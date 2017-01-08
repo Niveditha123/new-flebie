@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Demo- {+title /}</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+     {+pageStyles /}
+  </head>
+  <body>
+  <div class="navbar navbar-fixed-top">
+    <a href="/" class="fl logo-block">
+    </a>
+
+    <div class="fr nv-xtra">
+    <button class="btn btn-link icon icon-phone" id="callUs" data-target="callUsPop"></button>
+    <button class="btn btn-link icon icon-shopping-cart" id="openCart" data-target="cartPopUp">
+    </button>
+    </div>
+  </div>
+    {+body /}
+  <footer class="footer-main">
+    <div class="clearfix text-center">
+      <a target="_blank" class="btn btn-link" href="https://www.facebook.com/flebiecom">
+        <img src="/public/images/icons/HomePageFB.png" alt="">
+      </a>
+        <a target="_blank" class="btn btn-link" href="https://twitter.com/flebiecom">
+          <img src="/public/images/icons/HomePageTwitter.png" alt="">
+        </a>
+    </div>
+    <div class="clearfix text-center bread-crumb">
+      <span>&nbsp;&nbsp;&nbsp; ● &nbsp;&nbsp;&nbsp;</span>
+      <a href="/aboutus" class="btn btn-link" >About Us</a>
+      <span class="hidden">&nbsp;&nbsp;&nbsp; ● &nbsp;&nbsp;&nbsp;</span>
+      <a  href="/careers" class="hidden">Careers</a>
+      <span class="hidden">&nbsp;&nbsp;&nbsp; ● &nbsp;&nbsp;&nbsp;</span>
+      <a href="/contactus" class="hidden">Contact Us</a>
+      <span>&nbsp;&nbsp;&nbsp; ● &nbsp;&nbsp;&nbsp;</span>
+      <a class="btn btn-link" href="/faqs">FAQs</a>
+      <span>&nbsp;&nbsp;&nbsp; ● &nbsp;&nbsp;&nbsp;</span>
+      <a href="/terms&amp;condition"  class="btn btn-link">Terms &amp; Conditions</a>
+      <span>&nbsp;&nbsp;&nbsp; ● &nbsp;&nbsp;&nbsp;</span>
+      <a href="/privacypolicy" class="btn btn-link">Privacy Policy</a>
+      <span class="hidden">&nbsp;&nbsp;&nbsp; ● &nbsp;&nbsp;&nbsp;</span>
+      <span>&nbsp;&nbsp;&nbsp; ● &nbsp;&nbsp;&nbsp;</span>
+      <a href="/refundsandcancellation" class="btn btn-link">Cancellation Policy</a>
+      <span class="hidden">&nbsp;&nbsp;&nbsp; ● &nbsp;&nbsp;&nbsp;</span>
+      <a href="/partnerwithus" class="hidden">Partner With Us</a>
+      </div>
+  <div class="clearfix text-center"><p>© Famian Healthcare Pvt Ltd 2016</p></div>
+      
+  </footer>
+  <div id="utilBlock">
+  </div>
+
+<script src="/public/scripts/commonbundle.js"></script>
+  {+pageScripts /}
+  <!--<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>-->
+  </body>
+</html>

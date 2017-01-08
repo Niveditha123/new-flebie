@@ -1,0 +1,130 @@
+@import "/layout.scss";
+.banner-main{
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 79%;
+    text-align: center;
+    color:#FFFFFF;
+    h1{
+        font-size: 3em;
+        margin-bottom: .0em;
+    }
+    P{
+        margin-top: .5em;
+        font-size: 1.2em;
+    }
+    .home-input{
+        width:500px;
+        margin: 0 auto;
+        background: #FFFFFF;
+        position: relative;
+    }
+    .input-ctrl {
+        width: 100%;
+        border: solid 1px #CCCCCC;
+        background: rgb(255, 255, 255);
+        height: 2em;
+        padding: 0 1em;
+        color: #656565;
+        font-size: 1.5em;
+    }
+}
+.error-drop{
+     width: 100%;
+        max-height: 50px;
+        overflow-y: auto;
+        background: #fff;
+        color: #3f3f40;
+        position: absolute;
+        top:100%;
+        >div {
+            padding: .5em 1em;
+            text-align: center;
+        }
+}
+    .results-block {
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        background: #fff;
+        color: #3f3f40;
+        position: absolute;
+        top:100%;
+        >div {
+            padding: .5em 1em;
+            text-align: left;
+        }
+    }
+    span.selected-item {
+    display: inline-block;
+    margin-bottom: 0.5em;
+    margin-right: 0.5em;
+    background: #337ab7;
+    border-radius: 3px;
+    color: #fff;
+    padding: .25em;
+    cursor: default;
+}
+button.btn.btn-close {
+    color: #FFF;
+    background: transparent;
+    border: solid 2px #FFFFFF;
+    margin-left: 12px;
+    border-radius: 50%;
+    height: 1.5em;
+    width: 1.5em;
+    text-align: center;
+    padding: 0px;
+    line-height: 1em;
+}
+.loader-wrap {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0);
+    height: 100%;
+    width: 100%;
+    top: 0;
+    .sk-circle {
+        margin: auto;
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: auto;
+        right: 0;
+        bottom: 0;
+    }
+}
+.btn-go{
+    border-radius: 25px;
+    text-transform: uppercase;
+    background-color: #00CF17;
+    font-size: 20px;
+    font-weight: bolder;
+    color: #fff;
+    margin: 1em;
+    padding: .5em 1em;
+}
+.marketing-block {
+    display: table;
+    width: 100%;
+     > a {
+        display: table-cell;
+        color: #FFFFFF;
+        text-decoration: none;
+        vertical-align: middle;
+        padding: 2em 0;
+        text-align: center;
+        width: 33.3%;
+    }
+}
+.disabled{
+    background: #CCCCCC;
+}

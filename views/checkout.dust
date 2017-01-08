@@ -1,0 +1,16 @@
+{>"layouts/master" /}
+
+{<pageStyles}
+<link rel="stylesheet"  type="text/css" href="/public/styles/checkout.css"></link>
+{/pageStyles}
+
+
+{<title}Check out{/title}
+{<body}
+<div id="root" class="container-main"> </div>
+{/body}
+
+
+{<pageScripts}
+<script src="/public/scripts/checkoutbundle.js"></script>
+{/pageScripts}
