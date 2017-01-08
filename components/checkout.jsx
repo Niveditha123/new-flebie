@@ -87,8 +87,11 @@ class CheckOut extends React.Component {
             </div>
             </div>
         </div>
+         var schedulingUI = <div id="SchedulingBlock" className={(this.state.activetab)?"tab-main fade-in":"fade-out"}>
+        <h3>Scheduling Details</h3>
+        </div>
 
-        tabContentUI.push(patientdetailsUI);
+        tabContentUI.push(patientdetailsUI,schedulingUI);
         return (
             <div className="checkout-main">
                 <div className="checkout-banner">
