@@ -12,7 +12,8 @@
 
     <div class="fr nv-xtra">
     <button class="btn btn-link icon icon-phone" id="callUs" data-target="callUsPop"></button>
-    <button class="btn btn-link icon icon-shopping-cart" id="openCart" data-target="cartPopUp">
+    <span class="cart-id fr" id="cartPl">
+    </span>
     </button>
     </div>
   </div>

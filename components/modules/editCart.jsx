@@ -1,11 +1,14 @@
 
 import React from 'react';
+import Modal from '../../components/utils/modal.jsx';
 class OpenCartModalContent extends React.Component{
   constructor(props){
 		super(props);
     this.state={
       testsList:{
-        items:[]
+        items:[],
+        totalItems:0,
+        labname:""
       }
     }
   }
@@ -45,7 +48,17 @@ class OpenCartModalContent extends React.Component{
   }
   componentDidMount(){
        this.getUserTests.bind(this)();
+      document.body.addEventListener('updateCart',this.updateCart.bind(this));
+
 	}
+  updateCart(e){
+    console.log(e.data,this.props.triggerElem,"yooo")
+      this.setState({
+      testsList:e.data.list
+    },function(){
+      localStorage.setItem("cartInfo", JSON.stringify(this.state.testsList));
+    })
+  }
   deleteOne(e){
     var itemId= e.target.getAttribute("data-id");
     var dataList = this.state.testsList;
@@ -58,9 +71,8 @@ class OpenCartModalContent extends React.Component{
     dataList.totalItems = dataList.totalItems-1;
     dataList.totalListPrice = dataList.totalListPrice-item.listPrice;
     dataList.totalPrice = dataList.totalPrice-item.price;
-    this.setState({
-      testsList:dataList
-    })
+        this.eventDispatcher("updateCart",dataList);
+
 
   }
   addOne(e){
@@ -71,10 +83,17 @@ class OpenCartModalContent extends React.Component{
     dataList.totalItems = dataList.totalItems+1;
     dataList.totalListPrice = dataList.totalListPrice+item.listPrice;
     dataList.totalPrice = dataList.totalPrice+item.price;
-    this.setState({
-      testsList:dataList
-    })
+        this.eventDispatcher("updateCart",dataList);
 
+
+  }
+  eventDispatcher(name,data){
+
+    var event =new Event(name);
+    event.data={
+        "list":data
+    }
+      document.body.dispatchEvent(event);
   }
   deleteTest(e){
     var itemId= e.target.getAttribute("data-id");
@@ -84,16 +103,18 @@ class OpenCartModalContent extends React.Component{
     dataList.totalItems = dataList.totalItems-item.quantity;
     dataList.totalListPrice = dataList.totalListPrice-(item.quantity*item.listPrice);
     dataList.totalPrice = dataList.totalPrice-(item.quantity*item.price);
-    this.setState({
-      testsList:dataList
-    })
+    this.eventDispatcher("updateCart",dataList);
   }
   gotoCheckout(e){
     location.href="checkout";
   }
+  openCartModal(e){
+    Fleb.OpenModal(e)
+  }
   render(){
     var listUI=[];
     var _this = this;
+    var headerUI= <h3 className={(this.props.header)?"":"hide"}>{this.state.testsList.labname}</h3>
     if(this.state.testsList.items.length >0 ){
       var head=<div className="test-head-row">
         <div className="item-head">
@@ -148,7 +169,13 @@ class OpenCartModalContent extends React.Component{
         No test added!!
       </div>
     }
-    return(<div className="clearfix">
+    var cartUI =[];
+    var cartContent = [];
+    var cartNotification = <span onClick={this.openCartModal.bind(this)} data-target="cartPopUp" className="cart-badge">{this.state.testsList.totalItems}</span>
+    if(this.props.triggerElem== true){
+      cartUI.push( <button className="btn btn-link icon icon-shopping-cart" id="openCart" onClick={this.openCartModal.bind(this)} data-target="cartPopUp"/>);
+      cartUI.push(cartNotification)
+      cartContent = <div className={"clearfix"}>
       <div className="modal-body ">
         {listUI}
        </div>
@@ -160,7 +187,22 @@ class OpenCartModalContent extends React.Component{
           Add Tests</button>
           
         </div>
-       </div>
+       </div>;
+      cartUI.push(<Modal open={false} selfClose={true}  
+    id={"cartPopUp"} 
+    headText={"Your Tests"}
+    css="your-tests-pop"
+      content={cartContent}/>);
+    }else{
+      cartUI = <div className="clearfix cart-summary">
+      {headerUI}
+      {listUI}
+      </div>
+    }
+    return(
+      <div className="cart-in">
+      {cartUI}
+      </div>
     )
   }
 }

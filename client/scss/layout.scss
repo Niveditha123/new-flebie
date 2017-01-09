@@ -185,7 +185,7 @@ html{
 }
 .fr.nv-xtra {
     padding-right: 5%;
-    * {
+    >.btn, .cart-in > .btn {
     color: #ffffff;
     font-size: 2em;
     text-decoration: none !important;
@@ -310,4 +310,20 @@ html{
 .img-block >img {
     display: block;
     max-width: 100%;
+}
+span.cart-badge {
+    position: absolute;
+    display: block;
+    height: 30px;
+    width: 30px;
+    background: #119439;
+    color: #fff;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 50%;
+    bottom: 0;
+    right: -12px;
+}
+.cart-in {
+    position: relative;
 }

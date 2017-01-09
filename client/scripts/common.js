@@ -32,11 +32,8 @@ ReactDOM.render(
     css="callus-popup"
     headText={"Customer Support"}
   content={<CallModalContent/>} />
-  <Modal open={false} selfClose={true}  
-    id={"cartPopUp"} 
-    headText={"Your Tests"}
-    css="your-tests-pop"
-  content={<OpenCartModalContent/>} />
   </div>,
   document.getElementById('utilBlock')
 );
+ReactDOM.render(  <OpenCartModalContent triggerElem={true} header={false}/>,
+  document.getElementById('cartPl'))

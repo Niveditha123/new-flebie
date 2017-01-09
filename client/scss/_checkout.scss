@@ -2,7 +2,7 @@
 html{
     background-image: url("https://www.flebie.com/img/ListPage_Cover.jpg");
     background-repeat: no-repeat;
-    background-size: auto 310px;
+    background-size: 100% 325px;
 }
 .container-main{
     padding-bottom: 210px;
@@ -84,4 +84,28 @@ input[type=radio] {
     font-weight: 400;
     vertical-align: middle;
     cursor: pointer;
+}
+.tab-content .fade-out{
+    height: 0;
+    overflow: hidden;
+}
+:disabled {
+    cursor: not-allowed;
+}
+.form-content {
+    padding-right: 20px;
+    padding-bottom: 12px;
+}
+.form-row {
+    position: relative;
+}
+.err-msg {
+    color: #a80505;
+    font-size: .8em;
+}
+span.required {
+    position: absolute;
+    right: 0px;
+    top: -13px;
+    color: #8d0000;
 }
