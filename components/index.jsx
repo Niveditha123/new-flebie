@@ -163,7 +163,7 @@ class Index extends React.Component {
 		})
 		selectedListUI = this.state.selectedList.map(function(item,index){
 			return <span key={index} className="selected-item">{item}
-			<button data-value={item} className="btn btn-close" onClick={_this.removeItem.bind(_this)}>x</button>
+			<button data-value={item} className="btn icon icon-delete btn-close" onClick={_this.removeItem.bind(_this)}></button>
 			</span>
 		})
 		return (<div className="banner-main">
