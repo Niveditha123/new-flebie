@@ -1,16 +1,22 @@
 import React from 'react';
 import reqwest from 'reqwest';
+import moment from 'moment';
+import { SingleDatePicker } from 'react-dates';
 import  OpenCartModalContent from './modules/editCart.jsx';
 
 class CheckOut extends React.Component {
     constructor(props){
 		super(props);
         this.state={
-            activetab:"patientDetailsBlock",
+            activetab:"SchedulingBlock",
             patientDetailsInfo:[],
             enableScheduling:false,
             enablePayment:false,
-            patientData:{}
+            patientData:{},
+            date: moment(),
+            focused:false,
+            timeSlotArray:[],
+            timeStringArray : ["Select Time", "7:00:00 AM-7:30:00 AM", "7:30:00 AM-8:00:00 AM", "8:00:00 AM-8:30:00 AM","8:30:00 AM-9:00:00 AM","9:00:00 AM-9:30:00 AM", "9:30:00 AM-10:00:00 AM", "10:00:00 AM-10:30:00 AM","10:30:00 AM-11:00:00 AM","11:00:00 AM-11:30:00 AM","11:30:00 AM-12:00:00 PM","12:00:00 PM-12:30:00 PM","12:30:00 PM-1:00:00 PM","1:00:00 PM-1:30:00 PM","1:30:00 PM-2:00:00 PM","2:00:00 PM-2:30:00 PM","2:30:00 PM-3:00:00 PM","3:00:00 PM-3:30:00 PM","3:30:00 PM-4:00:00 PM","4:00:00 PM-4:30:00 PM","4:30:00 PM-5:00:00 PM"]
         }
     }
     componentDidMount(){
@@ -104,10 +110,61 @@ class CheckOut extends React.Component {
                 patientData[name]= "";
             }
         }
-        debugger;
+        var genderList = this.refs.genderBlock.querySelectorAll(".radio-ctrl");
+        var isGender=false;
+        for(var i=0;i<genderList.length;i++){
+            var radio = genderList[i];
+            if(radio.checked){
+                isGender=radio.value;                
+            }
+        }
+        if(isGender== false){
+            this.refs.errInputGen.className="err-msg";
+        }else{
+            patientData["gender"]= isGender;
+            this.refs.errInputGen.className="err-msg fade-out";            
+        }
         this.setState({
-            enableScheduling:true
+            enableScheduling:true,
+            patientData:patientData,
+            activetab:"SchedulingBlock"
         })
+    }
+    getTimeSlots(){
+        var _this = this;
+        var date = moment(this.state.date).format('YYYY-MM-DD');
+        date="2016-12-16";
+		reqwest({			
+				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromTestNames?tests=Vitamin B6 (Pyridoxin), Serum;"
+				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests"
+				//url:"/getMultiLabs"
+				url:"http://lowcost-env.qxsdp2qnuv.ap-south-1.elasticbeanstalk.com/api/v0.1/timeSlot/getAvailableSlots?sessionKey=pONzFZqnt23E9BaFDPMtBmoUARvLOhmTbmAE/o9dKXuGh5AjRUQjYwXiQgG6lqMi&slotDate="+date
+				, type: 'json'
+				,headers:{
+					"Access-Control-Allow-Origin":"*"
+				}
+				, method: 'get'
+				, error: function (err) {
+					console.log(err,"err")
+					_this.setState({
+						timeSlotArray:[]
+					})
+				}
+				, success: function (resp) {
+					console.log(resp,"success");
+                    var slotArray = _this.state.timeStringArray.slice();
+						_this.setState({
+                            timeSlotArray:slotArray
+						})
+					}
+				})
+    }
+    dateChanged(date){
+        this.setState({ 
+            date:date
+        },function(){
+            this.getTimeSlots.bind(this)()
+        });
     }
     render(){
         var tabContentUI =[];
@@ -132,20 +189,49 @@ class CheckOut extends React.Component {
             <h3>Patient Details</h3>
             <div className="form-content">
             {patientDetailsForm}
-            <div className="form-row input-row">
+            <div ref="genderBlock" className="form-row input-row">
                 <label className="radio-inline">
-                    <input type="radio" name="gender" id="male" value="male"/> Male
+                    <input type="radio" name="gender" className="radio-ctrl" id="male" value="male"/> Male
                 </label>
                 <label className="radio-inline">
-                    <input type="radio" name="gender" id="female" value="female"/> Female
+                    <input type="radio" name="gender" className="radio-ctrl" id="female" value="female"/> Female
                 </label>
             </div>
+            <div ref="errInputGen" className="err-msg fade-out">Please select gender</div>
             <button id="getPatientInfo" className="btn btn-success fr btn-next curved" onClick={this.getPatientInfo.bind(this)}>Next</button>
             </div>
         </div>
+        var timeSlotArrayUI = [];
+        if(this.state.timeSlotArray.length == 0){
+            if(moment(this.state.date).format('MM/DD/YYYY') == moment().format('MM/DD/YYYY')){
+                timeSlotArrayUI= <option value="">"Not insame day"</option>
+            }else{
+            timeSlotArrayUI=<option value="">"Please select another date"</option>
+                    
+            }
+        }else{
+            timeSlotArrayUI = this.state.timeSlotArray.map(function(item,index){
+            return  <option value={item}>{item}</option>
+            })
+        }
+
          var schedulingUI = <div id="SchedulingBlock" className={(this.state.activetab==="SchedulingBlock")?"tab-main fade-in":"fade-out"}>
-                <h3>Scheduling Details</h3>
-                <div className="">
+                <p>Convenience fee of INR 100 will be levied on home collection orders</p>
+                <div className="col2-row">
+                <SingleDatePicker
+                        id="date_input"
+                        date={this.state.date}
+                        focused={this.state.focused}
+                        onDateChange={this.dateChanged.bind(this)}
+                        onFocusChange={({ focused }) => { this.setState({ focused }); }}
+                        numberOfMonths={1}
+                        displayFormat="DD/MM/YYYY"
+                        />
+                    <div className="time-selector-main">
+                        <select className="form-control">
+                            {timeSlotArrayUI}
+                        </select>
+                    </div>
                 </div>
         </div>;
         var paymentUI = <div id="paymentBlock" className={(this.state.activetab==="SchedulingBlock")?"tab-main fade-in":"fade-out"}>
@@ -166,9 +252,9 @@ class CheckOut extends React.Component {
                     <div className="order-block">
                         <h3>Order Details</h3>
                         <div className="tab-head-row col3-row">
-                            <button onClick={this.openSection.bind(this)} data-target="patientDetailsBlock" className={(this.state.activetab)?"btn btn-link active-tab":"btn btn-link"}>Patient details</button>
-                            <button onClick={this.openSection.bind(this)} disabled={(this.state.enableScheduling?"":"disabled")} data-target="SchedulingBlock" className={(this.state.activetab)?"btn btn-link active-tab":"btn btn-link"}>Scheduling</button>
-                            <button onClick={this.openSection.bind(this)} disabled={(this.state.enablePayment?"":"disabled")} data-target="paymentBlock" className={(this.state.activetab)?"btn btn-link active-tab":"btn btn-link"}>Payment</button>                            
+                            <button onClick={this.openSection.bind(this)} data-target="patientDetailsBlock" className={(this.state.activetab=== "patientDetailsBlock")?"btn btn-link active-tab":"btn btn-link"}>Patient details</button>
+                            <button onClick={this.openSection.bind(this)} disabled={(this.state.enableScheduling?"":"disabled")} data-target="SchedulingBlock" className={(this.state.activetab==="SchedulingBlock")?"btn btn-link active-tab":"btn btn-link"}>Scheduling</button>
+                            <button onClick={this.openSection.bind(this)} disabled={(this.state.enablePayment?"":"disabled")} data-target="paymentBlock" className={(this.state.activetab==="paymentBlock")?"btn btn-link active-tab":"btn btn-link"}>Payment</button>                            
                         </div>
                         <div className="tab-content">
                             {tabContentUI}

@@ -1,4 +1,5 @@
 @import "/layout.scss";
+@import '../../node_modules/react-dates/lib/css/_datepicker.css';
 html{
     background-image: url("https://www.flebie.com/img/ListPage_Cover.jpg");
     background-repeat: no-repeat;
@@ -98,6 +99,7 @@ input[type=radio] {
 }
 .form-row {
     position: relative;
+    padding-bottom: 12px;
 }
 .err-msg {
     color: #a80505;
@@ -108,4 +110,7 @@ span.required {
     right: 0px;
     top: -13px;
     color: #8d0000;
+}
+.active-tab {
+    border-bottom: solid 2px #000;
 }
