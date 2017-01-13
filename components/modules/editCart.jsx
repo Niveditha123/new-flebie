@@ -111,6 +111,9 @@ class OpenCartModalContent extends React.Component{
   openCartModal(e){
     Fleb.OpenModal(e)
   }
+  gotoTestList(){
+    location.href="/test/list?labId=DhdJqyTrhg";
+  }
   render(){
     var listUI=[];
     var _this = this;
@@ -183,7 +186,7 @@ class OpenCartModalContent extends React.Component{
         <label className="footer-label fl">{this.state.testsList.labname}</label>
         <button type="submit" onClick={this.gotoCheckout.bind(this)} data-dismiss="modal"  className="btn fr btn-success curved">
           checkout</button>
-        <button type="submit" data-dismiss="modal"  className="btn fr  curved">
+        <button type="submit" onClick={this.gotoTestList.bind(this)}   className="btn fr  curved">
           Add Tests</button>
           
         </div>

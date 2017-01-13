@@ -166,6 +166,15 @@ class CheckOut extends React.Component {
             this.getTimeSlots.bind(this)()
         });
     }
+    getSchedulingInfo(){
+        this.setState({
+            enablePayment:true,
+            activetab:"paymentBlock"
+        })
+    }
+    makePayment(){
+
+    }
     render(){
         var tabContentUI =[];
         var patientDetailsForm=[];
@@ -217,28 +226,81 @@ class CheckOut extends React.Component {
 
          var schedulingUI = <div id="SchedulingBlock" className={(this.state.activetab==="SchedulingBlock")?"tab-main fade-in":"fade-out"}>
                 <p>Convenience fee of INR 100 will be levied on home collection orders</p>
+                <div className="clearfix">
+                    <label className="radio-inline">
+                        <input type="radio" name="ordertype" defaultChecked id="ordertype1" value="Home Collection"/> Home Collection
+                    </label>
+                    <label className="radio-inline">
+                        <input type="radio" name="ordertype" id="ordertype2" value="Walk-in Appointment"/> Walk-in Appointment
+                    </label>
+                </div>
+                <h4>Select Date and Timeslot</h4>
                 <div className="col2-row">
-                <SingleDatePicker
-                        id="date_input"
-                        date={this.state.date}
-                        focused={this.state.focused}
-                        onDateChange={this.dateChanged.bind(this)}
-                        onFocusChange={({ focused }) => { this.setState({ focused }); }}
-                        numberOfMonths={1}
-                        displayFormat="DD/MM/YYYY"
-                        />
+                    <SingleDatePicker
+                            id="date_input"
+                            date={this.state.date}
+                            focused={this.state.focused}
+                            onDateChange={this.dateChanged.bind(this)}
+                            onFocusChange={({ focused }) => { this.setState({ focused }); }}
+                            numberOfMonths={1}
+                            displayFormat="DD/MM/YYYY"
+                            />  
                     <div className="time-selector-main">
                         <select className="form-control">
                             {timeSlotArrayUI}
                         </select>
                     </div>
                 </div>
+                    <div className="form-row">
+                        <label className="control-label ">Address</label>
+                        <input type="textarea" 
+                            id="address"
+                            className="form-control"
+                            placeholder="Enter Adrress"/>
+
+                        <span className={"hide"}>*</span>
+                        <div ref={"errInput"} className="err-msg fade-out">"Please Enter Addres"</div>
+                    </div>
+                    <div className="form-row">
+                        <label className="control-label ">Comments</label>
+                        <input type="textarea" 
+                            id="comments"
+                            className="form-control"/>
+
+                        <span className={"hide"}>*</span>
+                    </div>
+                    <button id="getSchdulingInfo" className="btn btn-success fr btn-next curved" onClick={this.getSchedulingInfo.bind(this)}>Next</button>
         </div>;
-        var paymentUI = <div id="paymentBlock" className={(this.state.activetab==="SchedulingBlock")?"tab-main fade-in":"fade-out"}>
+        var paymentUI = <div id="paymentBlock" className={(this.state.activetab==="paymentBlock")?"tab-main fade-in":"fade-out"}>
             <h3>Payment</h3>
+            <div className="clearfix payment-main">
+                <div className="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="Cash On Delivery" defaultChecked/>
+                        Cash On Delivery
+                    </label>
+                </div>
+                <div className="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="Credit Card/Debit Card/Net Banking"/>
+                        Credit Card/Debit Card/Net Banking
+                    </label>
+                </div>
+            </div>
+            <div className="offer-main">
+                <div className="input-group">
+                    <input type="text" className="form-control" id="exampleInputAmount" placeholder="Enter Promo Code"/>
+                    <div className="input-group-addon">
+                        <button className="btn btn-default">Apply</button>
+                    </div>
+                </div>
+            </div>
+            <div  className="text-center">
+                    <button id="MakePayment" className="btn btn-success fr btn-next curved" onClick={this.makePayment.bind(this)}>Proceed to Pay</button>                
+            </div>
         </div>
 
-        tabContentUI.push(patientdetailsUI,schedulingUI);
+        tabContentUI.push(patientdetailsUI,schedulingUI,paymentUI);
         return (
             <div className="checkout-main">
                 <div className="checkout-banner">

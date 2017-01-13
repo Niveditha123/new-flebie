@@ -16,7 +16,8 @@ module.exports = {
             common: ['./client/scripts/common.js'],
             index: ['./client/scripts/index.js'],
             search: ['./client/scripts/search.js'],
-            checkout: ['./client/scripts/checkout.js']
+            checkout: ['./client/scripts/checkout.js'],
+            testlist: ['./client/scripts/testlist.js']
         },
         output: {
             path: path.join(__dirname, 'public'),
