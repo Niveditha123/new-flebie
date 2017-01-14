@@ -7,3 +7,30 @@ html{
 .container-main {
     padding-bottom: 200px;
 }
+.col4{
+    display: table;
+    width:100%;
+    > div{
+        display: table-cell;
+        width: 25%;
+        vertical-align: middle;
+        padding:6px;
+    }
+}
+.tb-head-row{
+    height: 40px;
+    background: #3f3f40;
+    color: #ffffff;
+    
+}
+.tb-head-row,.tb-bd-row{
+    .test-name{
+        width: 60%
+    }
+    .of-price,.mrp-price,.action-col{
+        width: 10%
+    }
+}
+.lab-details {
+    min-height: 250px;
+}

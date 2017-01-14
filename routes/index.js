@@ -4,6 +4,10 @@ var searchController = require("../controllers/searchController");
 var checkoutController = require("../controllers/checkoutController");
 var testListController = require("../controllers/testListController");
 
+var populartestsController = require("../controllers/populartestsController");
+var popularlabsController = require("../controllers/popularlabsController");
+var popularpackagesController = require("../controllers/popularpackagesController");
+
  
 module.exports = function() {
 
@@ -11,6 +15,9 @@ module.exports = function() {
   router.get('/', indexController.renderPage);
   router.get('/getList',indexController.getList);
   router.get('/getMultiLabs',indexController.getMultiLabs);
+  router.get('/populartests',populartestsController.renderPage);
+    router.get('/popularlabs',popularlabsController.renderPage);
+    router.get('/popularpackages',popularpackagesController.renderPage);
 
   router.get('/multisearchlabs', searchController.renderPage);
   router.get('/checkout', checkoutController.renderPage);

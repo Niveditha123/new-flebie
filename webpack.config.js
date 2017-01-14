@@ -17,7 +17,10 @@ module.exports = {
             index: ['./client/scripts/index.js'],
             search: ['./client/scripts/search.js'],
             checkout: ['./client/scripts/checkout.js'],
-            testlist: ['./client/scripts/testlist.js']
+            testlist: ['./client/scripts/testlist.js'],
+            popularlabs: ['./client/scripts/popularlabs.js'],
+            populartests: ['./client/scripts/populartests.js'],
+            popularpackages: ['./client/scripts/popularpackages.js']
         },
         output: {
             path: path.join(__dirname, 'public'),

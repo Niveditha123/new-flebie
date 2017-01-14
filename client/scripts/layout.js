@@ -15,5 +15,14 @@ Fleb.OpenModal = function(e){
 var callBtn = document.getElementById("callUs");
 callBtn.addEventListener("click",Fleb.OpenModal);
 
+Fleb.eventDispatcher = function(name,data){
+
+    var event =new Event(name);
+    event.data={
+        "list":data
+    }
+      document.body.dispatchEvent(event);
+  }
+
 //var openCartBtn = document.getElementById("openCart");
 //openCartBtn.addEventListener("click",Fleb.OpenModal);

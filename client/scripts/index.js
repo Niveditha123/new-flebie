@@ -1,7 +1,6 @@
 
 import Index from '../../components/index.jsx';
-import PopularTests from '../../components/popularTests.jsx';
-import PopularLabs from '../../components/PopularLabs.jsx';
+//import PopularLabs from '../../components/PopularLabs.jsx';
 
 import React from 'react';
 import ReactDOM from 'react-dom';

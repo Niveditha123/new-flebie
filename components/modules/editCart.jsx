@@ -8,7 +8,9 @@ class OpenCartModalContent extends React.Component{
       testsList:{
         items:[],
         totalItems:0,
-        labname:""
+        labname:"",
+        totalListPrice:0,
+        totalPrice : 0
       }
     }
   }
@@ -41,15 +43,25 @@ class OpenCartModalContent extends React.Component{
       "labId": "DhdJqyTrhg",
       "labAddress": "#5/3/1, 24th Main, Parangipalya, HSR Layout, Sector-2, Bangalore - 560102."
     };
-    this.setState({
-        testsList:list
-    })
+
+    var testInfo={
+        items:[],
+        totalItems:0,
+        labname:"",
+        totalListPrice:0,
+        totalPrice : 0
+      }
+    var localData= localStorage.getItem("cartInfo")
+      this.setState({
+        testsList:(localData)?JSON.parse(localData):testInfo
+      })
+    
 
   }
   componentDidMount(){
        this.getUserTests.bind(this)();
       document.body.addEventListener('updateCart',this.updateCart.bind(this));
-
+       
 	}
   updateCart(e){
     console.log(e.data,this.props.triggerElem,"yooo")
@@ -71,7 +83,7 @@ class OpenCartModalContent extends React.Component{
     dataList.totalItems = dataList.totalItems-1;
     dataList.totalListPrice = dataList.totalListPrice-item.listPrice;
     dataList.totalPrice = dataList.totalPrice-item.price;
-        this.eventDispatcher("updateCart",dataList);
+        Fleb.eventDispatcher("updateCart",dataList);
 
 
   }
@@ -83,18 +95,11 @@ class OpenCartModalContent extends React.Component{
     dataList.totalItems = dataList.totalItems+1;
     dataList.totalListPrice = dataList.totalListPrice+item.listPrice;
     dataList.totalPrice = dataList.totalPrice+item.price;
-        this.eventDispatcher("updateCart",dataList);
+      Fleb.eventDispatcher("updateCart",dataList);
 
 
   }
-  eventDispatcher(name,data){
 
-    var event =new Event(name);
-    event.data={
-        "list":data
-    }
-      document.body.dispatchEvent(event);
-  }
   deleteTest(e){
     var itemId= e.target.getAttribute("data-id");
     var dataList = this.state.testsList;
@@ -103,10 +108,10 @@ class OpenCartModalContent extends React.Component{
     dataList.totalItems = dataList.totalItems-item.quantity;
     dataList.totalListPrice = dataList.totalListPrice-(item.quantity*item.listPrice);
     dataList.totalPrice = dataList.totalPrice-(item.quantity*item.price);
-    this.eventDispatcher("updateCart",dataList);
+    Fleb.eventDispatcher("updateCart",dataList);
   }
   gotoCheckout(e){
-    location.href="checkout";
+    location.href="/checkout";
   }
   openCartModal(e){
     Fleb.OpenModal(e)
