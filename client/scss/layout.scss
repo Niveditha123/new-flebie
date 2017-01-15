@@ -20,7 +20,7 @@ html{
         position: relative;
         footer {
                 position: absolute;
-                bottom: 0;
+                top: 100%;
                 width: 100%;
                 padding:1em;
             }
@@ -43,7 +43,7 @@ html{
     display: block
 }
 .container-main {
-    padding:100px 1em  180pc 1em;
+    padding:100px 1em  180px 1em;
 }
 .sk-circle {
   margin: 100px auto;
