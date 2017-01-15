@@ -8,7 +8,7 @@ class CheckOut extends React.Component {
     constructor(props){
 		super(props);
         this.state={
-            activetab:"SchedulingBlock",
+            activetab:"patientDetailsBlock",
             patientDetailsInfo:[],
             enableScheduling:false,
             enablePayment:false,
