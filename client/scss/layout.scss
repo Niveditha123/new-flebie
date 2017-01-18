@@ -327,3 +327,70 @@ span.cart-badge {
 .cart-in {
     position: relative;
 }
+.banner-main{
+    min-height: 220px
+}
+
+.notification-wrapper{
+    position: fixed;
+    top: 150px;
+    right: 50px;
+}
+
+.notification-wrap {
+    border: solid 1px #5cb85c;
+    height: 50px;
+    background: #5cb85c;
+    color: #FFFFFF;
+    font-weight: 300;
+    border-radius: 5px;
+    box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.3);
+    padding-right: 25px;
+    position: relative;
+        opacity: 0;
+        transition: transform .3s ease, opacity .2s ease;
+    transform-origin: right;
+    overflow: hidden;
+    transform: scale3d(0,0,0);
+}
+.notification-wrap.flebie-notificationbubble-up {
+    opacity: 1;
+    transform: scale3d(1,1,1);
+}
+.notification-wrap p {
+    padding-right: 20px;
+    padding-left: 20px;
+    line-height: 50px;
+}
+.close-notification {
+    position: absolute;
+    right: 0px;
+    top: 0;
+    bottom: 0;
+    border-radius: 0px 5px 5px 0px;
+    background: #1e6d1e;
+}
+.lab-details {
+    color: #FFFFFF;
+    h3{
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        margin-top: 15px;
+        font-weight: bold;
+    }
+    span.icon {
+        padding-right: 9px;
+    }
+}
+.lab-details >div > div {
+    padding: 5px 0px;
+}
+.banner-main,.checkout-banner {
+    color: #ffffff;
+    h1{
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        margin-top: 15px;
+        font-weight: bold;
+    }
+}

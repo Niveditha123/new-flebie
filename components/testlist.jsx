@@ -1,5 +1,6 @@
 import React from 'react';
 import reqwest from 'reqwest';
+var NotificationSystem = require('react-notification-system');
 
 class TestList extends React.Component {
     constructor(props){
@@ -12,9 +13,16 @@ class TestList extends React.Component {
 			currentPage:0,
 			filtered:false,
 			filterList:[],
-			inputFilter:""
+			inputFilter:"",
+			_notificationSystem: null,
         }
     }
+ _addNotification(data) {
+    this.state._notificationSystem.addNotification({
+      message: data,
+      level: 'success'
+    });
+  }
 	ChangeInput(e){
 		this.setState({
 			inputFilter:e.target.value
@@ -106,6 +114,9 @@ class TestList extends React.Component {
     }
     componentDidMount(){
 		this.loadAllTests.bind(this)();
+		this.setState({
+		_notificationSystem : this.refs.notificationSystem
+	});
 	}
 	findAnItem(item,list,prop){
 		var found={
@@ -147,6 +158,8 @@ class TestList extends React.Component {
 						cartList.totalPrice+=testItem.price;
 					}
 				}
+				var testMsg = test+" successfully added to your cart!!!"
+				this._addNotification(testMsg);
 			Fleb.eventDispatcher("updateCart",cartList);				
 			}
 			else{
@@ -170,6 +183,7 @@ class TestList extends React.Component {
 				cartInfo.totalItems=1;
 				cartInfo["totalListPrice"]=cartItem.data.listPrice;
 				cartInfo["totalPrice"]=cartItem.data.price;
+
 				Fleb.eventDispatcher("updateCart",cartInfo);								
 
 		}
@@ -221,6 +235,7 @@ class TestList extends React.Component {
 		}
         return (
             <div className="clearfix test-list-main">
+			<NotificationSystem ref="notificationSystem" />
                 <div className="lab-details">
 					{labdetailsUI}
 				</div>

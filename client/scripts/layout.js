@@ -24,5 +24,6 @@ Fleb.eventDispatcher = function(name,data){
       document.body.dispatchEvent(event);
   }
 
+
 //var openCartBtn = document.getElementById("openCart");
 //openCartBtn.addEventListener("click",Fleb.OpenModal);

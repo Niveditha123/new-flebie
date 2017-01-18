@@ -133,7 +133,7 @@ class CheckOut extends React.Component {
     getTimeSlots(){
         var _this = this;
         var date = moment(this.state.date).format('YYYY-MM-DD');
-        date="2016-12-16";
+       // date="2016-12-16";
 		reqwest({			
 				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromTestNames?tests=Vitamin B6 (Pyridoxin), Serum;"
 				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests"

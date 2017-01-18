@@ -72,7 +72,7 @@ class PopularTests extends React.Component {
 
             </div>
             <div className="content-main pop-test-main">
-                <div className="clearfic col3">
+                <div className="clearfix col3">
                         {popTestUI}
                 </div>
             </div>

@@ -25,6 +25,40 @@ class CallModalContent extends React.Component{
   }
 }
 
+class LoginModalContent extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={
+      showlogin:false
+    }
+  }
+  componentDidMount(){
+    if(location.hash=="#login"){
+      this.setState({
+        showlogin:true
+      })
+    }
+  }
+  render(){
+    var content= <div className="clearfix">
+      <div className="modal-body text-muted">
+            <h4>Login to Flebie</h4>
+       </div>
+       <div className="modal-footer">
+          <button type="submit" data-dismiss="modal"  className="btn btn-success curved">
+          Login</button>
+        </div>
+       </div>;
+    return(
+      <Modal open={this.state.showlogin} selfClose={true}  
+    id={"loginPop"} 
+    css="login-popup"
+    headText={"login"}
+  content={content} />
+    )
+  }
+}
+
 ReactDOM.render(
   <div>
   <Modal open={false} selfClose={true}  
@@ -32,6 +66,7 @@ ReactDOM.render(
     css="callus-popup"
     headText={"Customer Support"}
   content={<CallModalContent/>} />
+  <LoginModalContent/>
   </div>,
   document.getElementById('utilBlock')
 );
