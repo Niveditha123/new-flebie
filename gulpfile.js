@@ -54,6 +54,11 @@ gulp.task("copyimages",function(){
     ncp("./client/Images","./public/Images",function(){});
 })
 
+gulp.task("copyFonts",function(){
+    ncp("./client/fonts","./public/fonts",function(){
+        console.log("font copied!!!");
+    });
+})
 
 gulp.task("makedist",function(){
 
@@ -103,7 +108,7 @@ function getFileList(dir, files_) {
 }
 
 gulp.task("default", function(){
-	runSequence("clean-css","font-icon" ,"webpack","copyimages");
+	runSequence("clean-css","copyFonts","font-icon" ,"webpack","copyimages");
 
 });
 

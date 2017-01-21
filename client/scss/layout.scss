@@ -3,8 +3,38 @@
 @import "_base.scss";
 @import '../../public/fonts/iconfont.css';
 
+
+/* Custom Fonts
+-------------------------------------------------- */
+@font-face {
+    font-family: myFirstFont;
+    src: url("/public/fonts/ufonts.com_gotham-ultra.woff");
+}
+
+@font-face {
+    font-family: mySecondFont;
+    src: url("/public/fonts/ufonts.com_gotham-bold.woff");
+}
+
+
+@font-face {
+    font-family: generalFont;
+    src: url("/public/fonts/gothamhtf-book-webfont.woff");
+}
+/* Generic CSS changes
+-------------------------------------------------- */
+
+body {
+    font-family: generalFont;
+}
+
+
 *{
-    font-family: 'Roboto', sans-serif;
+    font-family:generalFont;
+}
+h1,h2,h3,h4,h5,h6{
+        font-family: mySecondFont;
+        font-weight: 500;
 }
 html{
     display: block;

@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <title>Demo- {+title /}</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
      {+pageStyles /}
   </head>
   <body>
