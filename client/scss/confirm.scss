@@ -1,0 +1,30 @@
+@import "/layout.scss";
+@import '../../node_modules/react-dates/lib/css/_datepicker.css';
+html{
+    background-image: url("https://www.flebie.com/img/ListPage_Cover.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 325px;
+}
+.container-main{
+    padding-bottom: 210px;
+}
+.confirm-head{
+    text-align:center;
+    color:green;
+    font-size: 25px;
+    .icon-smile {
+        margin-top: 12px;
+        display: block;
+        font-size: 1.6em;
+    }
+}
+.cart-id{
+    display: none !important;
+}
+.test-head-row {
+    color: #FFFFFF;
+    background: #434343;
+}
+.fr.nv-xtra{
+    padding-right: 0px
+}

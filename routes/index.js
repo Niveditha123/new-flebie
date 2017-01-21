@@ -7,7 +7,8 @@ var testListController = require("../controllers/testListController");
 var populartestsController = require("../controllers/populartestsController");
 var popularlabsController = require("../controllers/popularlabsController");
 var popularpackagesController = require("../controllers/popularpackagesController");
-
+var confirmController = require("../controllers/confirmController");
+var listlabsfortestController = require('../controllers/listlabsfortestController');
  
 module.exports = function() {
 
@@ -22,6 +23,8 @@ module.exports = function() {
   router.get('/multisearchlabs', searchController.renderPage);
   router.get('/checkout', checkoutController.renderPage);
   router.get('/test/list', testListController.renderPage);
+  router.get('/paymentresponse',confirmController.renderPage);
+  router.get('/listlabsfortest',listlabsfortestController.renderPage);
   //router.get('/multisearchlabs', searchController.renderPage);
 
 

@@ -20,7 +20,9 @@ module.exports = {
             testlist: ['./client/scripts/testlist.js'],
             popularlabs: ['./client/scripts/popularlabs.js'],
             populartests: ['./client/scripts/populartests.js'],
-            popularpackages: ['./client/scripts/popularpackages.js']
+            popularpackages: ['./client/scripts/popularpackages.js'],
+            confirm: ['./client/scripts/confirm.js'],
+            listlabsfortest:['./client/scripts/listlabsfortest.js']
         },
         output: {
             path: path.join(__dirname, 'public'),

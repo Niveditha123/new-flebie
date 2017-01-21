@@ -3,6 +3,7 @@ import reqwest from 'reqwest';
 import moment from 'moment';
 import { SingleDatePicker } from 'react-dates';
 import  OpenCartModalContent from './modules/editCart.jsx';
+import Modal from './utils/modal.jsx';
 
 class CheckOut extends React.Component {
     constructor(props){

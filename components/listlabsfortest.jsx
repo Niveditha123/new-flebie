@@ -1,7 +1,7 @@
 import React from 'react';
 import reqwest from 'reqwest';
 
-class Search extends React.Component {
+class ListLabs extends React.Component {
     constructor(props){
 		super(props);
 		this.state={
@@ -156,4 +156,4 @@ class Search extends React.Component {
         );
     }
 }
-export default Search;
+export default ListLabs;

@@ -1,0 +1,129 @@
+@import "/layout.scss";
+html{
+    background-image: url("https://www.flebie.com/img/ListPage_Cover.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 325px;
+}
+.container-main {
+    padding-bottom: 200px;
+}
+.loader-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(204, 204, 204, 0.51);
+    z-index: 999;
+    .sk-circle {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        transform: scale(2);
+        margin: auto;
+        right: 0;
+    }
+}
+.test-accord {
+    min-height: 220px;
+}
+.lab-lists > div {
+    width: 33.3%;
+    float: left;
+    padding: 1em;
+        
+    >div{
+        position: relative;
+        box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.66);
+    }
+}
+.lab-lists .item-head {
+    width: 100%;
+    position: relative;
+}
+.striked-price {
+    position: relative;
+    top: 0px;
+    font-size: 18px;
+    padding: 6px;
+    font-weight: bolder;
+}
+.striked-price:before {
+    position: absolute;
+    top: 12px;
+    content: " ";
+    height: 1px;
+    background: #000000;
+    width: 115%;
+    transform: rotate(10deg);
+    left: -5px;
+}
+.actual-price {
+    position: relative;
+    z-index: 2;
+    color: black;
+    background: url("https://www.flebie.com/img/price_ribbon.png");
+    background-size: cover;
+    padding-bottom: 5px;
+    padding-left: 10px;
+}
+.lab-footer {
+    padding: 12px;
+    h3{
+        margin:0px;
+    }
+}
+.flebie-btn{
+    background-color: #00cf17;
+    border: medium none;
+    border-radius: 15px;
+    font-weight: bold;
+    line-height: 30px;
+    padding: 0 20px 0 20px;
+    color: #fff
+}
+.lab-details {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.90);
+    color: #ffffff;
+}
+.clearfix.details-block div {
+    padding: .5em 1em;
+    *{
+        color: #ffffff;
+    }
+    .icon{
+        margin-right: 6px;
+    }
+    .icon.icon-delete {
+        color: #ffffff;
+    }
+}
+.tab-block .fade-out {
+    height: 0;
+    overflow: hidden;
+}
+.tab-item{
+    color: #ffffff;
+}
+.tab-item.fade-in {
+    height: auto;
+}
+.tab-head-row .btn.tab-btn {
+    padding-left: 0px;
+    text-decoration: none;
+    margin-right: 12px;
+    color: #000000;
+}
+.btn.tab-btn.active-tab {
+    background: #000000;
+    color: #fff;
+    padding-left: 12px;
+}
+.tab-block {
+    min-height: 160px;
+    overflow: hidden;
+}
