@@ -1,5 +1,6 @@
 import React from 'react';
 import reqwest from 'reqwest';
+var najax =  require('najax');
 
 class Search extends React.Component {
     constructor(props){
@@ -8,12 +9,13 @@ class Search extends React.Component {
 			loading:true,
 			gotList:false,
 			labList:[],
-			activeTab:"0test"
+			activeTab:"0test",
+			tests:[]
 		}
     }
     loadLabs(){
         var _this = this;
-		reqwest({			
+		/*reqwest({			
 				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromTestNames?tests=Vitamin B6 (Pyridoxin), Serum;"
 				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests"
 				//url:"/getMultiLabs"
@@ -38,7 +40,23 @@ class Search extends React.Component {
 							loading:false
 						})
 					}
-				})
+				})*/
+				var qP = Fleb.getQueryVariable("tests");
+		        najax.get({
+            url: "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromTestNames?tests="+qP, 
+						method:"get",    
+            cache: false,
+            success: function(resp){                          
+                //$("#result").html(returnhtml); 
+				console.log(resp,"resp");   
+				_this.setState({
+							labList:JSON.parse(resp),
+							gotList:true,
+							loading:false,
+							tests:qP.split[";"]
+						})                
+            }           
+        });  
     }
     componentDidMount(){
         console.log("popular");
@@ -60,6 +78,19 @@ class Search extends React.Component {
 		})
 	}
 	openKart(e){
+		var labName = e.target.getAttribute("data-lab");
+		var item =  Fleb.findAnItemDeep(labName,this.state.labList,["lab","labName"]);
+		var cartitem = {
+			"labAddress":"#5/3/1, 24th Main, Parangipalya, HSR Layout, Sector-2, Bangalore - 560102.",
+			"labId":"1",
+			"labname":"Thyrocare",
+			"totalItems":1,
+			"totalListPrice":210,
+			"totalPrice":189,
+			"userEmail":"",
+			"homeCollectible":true,
+			"items":[{"testname":"Total Iron Binding Capacity (TIBC)","price":189,"listPrice":210,"isHomeCollectible":true,"labtestid":"QH9hPLiNmH","quantity":1}]};
+			Fleb.eventDispatcher("updateCart",cartitem);
 		document.getElementById("openCart").click();
 	}
     render(){
@@ -114,7 +145,7 @@ class Search extends React.Component {
 							<span className={(lab.isNABLAccredited)?"fl icon icon-checked":"hide"}/>
 							<span className={(lab.isAvailableForHC)?"fl icon icon-homedelivery":"hide"}/>
 							<span className={(lab.isAvailableForOB)?"fl icon icon-appointment":"hide"}/>
-							<button onClick={_this.openKart.bind(this)} className="fr btn-btn-success bookme flebie-btn">BOOK ME</button>
+							<button data-lab={lab.labName} onClick={_this.openKart.bind(_this)} className="fr btn-btn-success bookme flebie-btn">BOOK ME</button>
 						</div>
 					</div>
 					<div ref={"labDetails"+index} className="lab-details fade-out">

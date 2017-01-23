@@ -1,9 +1,10 @@
 import React from 'react';
-import reqwest from 'reqwest';
+//import reqwest from 'reqwest';
 import moment from 'moment';
 import { SingleDatePicker } from 'react-dates';
 import  OpenCartModalContent from './modules/editCart.jsx';
 import Modal from './utils/modal.jsx';
+var najax =  require('najax');
 
 class CheckOut extends React.Component {
     constructor(props){
@@ -66,6 +67,42 @@ class CheckOut extends React.Component {
         this.setState({
             patientDetailsInfo:patientForm
         })
+ var payLoad = {
+            "consumerId": 1,
+            "convenienceFee": 12,
+            "grossMRP": 90,
+            "grossTotal": 907,
+            "orderComments": "</sas?as?",
+            "orderLevelDiscount": 0,
+            "orderOriginPerson": 1,
+            "orderTotal": 888,
+            "paymentType": "CARD",
+            "promotionId": 1,
+            "scheduleDate": "2016-01-07T00:00:00+05:30",
+            "scheduleTime": "06:30 AM",
+            "status": "PENDING",
+            "orderDetails": {
+                "age": 27,
+                "phoneNumber": 88888,
+                "firstName": "Adarsha",
+                "lastName": "Shetty",
+                "address": "AAAA"
+            },
+                "orderItems": [
+                {
+                    "labTestId": 1,
+                    "quantity": 2
+                }
+                ]
+            };
+            najax.post('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/createOrder', {
+      data:JSON.stringify(payLoad),
+      contentType: 'application/xml;charset=utf-8'
+    }, createSuccess());
+
+    function createSuccess(){
+debugger;
+    } 
 	}
     openSection(e){
         var target = e.target.getAttribute("data-target");
@@ -134,31 +171,19 @@ class CheckOut extends React.Component {
     getTimeSlots(){
         var _this = this;
         var date = moment(this.state.date).format('YYYY-MM-DD');
-       // date="2016-12-16";
-		reqwest({			
-				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromTestNames?tests=Vitamin B6 (Pyridoxin), Serum;"
-				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests"
-				//url:"/getMultiLabs"
-				url:"http://lowcost-env.qxsdp2qnuv.ap-south-1.elasticbeanstalk.com/api/v0.1/timeSlot/getAvailableSlots?sessionKey=pONzFZqnt23E9BaFDPMtBmoUARvLOhmTbmAE/o9dKXuGh5AjRUQjYwXiQgG6lqMi&slotDate="+date
-				, type: 'json'
-				,headers:{
-					"Access-Control-Allow-Origin":"*"
-				}
-				, method: 'get'
-				, error: function (err) {
-					console.log(err,"err")
-					_this.setState({
-						timeSlotArray:[]
-					})
-				}
-				, success: function (resp) {
-					console.log(resp,"success");
+             najax.get({
+				url:"http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/timeSlot/getAvailableSlots?sessionKey=pONzFZqnt23E9BaFDPMtBmoUARvLOhmTbmAE/o9dKXuGh5AjRUQjYwXiQgG6lqMi&slotDate="+date,
+						method:"get",    
+            cache: false,
+            success: function(resp){                          
+                //$("#result").html(returnhtml); 
+				console.log(resp,"resp");  
                     var slotArray = _this.state.timeStringArray.slice();
 						_this.setState({
                             timeSlotArray:slotArray
 						})
-					}
-				})
+					}                         
+        });  
     }
     dateChanged(date){
         this.setState({ 
@@ -168,10 +193,59 @@ class CheckOut extends React.Component {
         });
     }
     getSchedulingInfo(){
-        this.setState({
+        var _this = this;
+        var date = moment(this.state.date).format('YYYY-MM-DD');
+        var payLoad = {
+            "consumerId": 1,
+            "convenienceFee": 12,
+            "grossMRP": 90,
+            "grossTotal": 907,
+            "orderComments": "</sas?as?",
+            "orderLevelDiscount": 0,
+            "orderOriginPerson": 1,
+            "orderTotal": 888,
+            "paymentType": "CARD",
+            "promotionId": 1,
+            "scheduleDate": "2016-01-07T00:00:00+05:30",
+            "scheduleTime": "06:30 AM",
+            "status": "PENDING",
+            "orderDetails": {
+                "age": 27,
+                "phoneNumber": 88888,
+                "firstName": "Adarsha",
+                "lastName": "Shetty",
+                "address": "AAAA"
+            },
+                "orderItems": [
+                {
+                    "labTestId": 1,
+                    "quantity": 2
+                }
+                ]
+            };
+             najax({
+				url:"http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/createOrder", 
+                data:payLoad,
+            cache: false,
+            type: 'POST',
+            success: function(resp){ 
+                debugger;                         
+                //$("#result").html(returnhtml); 
+				console.log(resp,"resp");  
+                    /*var slotArray = _this.state.timeStringArray.slice();
+						_this.setState({
+                            timeSlotArray:slotArray
+						})*/
+                        /* this.setState({
             enablePayment:true,
             activetab:"paymentBlock"
         })
+        */
+					}                         
+        });  
+
+
+       
     }
     makePayment(){
 

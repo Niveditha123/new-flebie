@@ -117,7 +117,9 @@ class OpenCartModalContent extends React.Component{
     Fleb.OpenModal(e)
   }
   gotoTestList(){
-    location.href="/test/list?labId=DhdJqyTrhg";
+    var labId = this.state.testsList.labId;
+    debugger;
+    location.href="/test/list?labId="+labId;
   }
   render(){
     var listUI=[];

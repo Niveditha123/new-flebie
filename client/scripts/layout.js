@@ -25,5 +25,32 @@ Fleb.eventDispatcher = function(name,data){
   }
 
 
+Fleb.getQueryVariable = function(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    console.log('Query variable %s not found', variable);
+}
+Fleb.findAnItemDeep = function(item,list,prop){
+		var found={
+			data:{},
+			pos:0,
+			in:false
+		};
+		for(var i=0;i<list.length;i++){
+				if(item == list[i][prop[0]][prop[1]]){
+					found.data=list[i];
+					found.in=true;
+					found.pos=i;
+					break;
+				}
+			}
+		return found;
+	}
 //var openCartBtn = document.getElementById("openCart");
 //openCartBtn.addEventListener("click",Fleb.OpenModal);

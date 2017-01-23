@@ -1,6 +1,5 @@
-import React from 'react';
-import reqwest from 'reqwest';
-import Modal from './utils/modal.jsx';
+import React from 'react';import Modal from './utils/modal.jsx';
+var najax = require('najax');
 
 class Index extends React.Component {
 	constructor(props){
@@ -17,16 +16,32 @@ class Index extends React.Component {
 			errrMsgs:""
 		}
 	}
-	componenDidMount(){
-
-	}
 	loadTests(){
 		var _this = this;
+		
+  najax.get({
+            url: "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests", 
+						method:"get",    
+            cache: false,
+            success: function(resp){                          
+                _this.setState({
+							getLists:JSON.parse(resp),
+							loadedList:true,
+							listLoadError:false
+						})                  
+            }           
+        }); 
+		/*reqwest({
+    url: 'http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests'
+  , type: 'jsonp'
+  , success: function (resp) {
+      console.log(resp,"jmjhb");
+    }
+})
 		reqwest({			
 				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromTestNames?tests=Vitamin B6 (Pyridoxin), Serum;"
 				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests"
-				url:"/getList"
-				, type: 'json'
+				url:"http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests"
 				,headers:{
 					"Access-Control-Allow-Origin":"*"
 				}
@@ -45,7 +60,7 @@ class Index extends React.Component {
 							listLoadError:false
 						})
 					}
-				})
+				})*/
 	}
 	componentDidMount(){
 		this.loadTests.bind(this)();
@@ -57,33 +72,35 @@ class Index extends React.Component {
 		this.setState({
 				inputEntry:value
 			})
-		if(value.length >2){
-		var resultArray = this.state.getLists.filter(function(item){
-			if(item.name.toUpperCase().indexOf(value.toUpperCase()) >=0 ){
-				return item;
+		if(value.length >2 && this.state.getLists.length >0){
+			var resultArray = this.state.getLists.filter(function(item){
+				if(item.testName.toUpperCase().indexOf(value.toUpperCase()) >=0 ){
+					return item;
+				}
+				//return name.match(value);
+			});
+			if(resultArray.length > 0){
+				this.setState({
+					showSuggest:true,
+					filterList:resultArray,
+					errrMsgs:""
+				})
+			}else{
+				this.setState({
+					errrMsgs:"No Results Found"
+				})
 			}
-			//return name.match(value);
-		});
-		if(resultArray.length > 0){
-			this.setState({
-				showSuggest:true,
-				filterList:resultArray,
-				errrMsgs:""
-			})
-		}else{
-			this.setState({
-				errrMsgs:"No Results Found"
-			})
-		}
 		}else{
 			this.setState({
 				showSuggest:false,
 				filterList:[],
 				errrMsgs:""
 			})
+					if(this.state.getLists.length===0){
+						this.loadTests.bind(this)(); 
 		}
-		/*if(value.length >2){
-			reqwest({
+		}
+		/*	reqwest({
 				
 				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromTestNames?tests=Vitamin B6 (Pyridoxin), Serum;"
 				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests"
@@ -152,13 +169,13 @@ class Index extends React.Component {
 			</div>
 		</div>
 		if(this.state.selectedList.length >0){
-			goBtn = <a href={"/multisearchlabs?"+this.state.selectedList.join(";")}  className="btn btn-go">GO</a>	
+			goBtn = <a href={"/multisearchlabs?tests="+this.state.selectedList.join(";")}  className="btn btn-go">GO</a>	
 		}else{
 			goBtn = <button disabled className="btn btn-go disabled"> Go</button>
 		}
 		results = this.state.filterList.map(function(item,index){
 			return <div key={index}>
-				{item.name}
+				{item.testName}
 			</div>
 		})
 		selectedListUI = this.state.selectedList.map(function(item,index){

@@ -1,6 +1,7 @@
 import React from 'react';
 import reqwest from 'reqwest';
 var NotificationSystem = require('react-notification-system');
+var najax =  require('najax');
 
 class TestList extends React.Component {
     constructor(props){
@@ -48,69 +49,28 @@ class TestList extends React.Component {
 
 	}
     loadAllTests(){
-        var tests ={
-	        "items": [{
-	          "testname": "Total Iron Binding Capacity (TIBC)",
-	          "price": 189,
-	          "listPrice": 210,
-	          "isHomeCollectible": true,
-	          "labtestid": "QH9hPLiNmH"
-	        }, {
-	          "testname": "Thyroxine Binding Globulin (TBG), Serum",
-	          "price": 540,
-	          "listPrice": 600,
-	          "isHomeCollectible": true,
-	          "labtestid": "FiKTBW1HXr"
-	        },
-            {
-	          "testname": "Vitamin B6 (Pyridoxin), Serum",
-	          "price": 840,
-	          "listPrice": 900,
-	          "isHomeCollectible": true,
-	          "labtestid": "FiKTBW1HXr"
-	        },
-            {
-	          "testname": "1,25 Dihydroxy Vitamin D (Calcitriol)",
-	          "price": 240,
-	          "listPrice": 400,
-	          "isHomeCollectible": true,
-	          "labtestid": "FiKTBW1HXr"
-	        },
-            {
-	          "testname": "17 - Hydroxy Corticosteroids, Urine 24H (17 O",
-	          "price": 140,
-	          "listPrice": 240,
-	          "isHomeCollectible": true,
-	          "labtestid": "FiKTBW1HXr"
-	        },
-            {
-	          "testname": "17 - OH Progesterone, Serum (17 - Hydroxy Pro",
-	          "price": 1040,
-	          "listPrice": 1234,
-	          "isHomeCollectible": true,
-	          "labtestid": "FiKTBW1HXr"
-	        }
-            ],
-	        "userEmail": "",
-	        "homeCollectible": true,
-	        "labname": "Thyrocare",
-	        "labId": "DhdJqyTrhg",
-            "location": "Jayanagar",
-            "operatingHours": "7 am - 10 pm (All Days)",
-            "phoneNumber": 2147483647,
-	        "labAddress": "#5/3/1, 24th Main, Parangipalya, HSR Layout, Sector-2, Bangalore - 560102.",
-            "inHouseConsultationAvailable": false,
-            "isAvailableForHC": false,
-            "isAvailableForOB": false,
-            "isCap": false,
-            "isDisplayable": true,
-            "isISOCertified": false,
-            "isNABLAccredited": false,
-	      };
-          this.setState({
-              testList:tests,
-			  loaded:true
-          })
+		var _this=this;
+		//http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromLabId?labId=1
+
+			var qP = Fleb.getQueryVariable("labId");
+			var list={
+                items:[]
+            }
+		        najax.get({
+            url: "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromLabId?labId="+qP, 
+						method:"get",    
+            cache: false,
+            success: function(resp){                          
+                //$("#result").html(returnhtml); 
+				console.log(resp,"resp");  
+				list.items = JSON.parse(resp); 
+				_this.setState({
+							 testList:list,
+			  				loaded:true,
+							  labId:qP
+						})                
+            }           
+        });  
     }
     componentDidMount(){
 		this.loadAllTests.bind(this)();
@@ -154,8 +114,8 @@ class TestList extends React.Component {
 						testItem.quantity=1;
 						cartList.items.push(testItem);
 						cartList.totalItems+=1;
-						cartList.totalListPrice+=testItem.listPrice;
-						cartList.totalPrice+=testItem.price;
+						cartList.totalListPrice+=testItem.MRP;
+						cartList.totalPrice+=testItem.offerPrice;
 					}
 				}
 				var testMsg = test+" successfully added to your cart!!!"
@@ -166,7 +126,7 @@ class TestList extends React.Component {
 				var cartInfo = {
 					"userEmail": this.state.testList.userEmail,
 					"homeCollectible": this.state.testList.homeCollectible,
-					"labname": this.state.testList.labname,
+					"labname": this.state.testList.labTestName,
 					"labId": this.state.testList.labId,
 					"location": this.state.testList.location,
 					"operatingHours": this.state.testList.operatingHours,
@@ -191,11 +151,11 @@ class TestList extends React.Component {
 	}
 	getRows(item,index){
 				var row= <div key={index} className="tb-bd-row col4">
-					<div className="test-name">{item.testname}</div>
-					<div className="of-price"><span className="icon icon-rupee"/>{item.price}</div>
-					<div className="mrp-price"><span className="icon icon-rupee"/>{item.listPrice}</div>
+					<div className="test-name">{item.labTestName}</div>
+					<div className="of-price"><span className="icon icon-rupee"/>{item.offerPrice}</div>
+					<div className="mrp-price"><span className="icon icon-rupee"/>{item.MRP}</div>
 					<div className="action-col">
-						<button id={index} onClick={this.addTests.bind(this)} data-name={item.testname} className="btn btn-success">Add</button>
+						<button id={index} onClick={this.addTests.bind(this)} data-name={item.labTestName} className="btn btn-success">Add</button>
 					</div>
 				</div>
 				return row;
