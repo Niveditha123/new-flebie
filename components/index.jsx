@@ -1,5 +1,6 @@
 import React from 'react';import Modal from './utils/modal.jsx';
-var najax = require('najax');
+import reqwest from  'reqwest';
+//var najax = require('najax');
 
 class Index extends React.Component {
 	constructor(props){
@@ -18,8 +19,29 @@ class Index extends React.Component {
 	}
 	loadTests(){
 		var _this = this;
+		reqwest({			
+				url:"/getList"
+				,headers:{
+					"Access-Control-Allow-Origin":"*"
+				}
+				, method: 'get'
+				, error: function (err) {
+					_this.setState({
+							getLists:[],
+							loadedList:true,
+							listLoadError:true
+						})  
+				}
+				, success: function (resp) {
+					  _this.setState({
+							getLists:resp,
+							loadedList:true,
+							listLoadError:false
+						})     
+				}
+		})
 		
-  najax.get({
+  /*najax.get({
             url: "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests", 
 						method:"get",    
             cache: false,
@@ -30,37 +52,7 @@ class Index extends React.Component {
 							listLoadError:false
 						})                  
             }           
-        }); 
-		/*reqwest({
-    url: 'http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests'
-  , type: 'jsonp'
-  , success: function (resp) {
-      console.log(resp,"jmjhb");
-    }
-})
-		reqwest({			
-				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromTestNames?tests=Vitamin B6 (Pyridoxin), Serum;"
-				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests"
-				url:"http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests"
-				,headers:{
-					"Access-Control-Allow-Origin":"*"
-				}
-				, method: 'get'
-				, error: function (err) {
-					console.log(err,"err")
-					_this.setState({
-						listLoadError:true
-					})
-				}
-				, success: function (resp) {
-					console.log(resp,"success");
-						_this.setState({
-							getLists:resp,
-							loadedList:true,
-							listLoadError:false
-						})
-					}
-				})*/
+        }); */
 	}
 	componentDidMount(){
 		this.loadTests.bind(this)();

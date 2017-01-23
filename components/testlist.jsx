@@ -1,7 +1,7 @@
 import React from 'react';
 import reqwest from 'reqwest';
 var NotificationSystem = require('react-notification-system');
-var najax =  require('najax');
+//var najax =  require('najax');
 
 class TestList extends React.Component {
     constructor(props){
@@ -56,7 +56,7 @@ class TestList extends React.Component {
 			var list={
                 items:[]
             }
-		        najax.get({
+		      /*  najax.get({
             url: "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromLabId?labId="+qP, 
 						method:"get",    
             cache: false,
@@ -70,7 +70,36 @@ class TestList extends React.Component {
 							  labId:qP
 						})                
             }           
-        });  
+        });  */
+			reqwest({			
+					url:"/getLabTestsFromLabId?labId="+qP
+					,headers:{
+						"Access-Control-Allow-Origin":"*"
+					}
+					, method: 'get'
+					, error: function (err) {
+						_this.setState({
+							testList:{
+								items:[]
+							},
+			  				loaded:false,
+							  labId:qP
+						})  
+					}
+					, success: function (resp) {
+						_this.setState({
+							testList:{
+								items:resp
+							},
+			  				loaded:true,
+							  labId:qP
+						})     
+					}
+			})
+
+
+
+
     }
     componentDidMount(){
 		this.loadAllTests.bind(this)();

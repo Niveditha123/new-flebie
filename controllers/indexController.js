@@ -1,4 +1,4 @@
-var request =  require('request');
+var request =  require('unirest');
 module.exports = {
   renderPage:function(req,res,next){
     res.render("index");
@@ -8,19 +8,19 @@ module.exports = {
     res.json(data);
   },
   getList:function(req,res,next){
-    request({
-        method:"GET",
-        url:"http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests",
-        headers:[{
-          "Access-Control-Allow-Origin":"*" 
-        }]
-    })
-        .on('response', function(response) {
-    console.log(response,"res") // 200
-    res.json(response)
-  })
-  .on('error', function(err) {
-    res.json(err)
-  })
+    var headers={
+
+    };
+
+ request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests')
+        .headers(headers)
+        .end(function (response) {
+          console.log(response.status);
+          if(response.status == 200){
+            res.send(response.body);
+          }else{
+            res.send([])
+          }
+        });
   }
 };

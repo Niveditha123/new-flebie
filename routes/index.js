@@ -13,8 +13,12 @@ var listlabsfortestController = require('../controllers/listlabsfortestControlle
 module.exports = function() {
 
   var router = express.Router();
-  router.get('/', indexController.renderPage);
+//apis
   router.get('/getList',indexController.getList);
+  router.get('/getLabTestsFromTestNames',searchController.getLabTestsFromTestNames);
+  router.get('/getLabTestsFromLabId',testListController.getLabTestsFromLabId)
+
+  router.get('/', indexController.renderPage);
   router.get('/getMultiLabs',indexController.getMultiLabs);
   router.get('/populartests',populartestsController.renderPage);
     router.get('/popularlabs',popularlabsController.renderPage);

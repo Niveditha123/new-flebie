@@ -1,6 +1,6 @@
 import React from 'react';
 import reqwest from 'reqwest';
-var najax =  require('najax');
+//var najax =  require('najax');
 
 class Search extends React.Component {
     constructor(props){
@@ -15,34 +15,34 @@ class Search extends React.Component {
     }
     loadLabs(){
         var _this = this;
-		/*reqwest({			
-				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromTestNames?tests=Vitamin B6 (Pyridoxin), Serum;"
-				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests"
-				//url:"/getMultiLabs"
-				url:" http://lowcost-env.qxsdp2qnuv.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromTestNames?tests=Vitamin B6 (Pyridoxin), Serum;Vitamin E (Tocopherol), Serum"
-				, type: 'json'
-				,headers:{
-					"Access-Control-Allow-Origin":"*"
-				}
-				, method: 'get'
-				, error: function (err) {
-					console.log(err,"err")
-					_this.setState({
-						loading:false,
-						gotList:false
-					})
-				}
-				, success: function (resp) {
-					console.log(resp,"success");
+
+				var qP = Fleb.getQueryVariable("tests");
+
+				reqwest({			
+					url:"/getLabTestsFromTestNames?tests="+qP
+					,headers:{
+						"Access-Control-Allow-Origin":"*"
+					}
+					, method: 'get'
+					, error: function (err) {
+						_this.setState({
+							gotList:false,
+							loading:false,
+							tests:qP.split[";"]
+						})  
+					}
+					, success: function (resp) {
 						_this.setState({
 							labList:resp,
 							gotList:true,
-							loading:false
-						})
+							loading:false,
+							tests:qP.split[";"]
+						})     
 					}
-				})*/
-				var qP = Fleb.getQueryVariable("tests");
-		        najax.get({
+			})
+
+
+		       /* najax.get({
             url: "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromTestNames?tests="+qP, 
 						method:"get",    
             cache: false,
@@ -56,7 +56,7 @@ class Search extends React.Component {
 							tests:qP.split[";"]
 						})                
             }           
-        });  
+        });  */
     }
     componentDidMount(){
         console.log("popular");
@@ -80,16 +80,29 @@ class Search extends React.Component {
 	openKart(e){
 		var labName = e.target.getAttribute("data-lab");
 		var item =  Fleb.findAnItemDeep(labName,this.state.labList,["lab","labName"]);
+		var cartData = item.data;
+		var itemsArr =cartData.labTests.map(function(test,index){
+			return{
+				"testname": test.labTestName,
+				"price": test.offerPrice,
+				"listPrice": test.MRP,
+				"quantity": 1,
+				"isHomeCollectible": test.test.isHomeCollectible,
+				"labtestid": test.labTestId
+			}
+
+		});
 		var cartitem = {
-			"labAddress":"#5/3/1, 24th Main, Parangipalya, HSR Layout, Sector-2, Bangalore - 560102.",
-			"labId":"1",
-			"labname":"Thyrocare",
-			"totalItems":1,
-			"totalListPrice":210,
-			"totalPrice":189,
+			"labAddress":cartData.lab.address,
+			"labId":cartData.lab.labId,
+			"labname":cartData.lab.labName,
+			"totalItems":cartData.labTests.length,
+			"totalListPrice":cartData.totalMRP,
+			"totalPrice":cartData.totalOfferPrice,
 			"userEmail":"",
-			"homeCollectible":true,
-			"items":[{"testname":"Total Iron Binding Capacity (TIBC)","price":189,"listPrice":210,"isHomeCollectible":true,"labtestid":"QH9hPLiNmH","quantity":1}]};
+			"homeCollectible":cartData.lab.isAvailableForHC,
+			"items":itemsArr
+		};
 			Fleb.eventDispatcher("updateCart",cartitem);
 		document.getElementById("openCart").click();
 	}
@@ -114,25 +127,30 @@ class Search extends React.Component {
 		var labListUI=[];
 		var testTabsUI =[];
 		var testHeadUI=[];
+		
+		if(this.state.labList.length>0){
+			this.state.labList[0].labTests.map(function(item,index){
+					var test = item.test;
+					var testUI= <div ref={index+"test"} className={(_this.state.activeTab== index+"test")?"tab-item fade-in":"fade-out"}>
+					<h2>{test.testName}</h2>
+					<p><span className="icon icon-flask"/>{test.sample}</p>
+					<p className="test-desc">{test.description}</p>
+					</div>
+					var headUI = <button onClick={_this.openTestDesc.bind(_this)} data-target={index+"test"} className={(_this.state.activeTab== index+"test")?"btn btn-link tab-btn active-tab":"btn btn-link tab-btn"}>{test.testName}</button>
+					testTabsUI.push(testUI);
+					testHeadUI.push(headUI);
+
+			})
+		}
 
 		labListUI= this.state.labList.map(function(item,index){
 			var lab = item.lab;
-			var labTest = item.labTest;
-			var test = item.test;
-			var testUI= <div ref={index+"test"} className={(_this.state.activeTab== index+"test")?"tab-item fade-in":"fade-out"}>
-			<h2>{test.testName}</h2>
-			<p><span className="icon icon-flask"/>{test.sample}</p>
-			<p className="test-desc">{test.description}</p>
-			</div>
-			var headUI = <button onClick={_this.openTestDesc.bind(_this)} data-target={index+"test"} className={(_this.state.activeTab== index+"test")?"btn btn-link tab-btn active-tab":"btn btn-link tab-btn"}>{test.testName}</button>
-			testTabsUI.push(testUI);
-			testHeadUI.push(headUI);
 			return <div className="list-item">
 					<div><div className="item-head">
 						<button data-target={"labDetails"+index} onClick={_this.showMoreDetails.bind(_this)} className="btn btn-link icon icon-info"></button>
 						<div className="fr price-block">
-							<div className="striked-price"><span className="icon icon-rupee"/>{labTest.MRP}</div>
-							<div className="actual-price"><span className="icon icon-rupee"/>{labTest.offerPrice}</div>
+							<div className="striked-price"><span className="icon icon-rupee"/>{item.totalMRP}</div>
+							<div className="actual-price"><span className="icon icon-rupee"/>{item.totalOfferPrice}</div>
 						</div>
 					</div>
 					<div className="lab-img img-block">
@@ -174,10 +192,11 @@ class Search extends React.Component {
             <div className="search-main">
 				{loader}
 				<div className="test-accord">
-					<div className="tab-block">{testTabsUI}
+					<div className="tab-block">
+						{testTabsUI}
 					</div>
 					<div className="clearfix tab-head-row">
-					{testHeadUI}
+						{testHeadUI}
 					</div>
 				</div>
 				<div className="clearfix lab-lists">
