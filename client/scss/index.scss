@@ -54,6 +54,7 @@
         color: #3f3f40;
         position: absolute;
         top:100%;
+        z-index: 999;
         >div {
             padding: .5em 1em;
             text-align: left;
