@@ -44,6 +44,7 @@ html{
     background-image: url("/public/images/HomePagebg.jpg");
     background-size: 100% auto;
     overflow-y: auto;
+        background-attachment: fixed;
     body{
         margin: 0;
         min-height: 100%;
@@ -217,7 +218,7 @@ html{
     padding-right: 5%;
     >.btn, .cart-in > .btn {
     color: #ffffff;
-    font-size: 2em;
+    font-size: 1em;
     text-decoration: none !important;
 }
 }
@@ -342,17 +343,18 @@ html{
     max-width: 100%;
 }
 span.cart-badge {
-    position: absolute;
+        position: absolute;
     display: block;
-    height: 30px;
-    width: 30px;
+    height: 20px;
+    width: 20px;
     background: #119439;
     color: #fff;
     text-align: center;
-    line-height: 30px;
+    line-height: 20px;
     border-radius: 50%;
     bottom: 0;
-    right: -12px;
+    right: -5px;
+    font-size: .8em;
 }
 .cart-in {
     position: relative;
