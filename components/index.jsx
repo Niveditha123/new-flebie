@@ -1,6 +1,6 @@
 import React from 'react';import Modal from './utils/modal.jsx';
-import reqwest from  'reqwest';
-//var najax = require('najax');
+//import reqwest from  'reqwest';
+var najax = require('najax');
 
 class Index extends React.Component {
 	constructor(props){
@@ -19,7 +19,7 @@ class Index extends React.Component {
 	}
 	loadTests(){
 		var _this = this;
-		reqwest({			
+		/*reqwest({			
 				url:"/getList"
 				,headers:{
 					"Access-Control-Allow-Origin":"*"
@@ -39,9 +39,9 @@ class Index extends React.Component {
 							listLoadError:false
 						})     
 				}
-		})
+		})*/
 		
-  /*najax.get({
+  najax.get({
             url: "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests", 
 						method:"get",    
             cache: false,
@@ -51,8 +51,14 @@ class Index extends React.Component {
 							loadedList:true,
 							listLoadError:false
 						})                  
-            }           
-        }); */
+            }, error: function (err) {
+					_this.setState({
+							getLists:[],
+							loadedList:true,
+							listLoadError:true
+						})  
+				}           
+        }); 
 	}
 	componentDidMount(){
 		this.loadTests.bind(this)();

@@ -1,10 +1,10 @@
 import React from 'react';
-//import reqwest from 'reqwest';
+import reqwest from 'reqwest';
 import moment from 'moment';
 import { SingleDatePicker } from 'react-dates';
 import  OpenCartModalContent from './modules/editCart.jsx';
 import Modal from './utils/modal.jsx';
-var najax =  require('najax');
+//var najax =  require('najax');
 
 class CheckOut extends React.Component {
     constructor(props){
@@ -95,14 +95,14 @@ class CheckOut extends React.Component {
                 }
                 ]
             };
-            najax.post('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/createOrder', {
+           /* najax.post('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/createOrder', {
       data:JSON.stringify(payLoad),
       contentType: 'application/xml;charset=utf-8'
     }, createSuccess());
 
     function createSuccess(){
 debugger;
-    } 
+    } */
 	}
     openSection(e){
         var target = e.target.getAttribute("data-target");
@@ -171,7 +171,7 @@ debugger;
     getTimeSlots(){
         var _this = this;
         var date = moment(this.state.date).format('YYYY-MM-DD');
-             najax.get({
+             /*najax.get({
 				url:"http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/timeSlot/getAvailableSlots?sessionKey=pONzFZqnt23E9BaFDPMtBmoUARvLOhmTbmAE/o9dKXuGh5AjRUQjYwXiQgG6lqMi&slotDate="+date,
 						method:"get",    
             cache: false,
@@ -183,7 +183,25 @@ debugger;
                             timeSlotArray:slotArray
 						})
 					}                         
-        });  
+        });  */
+
+        reqwest({			
+				url:"/getAvailableSlots?slotDate="+date
+				,headers:{
+					"Access-Control-Allow-Origin":"*"
+				}
+				, method: 'get'
+				, error: function (err) {
+debugger; 
+				}
+				, success: function (resp) {
+					 var slotArray = _this.state.timeStringArray.slice();
+                     debugger
+						_this.setState({
+                            timeSlotArray:slotArray
+						})  
+				}
+		})
     }
     dateChanged(date){
         this.setState({ 
@@ -198,16 +216,16 @@ debugger;
         var payLoad = {
             "consumerId": 1,
             "convenienceFee": 12,
-            "grossMRP": 90,
-            "grossTotal": 907,
+            "grossMRP": 950,
+            "grossTotal": 0,
             "orderComments": "</sas?as?",
             "orderLevelDiscount": 0,
             "orderOriginPerson": 1,
             "orderTotal": 888,
             "paymentType": "CARD",
             "promotionId": 1,
-            "scheduleDate": "2016-01-07T00:00:00+05:30",
-            "scheduleTime": "06:30 AM",
+            "scheduleDate": "2017-01-09T00:00:00+05:30",
+            "scheduleTime": "09:00 PM",
             "status": "PENDING",
             "orderDetails": {
                 "age": 27,
@@ -222,27 +240,23 @@ debugger;
                     "quantity": 2
                 }
                 ]
-            };
-             najax({
-				url:"http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/createOrder", 
-                data:payLoad,
-            cache: false,
-            type: 'POST',
-            success: function(resp){ 
-                debugger;                         
-                //$("#result").html(returnhtml); 
-				console.log(resp,"resp");  
-                    /*var slotArray = _this.state.timeStringArray.slice();
-						_this.setState({
-                            timeSlotArray:slotArray
-						})*/
-                        /* this.setState({
-            enablePayment:true,
-            activetab:"paymentBlock"
-        })
-        */
-					}                         
-        });  
+            }
+            debugger;
+            reqwest({
+                url: '/createOrder'
+            , type: 'json'
+            ,data:JSON.stringify(payLoad)
+            , contentType: 'application/json'
+            , method: 'post'
+            , error: function (err) { debugger;}
+            , success: function (resp) {
+                debugger;
+                _this.setState({
+                    enablePayment:true,
+                    activetab:"paymentBlock"
+                })
+                }
+            }) 
 
 
        

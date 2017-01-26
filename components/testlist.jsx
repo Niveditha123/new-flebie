@@ -10,6 +10,7 @@ class TestList extends React.Component {
             testList:{
                 items:[]
             },
+			labDetails:"",
 			loaded:false,
 			currentPage:0,
 			filtered:false,
@@ -87,13 +88,16 @@ class TestList extends React.Component {
 						})  
 					}
 					, success: function (resp) {
-						_this.setState({
-							testList:{
-								items:resp
-							},
-			  				loaded:true,
-							  labId:qP
-						})     
+						if(Array.isArray(resp)){
+							_this.setState({
+								testList:{
+									items:resp
+								},
+								loaded:true,
+								labId:qP
+							})   
+						}
+						  
 					}
 			})
 
@@ -101,8 +105,30 @@ class TestList extends React.Component {
 
 
     }
+	loadLabDetails(){
+		var _this = this;
+		var qP = Fleb.getQueryVariable("labId");
+		reqwest({			
+			url:"/getLab?id="+qP
+			,headers:{
+				"Access-Control-Allow-Origin":"*"
+			}
+			, method: 'get'
+			, error: function (err) {
+				_this.setState({
+					labDetails:""
+				})  
+			}
+			, success: function (resp) {
+				_this.setState({
+						labDetails:resp
+				})     
+			}
+	})
+	}
     componentDidMount(){
 		this.loadAllTests.bind(this)();
+		this.loadLabDetails.bind(this)();
 		this.setState({
 		_notificationSystem : this.refs.notificationSystem
 	});
@@ -137,10 +163,16 @@ class TestList extends React.Component {
 				cartList.totalPrice +=item.data.price;
 			}
 			else{
-				var newitem = this.findAnItem(test,this.state.testList.items,"testname");
+				var newitem = this.findAnItem(test,this.state.testList.items,"labTestName");
 					if(newitem.in){
-						testItem= newitem.data;
-						testItem.quantity=1;
+						var testItem ={
+								"testname": newitem.data.labTestName,
+								"price": newitem.data.offerPrice,
+								"listPrice": newitem.data.MRP,
+								"quantity": 1,
+								"isHomeCollectible":false,
+								"labtestid": newitem.data.labTestId
+							}
 						cartList.items.push(testItem);
 						cartList.totalItems+=1;
 						cartList.totalListPrice+=testItem.MRP;
@@ -153,25 +185,32 @@ class TestList extends React.Component {
 			}
 			else{
 				var cartInfo = {
-					"userEmail": this.state.testList.userEmail,
-					"homeCollectible": this.state.testList.homeCollectible,
-					"labname": this.state.testList.labTestName,
-					"labId": this.state.testList.labId,
-					"location": this.state.testList.location,
-					"operatingHours": this.state.testList.operatingHours,
-					"phoneNumber": this.state.testList.phoneNumber,
-					"labAddress": this.state.testList.labAddress,
-					"inHouseConsultationAvailable": this.state.testList.inHouseConsultationAvailable,
-					"isAvailableForHC": this.state.testList.isAvailableForHC,
-					"isAvailableForOB": this.state.testList.isAvailableForOB,
+					"userEmail":"",
+					"homeCollectible": this.state.labDetails.isAvailableForHC,
+					"labname": this.state.labDetails.labName,
+					"labId": this.state.labDetails.labId,
+					"location": this.state.labDetails.location,
+					"operatingHours": this.state.labDetails.operatingHours,
+					"phoneNumber": this.state.labDetails.phoneNumber,
+					"labAddress": this.state.labDetails.address,
+					"inHouseConsultationAvailable": this.state.labDetails.inHouseConsultationAvailable,
+					"isAvailableForHC": this.state.labDetails.isAvailableForHC,
+					"isAvailableForOB": this.state.labDetails.isAvailableForOB,
 					items:[]
 				}
-				var cartItem = this.findAnItem(test,this.state.testList.items,"testname");
-				cartItem.data.quantity=1;
-				cartInfo.items.push(cartItem.data);
+				var cartItem = this.findAnItem(test,this.state.testList.items,"labTestName");
+				var newTest ={
+					"testname": cartItem.data.labTestName,
+					"price": cartItem.data.offerPrice,
+					"listPrice": cartItem.data.MRP,
+					"quantity": 1,
+					"isHomeCollectible":false,
+					"labtestid": cartItem.data.labTestId
+				}
+				cartInfo.items.push(newTest);
 				cartInfo.totalItems=1;
-				cartInfo["totalListPrice"]=cartItem.data.listPrice;
-				cartInfo["totalPrice"]=cartItem.data.price;
+				cartInfo["totalListPrice"]=cartItem.data.MRP;
+				cartInfo["totalPrice"]=cartItem.data.offerPrice;
 
 				Fleb.eventDispatcher("updateCart",cartInfo);								
 
@@ -195,19 +234,21 @@ class TestList extends React.Component {
 		var labListHeader=[];
 		var listTableContent=[];
 		var _this=this;
-		if(this.state.loaded){
+		if(this.state.labDetails !== ""){
 			labdetailsUI = <div className="clearfix">
-				<h3>{this.state.testList.labname}</h3>
+				<h3>{this.state.labDetails.labName}</h3>
 				<div>
-					<span className="icon icon-clock"/>{this.state.testList.operatingHours}
+					<span className="icon icon-clock"/>{this.state.labDetails.operatingHours}
 				</div>
 				<div>
-					<span className="icon icon-phone"/>{this.state.testList.phoneNumber}
+					<span className="icon icon-phone"/>{this.state.labDetails.phoneNumber}
 				</div>
 				<div>
-					<span className="icon icon-location"/>{this.state.testList.labAddress}
+					<span className="icon icon-location"/>{this.state.labDetails.address}
 				</div>
 			</div>
+		}
+		if(this.state.loaded){
 			labListHeader=<div className="tb-head-row col4">
 				<div className="test-name">TEST NAME</div>
 				<div className="of-price">OFFER PRICE</div>

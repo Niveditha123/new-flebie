@@ -19,5 +19,22 @@ module.exports = {
                           res.send({})
                         }
                       });
+  },
+  getLab:function(req,res,next){
+      var headers={
+
+          };
+      console.log(req.query.id, "url")
+      var query = req.query.id;
+        request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/lab/getLab?id='+query)
+                .headers(headers)
+                .end(function (response) {
+                  console.log(response.status);
+                  if(response.status == 200){
+                    res.send(response.body);
+                  }else{
+                    res.send({})
+                  }
+                });
   }
 };
