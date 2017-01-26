@@ -9,6 +9,7 @@ var popularlabsController = require("../controllers/popularlabsController");
 var popularpackagesController = require("../controllers/popularpackagesController");
 var confirmController = require("../controllers/confirmController");
 var listlabsfortestController = require('../controllers/listlabsfortestController');
+var dashboardController = require("../controllers/dashboardController.js");
  
 module.exports = function() {
 
@@ -20,6 +21,7 @@ module.exports = function() {
   router.get('/populartests',populartestsController.renderPage);
     router.get('/popularlabs',popularlabsController.renderPage);
     router.get('/popularpackages',popularpackagesController.renderPage);
+    router.get('/dashboard',dashboardController.renderPage);
 
   router.get('/multisearchlabs', searchController.renderPage);
   router.get('/checkout', checkoutController.renderPage);

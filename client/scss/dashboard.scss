@@ -1,0 +1,10 @@
+@import "/layout.scss";
+@import "/bootstrap.min.css";
+html{
+    background-image: url("https://www.flebie.com/img/ListPage_Cover.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 325px;
+}
+.container-main{
+    padding-bottom: 210px;
+}
