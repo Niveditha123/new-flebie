@@ -9,109 +9,25 @@ class PopularLabs extends React.Component {
         }
     }
     loadPopLabs(){
-        var popLabs = [
-            {
-                "lab": {
-                "address": "Municipal No. 6a, 7th block, Jayanagar, Bengaluru",
-                "averageWaitingTime": 15,
-                "createdAt": "1900-01-01T00:00:00Z",
-                "emailId": "",
-                "inHouseConsultationAvailable": false,
-                "isAvailableForHC": false,
-                "isAvailableForOB": false,
-                "isCap": false,
-                "isDisplayable": true,
-                "isISOCertified": false,
-                "isNABLAccredited": false,
-                "isPopular": false,
-                "labId": 1,
-                "labName": "Lucid Medical Diagnostics",
-                "location": "Jayanagar",
-                "operatingHours": "7 am - 10 pm (All Days)",
-                "phoneNumber": 2147483647,
-                "updatedAt": "1900-01-01T00:00:00Z"
-                },
-                "labTest": {
-                "MRP": 4500,
-                "cost": 3375,
-                "createdAt": "1900-01-01T00:00:00Z",
-                "isDrive": false,
-                "isPopularPkg": false,
-                "labId": 1,
-                "labTestId": 1,
-                "labTestName": "Vitamin B6 (Pyridoxin), Serum",
-                "offerPrice": 4275,
-                "testId": 875,
-                "updatedAt": "1900-01-01T00:00:00Z"
-                },
-                "test": {
-                "comments": "",
-                "createdAt": "1900-01-01T00:00:00Z",
-                "description": "More information about this test will soon be",
-                "isDisplayable": true,
-                "isFastingRequired": false,
-                "isHomeCollectible": false,
-                "isPopular": false,
-                "sample": "Serum",
-                "testId": 875,
-                "testName": "Vitamin B6 (Pyridoxin), Serum",
-                "type": "TEST",
-                "updatedAt": "1900-01-01T00:00:00Z"
-                }
-            },
-            {
-                "lab": {
-                "address": "Municipal No. 6a, 7th block, Jayanagar, Bengaluru",
-                "averageWaitingTime": 15,
-                "createdAt": "1900-01-01T00:00:00Z",
-                "emailId": "",
-                "inHouseConsultationAvailable": false,
-                "isAvailableForHC": false,
-                "isAvailableForOB": false,
-                "isCap": false,
-                "isDisplayable": true,
-                "isISOCertified": false,
-                "isNABLAccredited": false,
-                "isPopular": false,
-                "labId": 1,
-                "labName": "Lucid Medical Diagnostics",
-                "location": "Jayanagar",
-                "operatingHours": "7 am - 10 pm (All Days)",
-                "phoneNumber": 2147483647,
-                "updatedAt": "1900-01-01T00:00:00Z"
-                },
-                "labTest": {
-                "MRP": 4500,
-                "cost": 3375,
-                "createdAt": "1900-01-01T00:00:00Z",
-                "isDrive": false,
-                "isPopularPkg": false,
-                "labId": 1,
-                "labTestId": 2,
-                "labTestName": "Vitamin E (Tocopherol), Serum",
-                "offerPrice": 4275,
-                "testId": 877,
-                "updatedAt": "1900-01-01T00:00:00Z"
-                },
-                "test": {
-                "comments": "",
-                "createdAt": "1900-01-01T00:00:00Z",
-                "description": "More information about this test will soon be",
-                "isDisplayable": true,
-                "isFastingRequired": false,
-                "isHomeCollectible": false,
-                "isPopular": false,
-                "sample": "Serum",
-                "testId": 877,
-                "testName": "Vitamin E (Tocopherol), Serum",
-                "type": "TEST",
-                "updatedAt": "1900-01-01T00:00:00Z"
-                }
-            }
-            ];
-            this.setState({
-                popularLabs:popLabs
-            })
+        var _this=this;
+        reqwest({			
+					url:"/getLabs"
+					,headers:{
+						"Access-Control-Allow-Origin":"*"
+					}
+					, method: 'get'
+					, error: function (err) {
+						_this.setState({
+                            popularLabs:[]
+                        })  
+					}
+					, success: function (resp) {
+						    _this.setState({
+                                popularLabs:resp
+                            })    
+					}
+			})
+
     }
     componentDidMount(){
         this.loadPopLabs.bind(this)();
@@ -119,24 +35,21 @@ class PopularLabs extends React.Component {
     showMoreDetails(e){
 		var elem = e.target.getAttribute("data-target");
 		this.refs[elem].className="lab-details fade-in";
+        e.preventDefault();
 	}
 	hideMoreDetails(e){
 		var elem = e.target.getAttribute("data-target");
 		this.refs[elem].className="lab-details fade-out";
+        e.preventDefault();
 	}
     render(){
         var popLabsUI=[];
         var _this=this;
-        popLabsUI=this.state.popularLabs.map(function(item,index){
-            var lab = item.lab;
-			var labTest = item.labTest;
-			var test = item.test;
-            return <div className="list-item">
+        popLabsUI=this.state.popularLabs.map(function(lab,index){
+            return <a className="list-item" href={"/test/list?labId="+lab.labId}>
 					<div><div className="item-head">
 						<button data-target={"labDetails"+index} onClick={_this.showMoreDetails.bind(_this)} className="btn btn-link icon icon-info"></button>
 						<div className="fr price-block">
-							<div className="striked-price"><span className="icon icon-rupee"/>{labTest.MRP}</div>
-							<div className="actual-price"><span className="icon icon-rupee"/>{labTest.offerPrice}</div>
 						</div>
 					</div>
 					<div className="lab-img img-block">
@@ -145,9 +58,9 @@ class PopularLabs extends React.Component {
 					<div className="lab-footer">
 						<h3>{lab.labName}</h3>
 						<h6>{lab.location}</h6>
-						<div className="clearfix">
-							<span className={(lab.isNABLAccredited)?"fl icon icon-checked":"hide"}/>
-							<span className={(lab.isAvailableForHC)?"fl icon icon-homedelivery":"hide"}/>
+						<div className="clearfix lab-options">
+							<span className={(lab.isNABLAccredited)?"fl icon icon-tick":"hide"}/>
+							<span className={(lab.isAvailableForHC)?"fl icon icon-home":"hide"}/>
 							<span className={(lab.isAvailableForOB)?"fl icon icon-appointment":"hide"}/>
 						</div>
 					</div>
@@ -171,7 +84,7 @@ class PopularLabs extends React.Component {
 					</div>
 				</div>
 				</div>
-			</div>
+			</a>
         })
         return (
             <div className="poplabs-main ">

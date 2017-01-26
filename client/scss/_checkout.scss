@@ -98,6 +98,7 @@ input[type=radio] {
 .form-row {
     position: relative;
     padding-bottom: 12px;
+    min-height: 40px;
 }
 .err-msg {
     color: #a80505;
@@ -111,4 +112,64 @@ span.required {
 }
 .active-tab {
     border-bottom: solid 2px #000;
+}
+.checkout-content {
+    background: #FFFFFF;
+    padding: 12px;
+    margin-top: 20px;
+}
+.order-block > h3,.order-summary >h3 {
+    color: #333;
+    font-size: 1.5em;
+}
+.tab-head-row {
+    border: solid 1px #cccccc;
+    padding: 12px 0px 0px 0px;
+    > button {
+        width: 33.3%;
+        font-weight: bold;
+        font-size: 1em;
+        text-align: center;
+    }
+}
+.tab-content {
+    border: solid 1px #cccccc;
+    //padding-left: 20px;
+}
+.age-block {
+    width: 35%;
+}
+.gen-block{
+    float: left;
+    width: 65%;
+    .err-msg{
+        padding-left: 20px;
+    }
+}
+.checkout-content >div{
+    padding:9px
+}
+.tab-main {
+    padding: 0px 12px;
+    font-size: .8em;
+}
+.radio-inline.first-radio {
+    padding-left: 0;
+}
+.sel-head {
+    font-size: 1em;
+    text-align: center;
+    padding: 12px 0;
+}
+.time-selector-main {
+    padding-left: 20px;
+    select {
+        min-height: 50px;
+    }
+}
+.SingleDatePickerInput{
+    border-radius: 4px;
+}
+.m20{
+    margin-bottom: 12px;
 }

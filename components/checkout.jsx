@@ -32,7 +32,8 @@ class CheckOut extends React.Component {
                 waterMark:"Name",
                 type:"text",
                 iconCSS:"icon icon-user",
-                reg:/^[a-zA-Z ]+$/
+                reg:/^[a-zA-Z ]+$/,
+                css:"clearfix"
             },
             {
                 name:"email",
@@ -42,7 +43,8 @@ class CheckOut extends React.Component {
                 waterMark:"Email",
                 type:"email",
                 iconCSS:"icon icon-email",
-                reg:/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                reg:/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                css:"clearfix"
             },
             {
                 name:"phone",
@@ -52,7 +54,8 @@ class CheckOut extends React.Component {
                 waterMark:"Phone",
                 type:"tel",
                 iconCSS:"icon icon-mob",
-                reg:/^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$/
+                reg:/^(?:(?:\+|0{0,2})91(\s*[\ -]\s*)?|[0]?)?[789]\d{9}|(\d[ -]?){10}\d$/,
+                css:"clearfix"
             },
             {
                 name:"age",
@@ -61,7 +64,8 @@ class CheckOut extends React.Component {
                 required:false,
                 waterMark:"Age",
                 type:"number",
-                iconCSS:"icon icon-age"
+                iconCSS:"icon icon-age",
+                css:"fl w50 age-block"
             }
         ];
         this.setState({
@@ -114,6 +118,7 @@ debugger;
         var elem= this.refs.patientDetailsBlock;
         var inputArray= elem.querySelectorAll(".form-control");
         var patientData={};
+        var isError=true;
         debugger;
         for(var i =0;i<inputArray.length;i++){
             var input = inputArray[i];
@@ -130,7 +135,8 @@ debugger;
                         patientData[name]= val;
                     }else{
                         errElem.className="err-msg "  ;
-                        patientData[name]= "";                      
+                        patientData[name]= ""; 
+                        isError=false;                     
                     }
                 }else{
                     if(name === "age"){
@@ -139,13 +145,22 @@ debugger;
                              patientData[name]= val;
                         }else{
                              errElem.className="err-msg";
+                             errElem.innerHTML="Please Enter Age";
                              patientData[name]= "";
+                             isError=false;
+                        }
+                        if(val <=5){
+                            errElem.className="err-msg";
+                            errElem.innerHTML="Age must be greater than 5 years";
+                             patientData[name]= "";
+                             isError=false;
                         }
                     }
                 }
             }else{
                 errElem.className="err-msg";
                 patientData[name]= "";
+                isError=false;
             }
         }
         var genderList = this.refs.genderBlock.querySelectorAll(".radio-ctrl");
@@ -158,15 +173,19 @@ debugger;
         }
         if(isGender== false){
             this.refs.errInputGen.className="err-msg";
+            isError=false;
         }else{
             patientData["gender"]= isGender;
             this.refs.errInputGen.className="err-msg fade-out";            
         }
-        this.setState({
-            enableScheduling:true,
-            patientData:patientData,
-            activetab:"SchedulingBlock"
-        })
+        if(isError){
+            this.setState({
+                enableScheduling:true,
+                patientData:patientData,
+                activetab:"SchedulingBlock"
+            })
+
+        }
     }
     getTimeSlots(){
         var _this = this;
@@ -184,6 +203,15 @@ debugger;
 						})
 					}                         
         });  */
+        debugger;
+        var d = new Date();
+            var currentTime = d.getHours();
+            if((moment(this.state.date).format('MM/DD/YYYY') == moment().format('MM/DD/YYYY')) &&  (currentTime >=14 )){
+             _this.setState({
+                timeSlotArray:[]
+			})  
+             return false;
+         }
 
         reqwest({			
 				url:"/getAvailableSlots?slotDate="+date
@@ -213,12 +241,14 @@ debugger;
     getSchedulingInfo(){
         var _this = this;
         var date = moment(this.state.date).format('YYYY-MM-DD');
+        debugger;
+        var orderComments = this.refs.commentBox.value;
         var payLoad = {
             "consumerId": 1,
             "convenienceFee": 12,
             "grossMRP": 950,
             "grossTotal": 0,
-            "orderComments": "</sas?as?",
+            "orderComments": orderComments,
             "orderLevelDiscount": 0,
             "orderOriginPerson": 1,
             "orderTotal": 888,
@@ -227,13 +257,7 @@ debugger;
             "scheduleDate": "2017-01-09T00:00:00+05:30",
             "scheduleTime": "09:00 PM",
             "status": "PENDING",
-            "orderDetails": {
-                "age": 27,
-                "phoneNumber": 88888,
-                "firstName": "Adarsha",
-                "lastName": "Shetty",
-                "address": "AAAA"
-            },
+            "orderDetails":this.state.patientData,
                 "orderItems": [
                 {
                     "labTestId": 1,
@@ -268,7 +292,7 @@ debugger;
         var tabContentUI =[];
         var patientDetailsForm=[];
         patientDetailsForm = this.state.patientDetailsInfo.map(function(item,index){
-            return <div className="form-row">
+            return <div className={"form-row "+ item.css}>
                 <div className="input-row input-group">
                     <span className={item.iconCSS+" input-group-addon"}/>
                     <input type={item.type} 
@@ -287,44 +311,66 @@ debugger;
             <h3>Patient Details</h3>
             <div className="form-content">
             {patientDetailsForm}
-            <div ref="genderBlock" className="form-row input-row">
+            <div ref="genderBlock" className="form-row gen-block input-row">
                 <label className="radio-inline">
                     <input type="radio" name="gender" className="radio-ctrl" id="male" value="male"/> Male
                 </label>
                 <label className="radio-inline">
                     <input type="radio" name="gender" className="radio-ctrl" id="female" value="female"/> Female
                 </label>
-            </div>
             <div ref="errInputGen" className="err-msg fade-out">Please select gender</div>
+                
+            </div>
+            <div className="clearfix tab-ft">
             <button id="getPatientInfo" className="btn btn-success fr btn-next curved" onClick={this.getPatientInfo.bind(this)}>Next</button>
+            </div>
             </div>
         </div>
         var timeSlotArrayUI = [];
         if(this.state.timeSlotArray.length == 0){
             if(moment(this.state.date).format('MM/DD/YYYY') == moment().format('MM/DD/YYYY')){
-                timeSlotArrayUI= <option value="">"Not insame day"</option>
+                timeSlotArrayUI= <option value="">Not insame day</option>
             }else{
-            timeSlotArrayUI=<option value="">"Please select another date"</option>
+            timeSlotArrayUI=<option value="">Please select another date</option>
                     
             }
         }else{
+            var d = new Date();
+            var currentTime = d.getHours();
+            var restrict = 0;
+            var istomo=false;
+            if(moment().add(1,'days').format('YYYY-MM-DD') == moment(this.state.date).format('YYYY-MM-DD') ){
+                istomo=true;
+            }
+            
+            if(currentTime >=22 && istomo){
+                restrict = 7;
+            }
+
+            if((moment(this.state.date).format('MM/DD/YYYY') == moment().format('MM/DD/YYYY')) && (currentTime <14)) {
+                restrict = currentTime - 0;
+            }
             timeSlotArrayUI = this.state.timeSlotArray.map(function(item,index){
-            return  <option value={item}>{item}</option>
+                if(index <=restrict){
+                    return  <option className="no-sel" disabled value={item}>{item}</option>
+                }else{
+                    return <option value={item}>{item}</option>
+                }
             })
         }
 
          var schedulingUI = <div id="SchedulingBlock" className={(this.state.activetab==="SchedulingBlock")?"tab-main fade-in":"fade-out"}>
                 <p>Convenience fee of INR 100 will be levied on home collection orders</p>
                 <div className="clearfix">
-                    <label className="radio-inline">
+                    <label className="radio-inline first-radio">
                         <input type="radio" name="ordertype" defaultChecked id="ordertype1" value="Home Collection"/> Home Collection
                     </label>
                     <label className="radio-inline">
                         <input type="radio" name="ordertype" id="ordertype2" value="Walk-in Appointment"/> Walk-in Appointment
                     </label>
                 </div>
-                <h4>Select Date and Timeslot</h4>
-                <div className="col2-row">
+                <h4 className="sel-head">Select Date and Timeslot</h4>
+                <div className="col2-row m20">
                     <SingleDatePicker
                             id="date_input"
                             date={this.state.date}
@@ -340,7 +386,7 @@ debugger;
                         </select>
                     </div>
                 </div>
-                    <div className="form-row">
+                    <div className="form-row m20">
                         <label className="control-label ">Address</label>
                         <input type="textarea" 
                             id="address"
@@ -350,15 +396,18 @@ debugger;
                         <span className={"hide"}>*</span>
                         <div ref={"errInput"} className="err-msg fade-out">"Please Enter Addres"</div>
                     </div>
-                    <div className="form-row">
+                    <div className="form-row m20">
                         <label className="control-label ">Comments</label>
                         <input type="textarea" 
                             id="comments"
+                            ref="commentBox"
                             className="form-control"/>
 
                         <span className={"hide"}>*</span>
                     </div>
+                    <div className="clearfix">
                     <button id="getSchdulingInfo" className="btn btn-success fr btn-next curved" onClick={this.getSchedulingInfo.bind(this)}>Next</button>
+                    </div>
         </div>;
         var paymentUI = <div id="paymentBlock" className={(this.state.activetab==="paymentBlock")?"tab-main fade-in":"fade-out"}>
             <h3>Payment</h3>

@@ -159,9 +159,9 @@ class Search extends React.Component {
 					<div className="lab-footer">
 						<h3>{lab.labName}</h3>
 						<h6>{lab.location}</h6>
-						<div className="clearfix">
-							<span className={(lab.isNABLAccredited)?"fl icon icon-checked":"hide"}/>
-							<span className={(lab.isAvailableForHC)?"fl icon icon-homedelivery":"hide"}/>
+						<div className="clearfix lab-options">
+							<span className={(lab.isNABLAccredited)?"fl icon icon-tick":"hide"}/>
+							<span className={(lab.isAvailableForHC)?"fl icon icon-home":"hide"}/>
 							<span className={(lab.isAvailableForOB)?"fl icon icon-appointment":"hide"}/>
 							<button data-lab={lab.labName} onClick={_this.openKart.bind(_this)} className="fr btn-btn-success bookme flebie-btn">BOOK ME</button>
 						</div>

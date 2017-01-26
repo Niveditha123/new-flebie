@@ -11,6 +11,7 @@ class Dashboard extends React.Component {
     
     componentDidMount(){
         //this.loadPopLabs.bind(this)();
+        
 	}
 
     render(){

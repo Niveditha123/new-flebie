@@ -582,6 +582,7 @@ class PopularPackages extends React.Component {
             var cartData= this.createNewCart.bind(this)(item.data);
             Fleb.eventDispatcher("updateCart",cartData);
         }
+        Fleb.eventDispatcher("toggleCartModal",{flag:true});
     }
     render(){
             var popPackagesUI=[];

@@ -38,7 +38,7 @@ class TestList extends React.Component {
 		var newList=[];
 		for(var i=0;i <this.state.testList.items.length;i++){
 			var item = this.state.testList.items[i];
-			var name = item.testname.toLowerCase();
+			var name = item.labTestName.toLowerCase();
 			if(name.indexOf(_this.state.inputFilter.toLowerCase()) > -1){
 				newList.push(item)
 			}

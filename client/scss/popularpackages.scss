@@ -8,6 +8,9 @@ html{
 .container-main{
     padding-bottom: 210px;
 }
+.lab-lists{
+    background: #FFFFFF;
+}
 .lab-lists > div {
     width: 33.3%;
     float: left;
@@ -16,6 +19,7 @@ html{
     >div{
         position: relative;
         box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.66);
+        background: #FFFFFF;
     }
 }
 .lab-lists .item-head {

@@ -10,7 +10,8 @@ class OpenCartModalContent extends React.Component{
         totalItems:0,
         labname:"",
         totalListPrice:0,
-        totalPrice : 0
+        totalPrice : 0,
+        openModal:false
       }
     }
   }
@@ -61,8 +62,14 @@ class OpenCartModalContent extends React.Component{
   componentDidMount(){
        this.getUserTests.bind(this)();
       document.body.addEventListener('updateCart',this.updateCart.bind(this));
+      document.body.addEventListener('toggleCartModal',this.toggleCartModal.bind(this));
        
 	}
+  toggleCartModal(e){
+    this.setState({
+      openModal:e.data.flag
+    })
+  }
   updateCart(e){
     console.log(e.data,this.props.triggerElem,"yooo")
       this.setState({
@@ -76,7 +83,18 @@ class OpenCartModalContent extends React.Component{
     var dataList = this.state.testsList;
     var item = dataList.items[itemId];
     if(item.quantity == 1){
-      dataList.items.splice( itemId, 1)
+      dataList.items.splice( itemId, 1);
+      this.setState({
+        testInfo:{
+          items:[],
+          totalItems:0,
+          labname:"",
+          totalListPrice:0,
+          totalPrice : 0
+        }     
+      },function(){
+        localStorage.removeItem("cartInfo")
+      })
     }else{
       item.quantity= item.quantity-1;
     }
@@ -176,7 +194,7 @@ class OpenCartModalContent extends React.Component{
       </div>
     }else{
       listUI = <div className="msg-block">
-        No test added!!
+        You have not selected any test
       </div>
     }
     var cartUI =[];
@@ -192,13 +210,13 @@ class OpenCartModalContent extends React.Component{
        <div className="modal-footer clearfix">
         <label className="footer-label fl">{this.state.testsList.labname}</label>
         <button type="submit" onClick={this.gotoCheckout.bind(this)} data-dismiss="modal"  className="btn fr btn-success curved">
-          checkout</button>
+          Checkout</button>
         <button type="submit" onClick={this.gotoTestList.bind(this)}   className="btn fr  curved">
           Add Tests</button>
           
         </div>
        </div>;
-      cartUI.push(<Modal open={false} selfClose={true}  
+      cartUI.push(<Modal open={this.state.openModal} selfClose={true}  
     id={"cartPopUp"} 
     headText={"Your Tests"}
     css="your-tests-pop"

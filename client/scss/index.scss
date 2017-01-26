@@ -1,4 +1,14 @@
 @import "/layout.scss";
+html{
+    background-attachment: fixed;
+    display: block;
+    height:100%;
+    overflow-y:auto;
+    //background-image:url("https://www.flebie.com/img/HomePagebg.jpg");
+    background-image: url("/public/images/HomePagebg.jpg");
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+}
 .banner-main{
     position: relative;
     top: 0;
@@ -197,4 +207,7 @@ button.btn.btn-close {
 .selected-list.clearfix {
     text-align: left;
     padding: 5px;
+}
+.container-main, html body {
+    background-image: none ;
 }

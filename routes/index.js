@@ -37,7 +37,8 @@ module.exports = function() {
   router.get('/getLabTestsFromLabId',testListController.getLabTestsFromLabId);
   router.get('/getLab',testListController.getLab);
   router.get("/getAvailableSlots",checkoutController.getAvailableSlots);
-  router.post("/createOrder",checkoutController.createOrder)
+  router.post("/createOrder",checkoutController.createOrder);
+  router.get("/getLabs",popularlabsController.getLabs)
 
 
   return router;

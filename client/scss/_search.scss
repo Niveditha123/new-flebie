@@ -1,9 +1,5 @@
 @import "/layout.scss";
-html{
-    background-image: url("https://www.flebie.com/img/ListPage_Cover.jpg");
-    background-repeat: no-repeat;
-    background-size: 100% 325px;
-}
+
 .container-main {
     padding-bottom: 200px;
 }
@@ -36,6 +32,7 @@ html{
     >div{
         position: relative;
         box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.66);
+        background: #FFFFFF;
     }
 }
 .lab-lists .item-head {
@@ -72,6 +69,12 @@ html{
     padding: 12px;
     h3{
         margin:0px;
+        font-size: 1em;
+    }
+     h6 {
+        font-size: .9em;
+        color: #3f3f40;
+        font-weight: lighter;
     }
 }
 .flebie-btn{
@@ -89,6 +92,10 @@ html{
     left: 0;
     background: rgba(0, 0, 0, 0.90);
     color: #ffffff;
+    min-height: 67%;
+    .btn-link{
+        text-decoration: none;
+    }
 }
 .clearfix.details-block div {
     padding: .5em 1em;
@@ -113,10 +120,13 @@ html{
     height: auto;
 }
 .tab-head-row .btn.tab-btn {
-    padding-left: 0px;
     text-decoration: none;
     margin-right: 12px;
-    color: #000000;
+    color: #a2a2a2;
+    background: rgba(17, 17, 17, 0.59);
+    :hover {
+        background: #000000;
+    }   
 }
 .btn.tab-btn.active-tab {
     background: #000000;
@@ -126,4 +136,20 @@ html{
 .tab-block {
     min-height: 160px;
     overflow: hidden;
+}
+button.icon.icon-info {
+    color: #000000;
+    text-decoration: none;
+}
+.lab-options{
+     >SPAN {
+        margin: 0px 4px;
+     }
+     .icon-tick{
+         color:#018429;
+     }
+}
+.lab-lists {
+    margin-top: 20px;
+    background: #FFFFFF;
 }

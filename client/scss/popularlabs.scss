@@ -8,14 +8,18 @@ html{
 .container-main{
     padding-bottom: 210px;
 }
-.lab-lists > div {
+.lab-lists > a {
     width: 33.3%;
     float: left;
     padding: 1em;
-        
+    display: block;
+    text-decoration: none !important;
+    background: #FFFFFF;
     >div{
         position: relative;
         box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.66);
+            min-height: 280px;
+            color: #333333;
     }
 }
 .lab-lists .item-head {
@@ -52,6 +56,12 @@ html{
     padding: 12px;
     h3{
         margin:0px;
+        font-size: 1em;
+    }
+     h6 {
+        font-size: .9em;
+        color: #3f3f40;
+        font-weight: lighter;
     }
 }
 .flebie-btn{
@@ -106,4 +116,16 @@ html{
 .tab-block {
     min-height: 160px;
     overflow: hidden;
+}
+.lab-options{
+     >SPAN {
+        margin: 0px 4px;
+     }
+     .icon-tick{
+         color:#018429;
+     }
+}
+.lab-lists {
+    margin-top: 20px;
+    background: #FFFFFF;
 }
