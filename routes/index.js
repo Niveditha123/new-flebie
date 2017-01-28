@@ -10,7 +10,7 @@ var popularpackagesController = require("../controllers/popularpackagesControlle
 var confirmController = require("../controllers/confirmController");
 var listlabsfortestController = require('../controllers/listlabsfortestController');
 var dashboardController = require("../controllers/dashboardController.js");
-var otherPageController = require("../controllers/otherPagesController.js");
+var otherPageController = require("../controllers/otherpagesController.js");
  
 module.exports = function() {
 
