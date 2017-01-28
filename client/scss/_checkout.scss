@@ -172,3 +172,35 @@ span.required {
 .m20{
     margin-bottom: 12px;
 }
+
+@media (max-width: 1023px){
+    .checkout-banner p {
+        margin-top: 0px;
+    }
+    .container-main{
+        background-size: 122% 400px;
+    }
+    .col2-row,.col2-row > * {
+        display: block;
+        width: 100%;
+    }
+    .tab-head-row > button {
+        width: 100%;
+    }
+    .radio-inline{
+        padding-left: 6px;
+    }
+    .age-block {
+        width: 100%;
+    }
+    .container-main > div{
+        width: 100%;
+    }
+    .checkout-content{
+        margin-top: 40px;
+    }
+    .list-cont-inner{
+        width:100%;
+        overflow-y: auto;
+    }
+}

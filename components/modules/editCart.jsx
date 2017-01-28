@@ -186,11 +186,15 @@ class OpenCartModalContent extends React.Component{
           <div className="text-right"><span className="icon icon-rupee"></span>{this.state.testsList.totalListPrice-this.state.testsList.totalPrice}</div>
         </div>;
 
-      listUI = <div className="list-content">
-      {head}
-       {list}
-       {priceUI}
-       {discountUI}
+      listUI = <div>
+      <div className="list-cont-inner">
+          <div className="list-content">
+            {head}  
+            {list}
+          </div>
+      </div>
+      {priceUI}
+          {discountUI}
       </div>
     }else{
       listUI = <div className="msg-block">

@@ -151,3 +151,9 @@ button.icon.icon-info {
     margin-top: 20px;
     background: #FFFFFF;
 }
+
+@media (max-width: 1023px){
+    .lab-lists > div {
+        width: 100%;
+    }
+}

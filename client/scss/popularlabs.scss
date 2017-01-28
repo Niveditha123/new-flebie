@@ -129,3 +129,12 @@ html{
     margin-top: 20px;
     background: #FFFFFF;
 }
+@media (max-width: 1023px){
+    .col3 div{
+        width: 100%;
+    }
+    .container-main {
+        padding-bottom: 30px;
+    }
+
+}
