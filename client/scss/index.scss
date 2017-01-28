@@ -177,7 +177,7 @@ button.btn.btn-close {
     content: " ";
     height: 2px;
     background: #FFFFFF;
-    width: 42%;
+    width: 3%;
     float: right;
     margin: auto;
     position: absolute;
@@ -192,7 +192,7 @@ button.btn.btn-close {
     content: " ";
     height: 2px;
     background: #FFFFFF;
-    width: 42%;
+    width: 30%;
     float: left;
     margin: auto;
     position: absolute;
@@ -210,4 +210,30 @@ button.btn.btn-close {
 }
 .container-main, html body {
     background-image: none ;
+}
+
+@media (max-width: 1023px){
+
+    
+    .banner-block {
+        margin-top: 50px;
+        font-size: 10px;
+    }
+    .banner-main P {
+        margin-top: 1.5em;
+        font-size: 1.4em;
+        margin-bottom: 1.5em;
+    }
+    .banner-main .input-ctrl{
+        width: 100%;
+    }
+    .bread-crumb .btn{
+            padding: 6px 0px;
+    }
+    html {
+        background-size: cover;
+    }
+    .banner-main .home-input{
+        width: 100%;
+    }
 }

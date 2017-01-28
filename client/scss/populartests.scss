@@ -60,3 +60,10 @@ html{
 .poptest6{
      background-position:-275px -140px;
 }
+
+@media (max-width: 1023px){
+    .col3 div{
+        width: 100%;
+    }
+
+}

@@ -110,3 +110,12 @@ html{
     min-height: 160px;
     overflow: hidden;
 }
+@media (max-width: 1023px){
+    .lab-lists > div{
+        width: 100%;
+    }
+    .container-main{
+        padding-bottom: 30px;
+    }
+
+}

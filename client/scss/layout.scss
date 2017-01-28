@@ -3,7 +3,9 @@
 @import "_base.scss";
 @import '../../public/fonts/iconfont.css';
 
-
+@-ms-viewport{
+  width: device-width;
+}
 /* Custom Fonts
 -------------------------------------------------- */
 @font-face {
@@ -447,4 +449,38 @@ span.cart-badge {
 }
 html,body{
     margin: 0;
+}
+
+@media (max-width: 1023px){
+    html{
+        background-size: cover;
+    }
+    .container-main{
+        padding: 100px 1em  30px 1em;
+    }
+    .container-main > div {
+        width: 90%
+    }
+    .bread-crumb .btn{
+            padding: 6px 0px;
+    }
+    .banner-main.banner-main h1, .checkout-banner h1 {
+            font-size: 2em;
+    }
+    .col3 div{
+        width: 100%;
+    }
+    p.descrition-area {
+        font-size: 12px;
+        line-height: 16px;
+    }
+    .modal-overlay .modal-body{
+        padding: 9px;
+        font-size: .8em;
+    }
+    .modal-header{
+        h3 {
+                margin: 6px 0px;
+            }
+    }
 }
