@@ -30,6 +30,10 @@ module.exports = function() {
   router.get('/paymentresponse',confirmController.renderPage);
   router.get('/listlabsfortest',listlabsfortestController.renderPage);
     router.get('/aboutus',otherPageController.aboutus);
+  router.get('/faqs',otherPageController.faqs);
+  router.get('/terms&condition',otherPageController.terms);
+   router.get('/privacypolicy',otherPageController.privacypolicy);
+   router.get('/refundsandcancellation',otherPageController.refundsandcancellation);
   //router.get('/multisearchlabs', searchController.renderPage);
 
 

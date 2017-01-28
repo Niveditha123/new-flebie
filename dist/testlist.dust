@@ -1,7 +1,7 @@
 {>"layouts/master" /}
 
 {<pageStyles}
-<link rel="stylesheet"  type="text/css" href="/public/styles/testlist.ea56accd0348c563f544.css"></link>
+<link rel="stylesheet"  type="text/css" href="/public/styles/testlist.css"></link>
 {/pageStyles}
 
 
@@ -12,5 +12,5 @@
 
 
 {<pageScripts}
-<script src="/public/scripts/testlistbundle.ea56accd0348c563f544.js"></script>
+<script src="/public/scripts/testlistbundle.js"></script>
 {/pageScripts}

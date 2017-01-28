@@ -1,7 +1,7 @@
 {>"layouts/master" /}
 
 {<pageStyles}
-<link rel="stylesheet"  type="text/css" href="/public/styles/search.1a0e15546de47ec3dc01.css"></link>
+<link rel="stylesheet"  type="text/css" href="/public/styles/search.css"></link>
 {/pageStyles}
 
 
@@ -12,5 +12,5 @@
 
 
 {<pageScripts}
-<script src="/public/scripts/searchbundle.1a0e15546de47ec3dc01.js"></script>
+<script src="/public/scripts/searchbundle.js"></script>
 {/pageScripts}

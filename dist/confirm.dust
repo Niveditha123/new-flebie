@@ -1,7 +1,7 @@
 {>"layouts/master" /}
 
 {<pageStyles}
-<link rel="stylesheet"  type="text/css" href="/public/styles/confirm.1b0a113319733f9c1c75.css"></link>
+<link rel="stylesheet"  type="text/css" href="/public/styles/confirm.css"></link>
 {/pageStyles}
 
 
@@ -12,5 +12,5 @@
 
 
 {<pageScripts}
-<script src="/public/scripts/confirmbundle.1b0a113319733f9c1c75.js"></script>
+<script src="/public/scripts/confirmbundle.js"></script>
 {/pageScripts}

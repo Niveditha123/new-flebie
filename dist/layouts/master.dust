@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <title>Demo- {+title /}</title>
-    <link rel="stylesheet"  type="text/css" href="/public/styles/common.6cabdc8e065c832600f0.css"></link>
+    <link rel="stylesheet"  type="text/css" href="/public/styles/common.css"></link>
      {+pageStyles /}
   </head>
   <body>
@@ -52,7 +52,7 @@
   <div id="utilBlock">
   </div>
 
-<script src="/public/scripts/commonbundle.6cabdc8e065c832600f0.js"></script>
+<script src="/public/scripts/commonbundle.js"></script>
   {+pageScripts /}
   </body>
 </html>

@@ -1,7 +1,7 @@
 {>"layouts/master" /}
 
 {<pageStyles}
-<link rel="stylesheet"  type="text/css" href="/public/styles/index.4788f20ea3dd22f54566.css"></link>
+<link rel="stylesheet"  type="text/css" href="/public/styles/index.css"></link>
 {/pageStyles}
 
 
@@ -12,5 +12,5 @@
 
 
 {<pageScripts}
-<script src="/public/scripts/indexbundle.4788f20ea3dd22f54566.js"></script>
+<script src="/public/scripts/indexbundle.js"></script>
 {/pageScripts}

@@ -71,42 +71,6 @@ class CheckOut extends React.Component {
         this.setState({
             patientDetailsInfo:patientForm
         })
- var payLoad = {
-            "consumerId": 1,
-            "convenienceFee": 12,
-            "grossMRP": 90,
-            "grossTotal": 907,
-            "orderComments": "</sas?as?",
-            "orderLevelDiscount": 0,
-            "orderOriginPerson": 1,
-            "orderTotal": 888,
-            "paymentType": "CARD",
-            "promotionId": 1,
-            "scheduleDate": "2016-01-07T00:00:00+05:30",
-            "scheduleTime": "06:30 AM",
-            "status": "PENDING",
-            "orderDetails": {
-                "age": 27,
-                "phoneNumber": 88888,
-                "firstName": "Adarsha",
-                "lastName": "Shetty",
-                "address": "AAAA"
-            },
-                "orderItems": [
-                {
-                    "labTestId": 1,
-                    "quantity": 2
-                }
-                ]
-            };
-           /* najax.post('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/createOrder', {
-      data:JSON.stringify(payLoad),
-      contentType: 'application/xml;charset=utf-8'
-    }, createSuccess());
-
-    function createSuccess(){
-debugger;
-    } */
 	}
     openSection(e){
         var target = e.target.getAttribute("data-target");

@@ -1,7 +1,7 @@
 {>"layouts/master" /}
 
 {<pageStyles}
-<link rel="stylesheet"  type="text/css" href="/public/styles/listlabsfortest.9e4c830934eaa9aff318.css"></link>
+<link rel="stylesheet"  type="text/css" href="/public/styles/listlabsfortest.css"></link>
 {/pageStyles}
 
 
@@ -12,5 +12,5 @@
 
 
 {<pageScripts}
-<script src="/public/scripts/listlabsfortestbundle.9e4c830934eaa9aff318.js"></script>
+<script src="/public/scripts/listlabsfortestbundle.js"></script>
 {/pageScripts}

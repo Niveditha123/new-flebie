@@ -1,7 +1,7 @@
 {>"layouts/master" /}
 
 {<pageStyles}
-<link rel="stylesheet"  type="text/css" href="/public/styles/populartests.aef0350add8c89b62067.css"></link>
+<link rel="stylesheet"  type="text/css" href="/public/styles/populartests.css"></link>
 {/pageStyles}
 
 
@@ -12,5 +12,5 @@
 
 
 {<pageScripts}
-<script src="/public/scripts/populartestsbundle.aef0350add8c89b62067.js"></script>
+<script src="/public/scripts/populartestsbundle.js"></script>
 {/pageScripts}

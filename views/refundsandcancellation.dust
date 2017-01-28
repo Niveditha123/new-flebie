@@ -1,0 +1,20 @@
+{>"layouts/master" /}
+
+{<pageStyles}
+<link rel="stylesheet"  type="text/css" href="/public/styles/other.css"></link>
+{/pageStyles}
+
+
+{<title}Login{/title}
+{<body}
+<div id="root" class="container-main">
+    <div class="clearfix other-pages">
+        <div class="banner-main">
+            <div class="bannertext"><h2>Cancellation Policy</h2></div>
+        </div>
+        <div className="content-main">
+            <div style="margin:10px;" class="row"><h2 class="text-center">Cancellation Charges</h2><table class="table table-bordered"><tbody><tr><td>Any time after the transaction and before the Flebie's visit to the patient's home</td><td>3% of the total transaction amount</td></tr><tr><td>Flebie visits the patient premises but the booking is cancelled. Sample is not collected.</td><td>Rs 100 + 3% of the Total Test Cost</td></tr><tr><td>After the sample is picked up</td><td>100% (No Refund)</td></tr></tbody></table><ol type="I"><li>In case a request for refund reaches the company, amount paid will be credited into patient account/card for within a maximum of 10 (Business days) days from the date of cancellation.</li><li>No refund will be given after 45 days of the preferred slot have been booked by patient.</li><li>Cancellations received after the stated deadline will not be eligible for the refund.</li><li>Refund request must include the name of the attendee and/or transaction number.</li></ol></div>
+        </div>
+    </div>
+</div>
+{/body}
