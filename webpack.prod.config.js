@@ -1,6 +1,9 @@
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var webpackUglifyJsPlugin = require('webpack-uglify-js-plugin');
+var changeFilePlugin = require('./build/changeFilePlugin.js');
+console.log("prdo wjjsj");
 module.exports = {
 
         devtool: 'source-map',
@@ -28,12 +31,16 @@ module.exports = {
         },
         output: {
             path: path.join(__dirname, 'public'),
-            filename: 'scripts/[name]bundle.js',
+            filename: 'scripts/[name]bundle.[chunkHash].js',
             publicPath: '/public/',
         },
         plugins: [
             new webpack.NoErrorsPlugin(),
-            new ExtractTextPlugin("styles/[name].css")
+            new ExtractTextPlugin("styles/[name].[chunkHash].css"),
+          new webpack.optimize.UglifyJsPlugin({
+              minimize: true
+          }),
+          new changeFilePlugin(),
         ],
 
         module: {

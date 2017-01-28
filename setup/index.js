@@ -11,7 +11,7 @@ module.exports = function(app){
 	hoffman.dust.config.whitespace = true;
 
 
-	app.set('views', 'views');
+app.set('views', path.join(__dirname, '../dist'));
 	app.set('view engine', 'dust');
 	app.engine('dust', hoffman.__express());
 	app.use(hoffman.stream);

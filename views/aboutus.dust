@@ -1,0 +1,20 @@
+{>"layouts/master" /}
+
+{<pageStyles}
+<link rel="stylesheet"  type="text/css" href="/public/styles/other.css"></link>
+{/pageStyles}
+
+
+{<title}Login{/title}
+{<body}
+<div id="root" class="container-main">
+    <div class="clearfix other-pages">
+        <div class="banner-main">
+            <div class="bannertext"><h2>About Us</h2></div>
+        </div>
+        <div className="content-main">
+            <div class="container aboutus footerfixlisting"><div class="row"><p style="margin:10px;">At Flebie, our vision is to bring "care" back into healthcare. We fall sick too, just like you and we hate having to trudge along to a hospital or a lab in that condition. Some of us still shudder at the thought of injections, and our anxiety levels reach their peak hoping that we get a good phlebotomist assigned to us! Some of us have elderly parents or really young kids and do not like having to inconvenience them by making them wait for long hours to get a few tests done. Some of us are just plain lazy, while the rest of us do everything we can, to avoid Bengaluru traffic like the plague.<br><br>With our own fleet of experienced and well trained phlebotomists, an advisory board consisting of doctors from India's premier medical schools and a dynamic technical team of engineers, we have set out on a mission to revolutionise diagnostic healthcare by making it convenient, transparent, affordable and accessible right from the comforts of your homes. The epic journey has only just begun</p></div></div>
+        </div>
+    </div>
+</div>
+{/body}

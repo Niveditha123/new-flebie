@@ -1,0 +1,16 @@
+{>"layouts/master" /}
+
+{<pageStyles}
+<link rel="stylesheet"  type="text/css" href="/public/styles/populartests.aef0350add8c89b62067.css"></link>
+{/pageStyles}
+
+
+{<title}Search{/title}
+{<body}
+<div id="root" class="container-main"> </div>
+{/body}
+
+
+{<pageScripts}
+<script src="/public/scripts/populartestsbundle.aef0350add8c89b62067.js"></script>
+{/pageScripts}

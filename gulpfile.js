@@ -7,6 +7,7 @@ var runSequence = require('run-sequence');
 var ncp = require("ncp");
 var webpack = require("webpack");
 var webpackConfig = require("./webpack.config.js");
+var webpackProdConfig = require("./webpack.prod.config.js");
 var minify = require('gulp-minify');
 
 function onBuild(done) {
@@ -30,14 +31,19 @@ gulp.task('webpack', shell.task([
     'gulp webpackFunnel'
 ]));
 
-gulp.task('clean-css', function(){
-    return del(['./public/styles/*'])
+gulp.task('clean-public', function(){
+    return del(['./public/*'])
 });
 gulp.task('webpackFunnel', function(done){
     webpack(webpackConfig).run(onBuild(done));
 });
+gulp.task('webpackprodFunnel', function(done){
+    webpack(webpackProdConfig).run(onBuild(done));
+});
 
-
+gulp.task('webpackProdConfig', shell.task([
+    'gulp webpackprodFunnel'
+]));
 
 gulp.task("copyimages",function(){
     /*ncp("./client/rootfiles","./public/rootfiles",function(){
@@ -52,7 +58,8 @@ gulp.task("copyimages",function(){
     });*/
     ncp("./client/images","./public/images",function(){});
     ncp("./client/Images","./public/Images",function(){});
-})
+});
+
 
 gulp.task("copyFonts",function(){
     ncp("./client/fonts","./public/fonts",function(){
@@ -107,8 +114,14 @@ function getFileList(dir, files_) {
     return files_;
 }
 
-gulp.task("default", function(){
-	runSequence("clean-css","copyFonts","font-icon" ,"webpack","copyimages");
-
+gulp.task('clean-dist', function(){
+    return del(['./dist/*'])
 });
 
+gulp.task("default", function(){
+	runSequence('clean-dist','clean-public',"copyFonts","font-icon" ,'makedist',"copyimages","webpack");
+});
+
+gulp.task("prod", function(){
+	runSequence('clean-dist',"clean-public","copyFonts","font-icon" ,"copyimages","webpackProdConfig");
+});

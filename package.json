@@ -68,10 +68,12 @@
     "style-loader": "^0.13.1",
     "unirest": "^0.5.1",
     "url": "^0.11.0",
+    "walk": "^2.3.9",
     "webfonts-generator": "^0.3.5",
     "webpack": "^1.14.0",
     "webpack-dev-middleware": "^1.8.4",
     "webpack-hot-middleware": "^2.13.2",
+    "webpack-uglify-js-plugin": "^1.1.9",
     "xmlhttprequest": "^1.8.0"
   },
   "homepage": "https://github.com/kingbalan/react-express-es6#readme"

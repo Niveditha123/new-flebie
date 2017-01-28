@@ -1,0 +1,16 @@
+{>"layouts/master" /}
+
+{<pageStyles}
+<link rel="stylesheet"  type="text/css" href="/public/styles/confirm.1b0a113319733f9c1c75.css"></link>
+{/pageStyles}
+
+
+{<title}Search{/title}
+{<body}
+<div id="root" class="container-main"> </div>
+{/body}
+
+
+{<pageScripts}
+<script src="/public/scripts/confirmbundle.1b0a113319733f9c1c75.js"></script>
+{/pageScripts}

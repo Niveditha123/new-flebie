@@ -1,11 +1,10 @@
 
 import Modal from '../../components/utils/modal.jsx';
 require ("./layout.js");
-
+import Styles from '../scss/layout.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import  OpenCartModalContent from '../../components/modules/editCart.jsx';
-import reqwest from 'reqwest';
 
 
 class CallModalContent extends React.Component{
