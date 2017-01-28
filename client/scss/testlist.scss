@@ -47,3 +47,22 @@ html{
 .action-col{
     border-radius: 4px;
 }
+    .tb-bd-row .mrp-price{
+            text-decoration: line-through;
+    }
+
+@media (max-width: 1023px){
+    .tb-head-row .test-name, .tb-bd-row .test-name {
+        width: 18%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+    .col4 {
+        table-layout: fixed;
+    }
+    .action-col .btn {
+        padding: 6px 6px;
+        font-size: 12px;
+    }
+
+}

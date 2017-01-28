@@ -136,8 +136,11 @@ class OpenCartModalContent extends React.Component{
   }
   gotoTestList(){
     var labId = this.state.testsList.labId;
-    debugger;
-    location.href="/test/list?labId="+labId;
+    if(this.state.testsList.items.length > 0){
+      location.href="/test/list?labId="+labId;
+    }else{
+      location.href="";
+    }
   }
   render(){
     var listUI=[];
@@ -212,7 +215,7 @@ class OpenCartModalContent extends React.Component{
         {listUI}
        </div>
        <div className="modal-footer clearfix">
-        <label className="footer-label fl">{this.state.testsList.labname}</label>
+        <label className={(this.state.testsList.items.length > 0)?"footer-label fl":"hide"} >{this.state.testsList.labname}</label>
         <button type="submit" onClick={this.gotoCheckout.bind(this)} data-dismiss="modal"  className={(this.state.testsList.items.length > 0)?"btn fr btn-success curved":"hide"}>
           Checkout</button>
         <button type="submit" onClick={this.gotoTestList.bind(this)}   className="btn fr  curved">
