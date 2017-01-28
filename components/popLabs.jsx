@@ -10,6 +10,7 @@ class PopularLabs extends React.Component {
     }
     loadPopLabs(){
         var _this=this;
+		Fleb.showLoader();
         reqwest({			
 					url:"/getLabs"
 					,headers:{
@@ -20,11 +21,13 @@ class PopularLabs extends React.Component {
 						_this.setState({
                             popularLabs:[]
                         })  
+						Fleb.hideLoader();
 					}
 					, success: function (resp) {
 						    _this.setState({
                                 popularLabs:resp
-                            })    
+                            })   
+							Fleb.hideLoader(); 
 					}
 			})
 

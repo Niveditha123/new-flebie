@@ -53,8 +53,14 @@
       
   </footer>
   <div id="utilBlock">
-  </div>
 
+  </div>
+  <div id="loader" class="loader-block hide">
+      <div class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+      </div>
+  </div>
 <script src="/public/scripts/commonbundle.js"></script>
   {+pageScripts /}
   </body>

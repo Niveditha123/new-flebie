@@ -28,7 +28,7 @@ class Search extends React.Component {
 						_this.setState({
 							gotList:false,
 							loading:false,
-							tests:qP.split[";"]
+							tests:qP.split(";")						
 						})  
 					}
 					, success: function (resp) {
@@ -36,7 +36,7 @@ class Search extends React.Component {
 							labList:resp,
 							gotList:true,
 							loading:false,
-							tests:qP.split[";"]
+							tests:qP.split(";")
 						})     
 					}
 			})
@@ -128,13 +128,12 @@ class Search extends React.Component {
 		var testTabsUI =[];
 		var testHeadUI=[];
 		
-		if(this.state.tests.length>0){
-			debugger;
+		if(this.state.labList.length>0){
 			this.state.labList[0].labTests.map(function(item,index){
 					var test = item.test;
 					var testUI= <div ref={index+"test"} className={(_this.state.activeTab== index+"test")?"tab-item fade-in":"fade-out"}>
 					<h2>{test.testName}</h2>
-					<p><span className="icon icon-flask"/>{test.sample}</p>
+					<p className="hide"><span className="icon icon-flask"/>{test.sample}</p>
 					<p className="test-desc">{test.description}</p>
 					</div>
 					var headUI = <button onClick={_this.openTestDesc.bind(_this)} data-target={index+"test"} className={(_this.state.activeTab== index+"test")?"btn btn-link tab-btn active-tab":"btn btn-link tab-btn"}>{test.testName}</button>

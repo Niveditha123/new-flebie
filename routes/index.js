@@ -44,7 +44,12 @@ module.exports = function() {
   router.get('/getLab',testListController.getLab);
   router.get("/getAvailableSlots",checkoutController.getAvailableSlots);
   router.post("/createOrder",checkoutController.createOrder);
-  router.get("/getLabs",popularlabsController.getLabs)
+  router.post("/setTimeSlot",checkoutController.setTimeSlot);
+  router.post("/applyOffer",checkoutController.applyOffer);
+  router.post("/removeOffer",checkoutController.removeOffer);
+  router.get("/getLabs",popularlabsController.getLabs);
+   router.get("/getPopTests",populartestsController.getPopTest);
+  //getPopTest
 
 
   return router;

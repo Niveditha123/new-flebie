@@ -108,6 +108,7 @@ class TestList extends React.Component {
 	loadLabDetails(){
 		var _this = this;
 		var qP = Fleb.getQueryVariable("labId");
+		Fleb.showLoader();
 		reqwest({			
 			url:"/getLab?id="+qP
 			,headers:{
@@ -117,12 +118,14 @@ class TestList extends React.Component {
 			, error: function (err) {
 				_this.setState({
 					labDetails:""
-				})  
+				})  ;
+				Fleb.hideLoader();
 			}
 			, success: function (resp) {
 				_this.setState({
 						labDetails:resp
-				})     
+				})    
+				Fleb.hideLoader(); 
 			}
 	})
 	}
@@ -175,8 +178,8 @@ class TestList extends React.Component {
 							}
 						cartList.items.push(testItem);
 						cartList.totalItems+=1;
-						cartList.totalListPrice+=testItem.MRP;
-						cartList.totalPrice+=testItem.offerPrice;
+						cartList.totalListPrice+=testItem.listPrice;
+						cartList.totalPrice+=testItem.price;
 					}
 				}
 				var testMsg = test+" successfully added to your cart!!!"
@@ -201,8 +204,8 @@ class TestList extends React.Component {
 				var cartItem = this.findAnItem(test,this.state.testList.items,"labTestName");
 				var newTest ={
 					"testname": cartItem.data.labTestName,
-					"price": cartItem.data.offerPrice,
-					"listPrice": cartItem.data.MRP,
+					"price": cartItem.data.MRP,
+					"listPrice": cartItem.data.offerPrice,
 					"quantity": 1,
 					"isHomeCollectible":false,
 					"labtestid": cartItem.data.labTestId

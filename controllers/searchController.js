@@ -18,7 +18,7 @@ var query = req.query.tests;
             if(response.status == 200){
               res.send(response.body);
             }else{
-              res.send({})
+              res.send([])
             }
           });
     }

@@ -156,4 +156,9 @@ button.icon.icon-info {
     .lab-lists > div {
         width: 100%;
     }
+    .tab-head-row {
+        white-space: nowrap;
+        overflow-y: auto;
+        width: 100%;
+    }
 }

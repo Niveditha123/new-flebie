@@ -51,6 +51,16 @@ Fleb.findAnItemDeep = function(item,list,prop){
 				}
 			}
 		return found;
-	}
+}
+
+Fleb.flatten = arr => arr.reduce((a, b) => a.concat(Array.isArray(b) ? Fleb.flatten(b) : b), []);
+Fleb.showLoader = function(){
+    var loader = document.getElementById("loader");
+    loader.className="loader-block";
+}
+Fleb.hideLoader = function(){
+    var loader = document.getElementById("loader");
+    loader.className="loader-block hide";
+}
 //var openCartBtn = document.getElementById("openCart");
 //openCartBtn.addEventListener("click",Fleb.OpenModal);

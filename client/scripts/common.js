@@ -93,5 +93,5 @@ ReactDOM.render(
   document.getElementById('utilBlock')
 );
 
-ReactDOM.render(  <OpenCartModalContent triggerElem={true} header={false}/>,
+ReactDOM.render(  <OpenCartModalContent isEditable={true} triggerElem={true} header={false}/>,
   document.getElementById('cartPl'))

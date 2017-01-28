@@ -9,7 +9,7 @@ class PopularTests extends React.Component {
         }
     }
     loadPopularTests(){
-        var popTests=[
+      /*  var popTests=[
                 {
                     "testname": "25 Hydroxy Vitamin D (25-OH Vitamin D)",
                     "price": 1710,
@@ -50,10 +50,28 @@ class PopularTests extends React.Component {
                     "isHomeCollectible": "true",
                     "labtestid": "TcU0o5CtQh"
                 }
-                ];
-                this.setState({
-                    popularTests:popTests
-                })
+                ];*/
+                var _this = this;
+                Fleb.showLoader();
+                 reqwest({			
+					url:"/getPopTests"
+					,headers:{
+						"Access-Control-Allow-Origin":"*"
+					}
+					, method: 'get'
+					, error: function (err) {
+						_this.setState({
+                            popularTests:[]
+                        });
+                        Fleb.hideLoader();
+					}
+					, success: function (resp) {
+						    _this.setState({
+                                popularTests:resp
+                            })   
+                            Fleb.hideLoader(); 
+					}
+			})
     }
     componentDidMount(){
         this.loadPopularTests.bind(this)()
@@ -61,8 +79,8 @@ class PopularTests extends React.Component {
     render(){
         var popTestUI=[];
         popTestUI = this.state.popularTests.map(function(item,index){
-            return <div key={index} className="pop-item"><a className={"pop-test poptest"+index} href={"/listlabsfortest?testId="+item.labtestid}>
-            <label>{item.testname}</label>
+            return <div key={index} className="pop-item"><a className={"pop-test poptest"+index} href={"/multisearchlabs?tests="+item.testName}>
+            <label>{item.testName}</label>
             </a></div>;
         });
         return (<div className="popular-main">

@@ -13,7 +13,7 @@ console.log(query);
   request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/timeSlot/getAvailableSlots?slotDate='+query)
           .headers(headers)
           .end(function (response) {
-            console.log(response.status);
+            console.log(response.body,"timeslot");
             if(response.status == 200){
               res.send(response.body);
             }else{
@@ -29,9 +29,59 @@ console.log(query);
         'Content-Type': 'application/json'})
       .send(req.body)
       .end(function (response) {
-        console.log(response.body);
+        console.log(response.body,"order");
         res.send(response.body)
       });
+  },
+  setTimeSlot:function(req,res,next){
+    console.log(req.body);
+    request.post('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/timeSlot/setTimeSlot')
+      .headers({
+        'Accept': 'application/json', 
+        'Content-Type': 'application/json'})
+      .send(req.body)
+      .end(function (response) {
+        console.log(response.body,"set timeslot");
+        res.send(response.body)
+      });
+  },
+  applyOffer:function(req,res,next){
+
+      var headers={
+
+    };
+var code = req.query.promoCode;
+var orderId = req.query.orderId;
+console.log(query);
+  request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/promotion/applyPromotionCode?promoCode='+code+'&orderId='+orderId)
+          .headers(headers)
+          .end(function (response) {
+            console.log(response.body,"promo");
+            if(response.status == 200){
+              res.send(response.body);
+            }else{
+              res.send([])
+            }
+          });
+  },
+  removeOffer:function(req,res,next){
+
+      var headers={
+
+    };
+var orderId = req.query.orderId;
+console.log(query);
+  request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/promotion/ignorePromotionCode?orderId='+orderId)
+          .headers(headers)
+          .end(function (response) {
+            console.log(response.body,"promo removed");
+            if(response.status == 200){
+              res.send(response.body);
+            }else{
+              res.send([])
+            }
+          });
   }
+
 
 };

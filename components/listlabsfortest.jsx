@@ -13,6 +13,7 @@ class ListLabs extends React.Component {
     }
     loadLabs(){
         var _this = this;
+		Fleb.showLoader();
 		reqwest({			
 				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromTestNames?tests=Vitamin B6 (Pyridoxin), Serum;"
 				//url:"http://lowcost-env.hppsvuceth.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests"
@@ -24,7 +25,8 @@ class ListLabs extends React.Component {
 				}
 				, method: 'get'
 				, error: function (err) {
-					console.log(err,"err")
+					console.log(err,"err");
+					Fleb.hideLoader();
 					_this.setState({
 						loading:false,
 						gotList:false
@@ -32,6 +34,7 @@ class ListLabs extends React.Component {
 				}
 				, success: function (resp) {
 					console.log(resp,"success");
+					Fleb.hideLoader();
 						_this.setState({
 							labList:resp,
 							gotList:true,

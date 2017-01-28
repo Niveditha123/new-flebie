@@ -1,6 +1,31 @@
 
 import React from 'react';
 import Modal from '../../components/utils/modal.jsx';
+
+
+class ItemQ extends React.Component{
+  constructor(props){
+    super(props);
+  }
+  render(){
+      var itemQ = <div  className="item-qnt"/>;
+      if(this.props.isEditable){
+        itemQ =  <div className="item-qnt">
+            <button data-id={this.props.index} onClick={this.props.ctx.deleteOne.bind(this.props.ctx)} className="btn btn-naked icon icon-minus"></button>
+            {this.props.item.quantity}
+            <button data-id={this.props.index} onClick={this.props.ctx.addOne.bind(this.props.ctx)} className="btn btn-naked icon icon-plus"></button>
+            <button data-id={this.props.index} onClick={this.props.ctx.deleteTest.bind(this.props.ctx)} className="btn btn-naked icon icon-bin"></button>
+            </div>;
+      }else{
+        itemQ=<div className="item-qnt">
+          <span>{this.props.item.quantity}</span>
+        </div>
+      }
+    return(
+      itemQ
+    )
+  }
+};
 class OpenCartModalContent extends React.Component{
   constructor(props){
 		super(props);
@@ -161,32 +186,28 @@ class OpenCartModalContent extends React.Component{
         Price
         </div>
       </div>;
+
       var list =  this.state.testsList.items.map(function(item,index){
           return <div className="test-row">
             <div className="item-head">
             {item.testname}
             </div>
-            <div className="item-qnt">
-            <button data-id={index} onClick={_this.deleteOne.bind(_this)} className="btn btn-naked icon icon-minus"></button>
-            {item.quantity}
-            <button data-id={index} onClick={_this.addOne.bind(_this)} className="btn btn-naked icon icon-plus"></button>
-            <button data-id={index} onClick={_this.deleteTest.bind(_this)} className="btn btn-naked icon icon-bin"></button>
+            <ItemQ item={item} isEditable={_this.props.isEditable} index={index} key={index} ctx={_this}/>
+            <div className="item-price">
+              <span className="icon icon-rupee"></span>{item.price*item.quantity}
             </div>
             <div className="item-mrp">
-            <span className="icon icon-rupee"></span>{item.listPrice}
-            </div>
-            <div className="item-price">
-            <span className="icon icon-rupee"></span>{item.price}
+              <span className="icon icon-rupee"></span>{item.listPrice*item.quantity}
             </div>
           </div>
         });
-        var priceUI=<div className="price-row col2-row">
-          <div  className="price-tot-label">Total Price</div>
-          <div className="text-right"><span className="icon icon-rupee"></span>{this.state.testsList.totalPrice}</div>
-        </div>;
         var discountUI=<div className="disc-row col2-row">
           <div  className="discount-label">You Saved</div>
           <div className="text-right"><span className="icon icon-rupee"></span>{this.state.testsList.totalListPrice-this.state.testsList.totalPrice}</div>
+        </div>;
+        var priceUI=<div className="price-row col2-row">
+          <div  className="price-tot-label">Total Price</div>
+          <div className="text-right"><span className="icon icon-rupee"></span>{this.state.testsList.totalPrice}</div>
         </div>;
 
       listUI = <div className="list-ui">
@@ -196,8 +217,8 @@ class OpenCartModalContent extends React.Component{
             {list}
           </div>
       </div>
+      {discountUI}
       {priceUI}
-          {discountUI}
       </div>
     }else{
       listUI = <div className="msg-block">

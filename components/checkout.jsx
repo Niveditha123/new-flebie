@@ -15,9 +15,12 @@ class CheckOut extends React.Component {
             enableScheduling:false,
             enablePayment:false,
             patientData:{},
+            editableCart:true,
             date: moment(),
             focused:false,
             timeSlotArray:[],
+            isOffer:false,
+            offer:"",
             timeStringArray : ["Select Time", "7:00:00 AM-7:30:00 AM", "7:30:00 AM-8:00:00 AM", "8:00:00 AM-8:30:00 AM","8:30:00 AM-9:00:00 AM","9:00:00 AM-9:30:00 AM", "9:30:00 AM-10:00:00 AM", "10:00:00 AM-10:30:00 AM","10:30:00 AM-11:00:00 AM","11:00:00 AM-11:30:00 AM","11:30:00 AM-12:00:00 PM","12:00:00 PM-12:30:00 PM","12:30:00 PM-1:00:00 PM","1:00:00 PM-1:30:00 PM","1:30:00 PM-2:00:00 PM","2:00:00 PM-2:30:00 PM","2:30:00 PM-3:00:00 PM","3:00:00 PM-3:30:00 PM","3:30:00 PM-4:00:00 PM","4:00:00 PM-4:30:00 PM","4:30:00 PM-5:00:00 PM"]
         }
     }
@@ -151,32 +154,19 @@ class CheckOut extends React.Component {
 
         }
     }
-    getTimeSlots(){
+    getTimeSlots(d){
         var _this = this;
-        var date = moment(this.state.date).format('YYYY-MM-DD');
-             /*najax.get({
-				url:"http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/timeSlot/getAvailableSlots?sessionKey=pONzFZqnt23E9BaFDPMtBmoUARvLOhmTbmAE/o9dKXuGh5AjRUQjYwXiQgG6lqMi&slotDate="+date,
-						method:"get",    
-            cache: false,
-            success: function(resp){                          
-                //$("#result").html(returnhtml); 
-				console.log(resp,"resp");  
-                    var slotArray = _this.state.timeStringArray.slice();
-						_this.setState({
-                            timeSlotArray:slotArray
-						})
-					}                         
-        });  */
-        debugger;
-        var d = new Date();
-            var currentTime = d.getHours();
-            if((moment(this.state.date).format('MM/DD/YYYY') == moment().format('MM/DD/YYYY')) &&  (currentTime >=14 )){
+        var date = moment(d).format('YYYY-MM-DD');
+        var today = new Date();
+            var currentTime = today.getHours();
+            if((moment(d).format('MM/DD/YYYY') == moment().format('MM/DD/YYYY')) &&  (currentTime >=14 )){
              _this.setState({
-                timeSlotArray:[]
+                timeSlotArray:[],
+                date:d
 			})  
              return false;
          }
-
+        Fleb.showLoader();
         reqwest({			
 				url:"/getAvailableSlots?slotDate="+date
 				,headers:{
@@ -184,50 +174,67 @@ class CheckOut extends React.Component {
 				}
 				, method: 'get'
 				, error: function (err) {
-debugger; 
+                    _this.setState({
+                            timeSlotArray:[],
+                            date:d
+						})  
+                        Fleb.hideLoader();
 				}
 				, success: function (resp) {
+                    debugger;
 					 var slotArray = _this.state.timeStringArray.slice();
-                     debugger
+                     Fleb.getSlotResp = resp;
 						_this.setState({
-                            timeSlotArray:slotArray
-						})  
+                            timeSlotArray:slotArray,
+                            date:d
+						})
+                        Fleb.hideLoader();
 				}
 		})
     }
     dateChanged(date){
-        this.setState({ 
-            date:date
-        },function(){
-            this.getTimeSlots.bind(this)()
-        });
+        this.getTimeSlots.bind(this)(date)
     }
     getSchedulingInfo(){
         var _this = this;
-        var date = moment(this.state.date).format('YYYY-MM-DD');
         debugger;
         var orderComments = this.refs.commentBox.value;
+        var data = localStorage.getItem("cartInfo");
+        var orderItems = [];
+        if(data){
+            data = JSON.parse(data);
+            orderItems=data.items.map(function(item,index){
+                return{
+                    labTestId:item.labtestid,
+                    quantity:item.quantity
+                }
+            })
+        }else{
+            alert("Invalid Order");
+            location.href="";
+        }
+        if(!Fleb.slotResp){
+            alert("Plaese choose a time!");
+            return false;
+        }
+        Fleb.showLoader();
+        
         var payLoad = {
             "consumerId": 1,
             "convenienceFee": 12,
-            "grossMRP": 950,
+            "grossMRP": data.totalListPrice,
             "grossTotal": 0,
             "orderComments": orderComments,
-            "orderLevelDiscount": 0,
+            "orderLevelDiscount": data.totalListPrice-data.totalPrice,
             "orderOriginPerson": 1,
-            "orderTotal": 888,
+            "orderTotal": data.totalPrice,
             "paymentType": "CARD",
             "promotionId": 1,
-            "scheduleDate": "2017-01-09T00:00:00+05:30",
-            "scheduleTime": "09:00 PM",
+            "scheduleDate": Fleb.slotResp.slotDate,
+            "scheduleTime": Fleb.slotResp.slotTime,
             "status": "PENDING",
             "orderDetails":this.state.patientData,
-                "orderItems": [
-                {
-                    "labTestId": 1,
-                    "quantity": 2
-                }
-                ]
+                "orderItems": orderItems
             }
             debugger;
             reqwest({
@@ -236,12 +243,28 @@ debugger;
             ,data:JSON.stringify(payLoad)
             , contentType: 'application/json'
             , method: 'post'
-            , error: function (err) { debugger;}
+            , error: function (err) { 
+                 _this.setState({
+                    enablePayment:true,
+                    activetab:"paymentBlock",
+                    editableCart:false
+                },function(){
+                    var cartBtn = document.getElementById("cartPl");
+                    cartBtn.classList.add("hide");
+                    Fleb.hideLoader();
+                })
+            }
             , success: function (resp) {
                 debugger;
+                Fleb.orderResp = resp;
                 _this.setState({
                     enablePayment:true,
-                    activetab:"paymentBlock"
+                    activetab:"paymentBlock",
+                    editableCart:false
+                },function(){
+                    Fleb.hideLoader();
+                    var cartBtn = document.getElementById("cartPl");
+                    cartBtn.classList.add("hide");
                 })
                 }
             }) 
@@ -249,8 +272,127 @@ debugger;
 
        
     }
-    makePayment(){
+    setTimeSlot(e){
+        debugger;
+        var value = e.target.value;
+        Fleb.selectedTime = value;
+        var payLoad = {        
+            "slotDate": moment(this.state.date).format(),
+            "slotTime":Fleb.selectedTime.split("-")[0]
+        };
+        Fleb.showLoader();
+         reqwest({
+                url: '/setTimeSlot'
+            , type: 'json'
+            ,data:JSON.stringify(payLoad)
+            , contentType: 'application/json'
+            , method: 'post'
+            , error: function (err) { 
+                Fleb.hideLoader();
+                alert("please select another time");
+            }
+            , success: function (resp) {
+                Fleb.slotResp = resp;
+                Fleb.hideLoader();
+                }
+            })
 
+    }
+    applyOffer(e){
+        var _this=this;
+        var val = this.refs.offerInput.value;
+        if(val.length <2){
+            alert("please enter valid code");
+        }else{
+            var orderId="";
+            if(Fleb.orderResp){
+                orderId= Fleb.orderResp.txId
+            }else{
+                alert("Please try again later");
+                return false;
+            }
+             Fleb.showLoader();
+            var promoCode='promoCode='+val+'&orderId='+orderId;
+            reqwest({			
+				url:"/applyOffer"+promoCode
+				,headers:{
+					"Access-Control-Allow-Origin":"*"
+				}
+				, method: 'get'
+				, error: function (err) {
+                    _this.setState({
+                            isOffer:false,
+                            offer:""
+						})  
+                        alert("Please try again later");
+                        Fleb.hideLoader();
+				}
+				, success: function (resp) {
+                     Fleb.applyOfferResp = resp;
+						_this.setState({
+                            isOffer:true,
+                            offer:val
+						}) 
+                        Fleb.hideLoader();
+				}
+		})
+
+        }
+    }
+    removeOffer(e){
+        var orderId="";
+        if(Fleb.orderResp){
+            orderId= Fleb.orderResp.txId
+        }else{
+            alert("Please try again later");
+            return false;
+        }
+        Fleb.showLoader();
+        var _this=this;
+        var promoCode='&orderId='+orderId;
+            reqwest({			
+				url:"/removeOffer"+promoCode
+				,headers:{
+					"Access-Control-Allow-Origin":"*"
+				}
+				, method: 'get'
+				, error: function (err) {
+                    alert("Please try again later");
+                        Fleb.hideLoader();
+				}
+				, success: function (resp) {
+                     Fleb.applyOfferResp = resp;
+						_this.setState({
+                            isOffer:false,
+                            offer:""
+						}) 
+                        Fleb.hideLoader();
+				}
+		})
+
+    }
+    makePayment(){
+        debugger;
+        if(!Fleb.orderResp){
+            alert("Please try another Lab or Date");
+            return false;
+        }
+        Fleb.showLoader();
+        var form = [
+            '<form class="hidden" id="paymentForm" action="https://www.citruspay.com/flebie" >',
+                '<input type="hidden" name="email" value='+this.state.patientData.email+'/>',
+                '<input type="hidden" name="merchantTxnId" value='+Fleb.orderResp.txId+'/>',
+                '<input type="hidden" name="orderAmount" value='+Fleb.amount+'/>',
+                '<input type="hidden" name="currency" value="INR"/>',
+                '<input type="hidden" name="secSignature" value='+Fleb.orderResp.signature+'/>',
+                '<input type="hidden" name="returnUrl" value="https://www.flebie.com/paymentresponse"/>',
+            '</form>'
+        ].join("\n");
+        // html: '<div ...>\n<h1 ...>Constructing HTML Elements<h1>\n</div>'
+        this.ref.fakeForm.innerHTML = form;
+        var paymentForm = document.getElementById("paymentForm");
+        debugger;
+        paymentForm.submit();
     }
     render(){
         var tabContentUI =[];
@@ -291,11 +433,29 @@ debugger;
             </div>
         </div>
         var timeSlotArrayUI = [];
+        debugger;
         if(this.state.timeSlotArray.length == 0){
             if(moment(this.state.date).format('MM/DD/YYYY') == moment().format('MM/DD/YYYY')){
-                timeSlotArrayUI= <option value="">Not insame day</option>
+                var d = new Date();
+                var currentTime = d.getHours();
+                var restrict = 0;
+                if(currentTime >=14){
+                    timeSlotArrayUI= <option value="">No Slots Available For This Date</option>
+                }
+                if(currentTime < 14){
+                    restrict = currentTime+6;
+                    timeSlotArrayUI = this.state.timeStringArray.map(function(item,index){
+                        if(index >=restrict){
+                            return <option value={item}>{item}</option>
+                        }
+                    })
+                }
+                
             }else{
-            timeSlotArrayUI=<option value="">Please select another date</option>
+            //timeSlotArrayUI=<option value="">No Slots Available For This Date</option>
+            timeSlotArrayUI = this.state.timeSlotArray.map(function(item,index){
+                    return <option value={item}>{item}</option>
+            })
                     
             }
         }else{
@@ -310,14 +470,11 @@ debugger;
             if(currentTime >=22 && istomo){
                 restrict = 7;
             }
-
-            if((moment(this.state.date).format('MM/DD/YYYY') == moment().format('MM/DD/YYYY')) && (currentTime <14)) {
-                restrict = currentTime - 0;
+            if(currentTime >=6 && !istomo){
+                restrict =currentTime+4;
             }
             timeSlotArrayUI = this.state.timeSlotArray.map(function(item,index){
-                if(index <=restrict){
-                    return  <option className="no-sel" disabled value={item}>{item}</option>
-                }else{
+                if(index >=restrict){
                     return <option value={item}>{item}</option>
                 }
             })
@@ -345,7 +502,7 @@ debugger;
                             displayFormat="DD/MM/YYYY"
                             />  
                     <div className="time-selector-main">
-                        <select className="form-control">
+                        <select className="form-control" onChange={this.setTimeSlot.bind(this)}>
                             {timeSlotArrayUI}
                         </select>
                     </div>
@@ -391,13 +548,14 @@ debugger;
             </div>
             <div className="offer-main">
                 <div className="input-group">
-                    <input type="text" className="form-control" id="exampleInputAmount" placeholder="Enter Promo Code"/>
+                    <input type="text" defaultValue={this.state.offer} className="form-control" ref="offerInput" id="exampleInputAmount" placeholder="Enter Promo Code"/>
                     <div className="input-group-addon">
-                        <button className="btn btn-default">Apply</button>
+                        <button onClick={this.applyOffer.bind(this)} className={(!this.state.isOffer)?"btn btn-default":"hide"}>Apply</button>
+                        <button onClick={this.removeOffer.bind(this)} className={(this.state.isOffer)?"btn btn-default":"hide"}>remove</button>
                     </div>
                 </div>
             </div>
-            <div  className="text-center">
+            <div  className="text-center make-payment clearfix">
                     <button id="MakePayment" className="btn btn-success fr btn-next curved" onClick={this.makePayment.bind(this)}>Proceed to Pay</button>                
             </div>
         </div>
@@ -408,9 +566,7 @@ debugger;
                 <div className="checkout-banner">
                     <h1>Checkout</h1>
                     <p>We are glad you found what you were looking for. We need a few details from you before proceeding with your order. We promise you not to spam your inbox or pester you with unnecessary calls. Your online transactions are also secure. So, go ahead, confirm your order.</p>
-                    <br/>
-                    <br/>
-                    <p>*A nominal fee of 100 will be charged for home collection services</p>
+                    
                 </div>
                 <div className="checkout-content col2-row">
                     <div className="order-block">
@@ -429,13 +585,14 @@ debugger;
                     <div className="order-summary">
                         <h3>Order Summary</h3>
                         <div className="order-block">
-                            <OpenCartModalContent triggerElem={false} header={true}/>
+                            <OpenCartModalContent triggerElem={false} isEditable={this.state.editableCart} header={true}/>
                         </div>
                     </div>
 
 
 
                 </div>
+                <div ref="fakeForm"/>
         </div>
         );
     }

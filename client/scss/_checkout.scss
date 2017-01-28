@@ -149,7 +149,7 @@ span.required {
     padding:9px
 }
 .tab-main {
-    padding: 0px 12px;
+    padding: 0px 12px 12px 12px;
     font-size: .8em;
 }
 .radio-inline.first-radio {
@@ -171,6 +171,33 @@ span.required {
 }
 .m20{
     margin-bottom: 12px;
+}
+.checkout-banner{
+    min-height: 220px;
+}
+.offer-main {
+    margin: 22px 0;
+    .input-group {
+        max-width: 300px;
+        .form-control{
+            border-radius: 4px 0px 0px 4px;
+         }
+    }
+    .input-group-addon {
+        background: #eee;
+        border-radius: 0px 4px 4px 0px;
+        padding: 0;
+        button {
+            height: 33px;
+        }
+    }
+}
+.make-payment {
+    margin: 15px 0;
+    button {
+        margin: 0 auto;
+        float: none;
+    }
 }
 
 @media (max-width: 1023px){
@@ -202,5 +229,13 @@ span.required {
     .list-cont-inner{
         width:100%;
         overflow-y: auto;
+    }
+    .disc-row>*, .price-row > * {
+        float: left;
+        width: 25%;
+        text-align: left;
+    }
+    .disc-row>*:first-child, .price-row > *:first-child {
+        width: 75%;
     }
 }
