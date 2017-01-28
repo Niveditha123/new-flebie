@@ -177,7 +177,7 @@ button.btn.btn-close {
     content: " ";
     height: 2px;
     background: #FFFFFF;
-    width: 30%;
+    width: 45%;
     float: right;
     margin: auto;
     position: absolute;
@@ -192,7 +192,7 @@ button.btn.btn-close {
     content: " ";
     height: 2px;
     background: #FFFFFF;
-    width: 30%;
+    width: 44%;
     float: left;
     margin: auto;
     position: absolute;
@@ -239,4 +239,12 @@ button.btn.btn-close {
     .banner-main .home-input{
         width: 100%;
     }
+    .marketing-block > a:after {
+        width: 30%;
+    }
+    .marketing-block > a:before {
+        width: 30%;
+
+    }
+
 }

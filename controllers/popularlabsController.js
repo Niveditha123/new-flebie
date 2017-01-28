@@ -12,8 +12,16 @@ module.exports = {
           .headers(headers)
           .end(function (response) {
             console.log(response.status);
+            var popularLabs=[];
             if(response.status == 200){
-              res.send(response.body);
+              if(Array.isArray(response.body)){
+                  for(var i=0;i<response.body.length;i++){
+                    if(response.body[i].isPopular){
+                      popularLabs.push(response.body[i]);
+                    }
+                  }
+              }
+              res.send(popularLabs);
             }else{
               res.send([])
             }

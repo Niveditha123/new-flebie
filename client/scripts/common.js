@@ -18,7 +18,7 @@ class CallModalContent extends React.Component{
        </div>
        <div className="modal-footer">
           <button type="submit" data-dismiss="modal"  className="btn btn-success curved">
-          THANK you</button>
+          Thank You</button>
         </div>
        </div>
     )

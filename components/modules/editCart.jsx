@@ -186,7 +186,7 @@ class OpenCartModalContent extends React.Component{
           <div className="text-right"><span className="icon icon-rupee"></span>{this.state.testsList.totalListPrice-this.state.testsList.totalPrice}</div>
         </div>;
 
-      listUI = <div>
+      listUI = <div className="list-ui">
       <div className="list-cont-inner">
           <div className="list-content">
             {head}  
@@ -213,7 +213,7 @@ class OpenCartModalContent extends React.Component{
        </div>
        <div className="modal-footer clearfix">
         <label className="footer-label fl">{this.state.testsList.labname}</label>
-        <button type="submit" onClick={this.gotoCheckout.bind(this)} data-dismiss="modal"  className="btn fr btn-success curved">
+        <button type="submit" onClick={this.gotoCheckout.bind(this)} data-dismiss="modal"  className={(this.state.testsList.items.length > 0)?"btn fr btn-success curved":"hide"}>
           Checkout</button>
         <button type="submit" onClick={this.gotoTestList.bind(this)}   className="btn fr  curved">
           Add Tests</button>

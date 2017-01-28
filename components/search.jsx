@@ -128,7 +128,8 @@ class Search extends React.Component {
 		var testTabsUI =[];
 		var testHeadUI=[];
 		
-		if(this.state.labList.length>0){
+		if(this.state.tests.length>0){
+			debugger;
 			this.state.labList[0].labTests.map(function(item,index){
 					var test = item.test;
 					var testUI= <div ref={index+"test"} className={(_this.state.activeTab== index+"test")?"tab-item fade-in":"fade-out"}>

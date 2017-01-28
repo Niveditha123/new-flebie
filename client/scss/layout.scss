@@ -454,12 +454,14 @@ html,body{
     width: 100%;
 }
 
+
 @media (max-width: 1023px){
     html{
         background-size: cover;
     }
     .container-main{
         padding: 100px 1em  30px 1em;
+        min-height: 300px;
     }
     .container-main > div {
         width: 90%
@@ -467,7 +469,10 @@ html,body{
     .bread-crumb .btn{
             padding: 6px 0px;
     }
-    .banner-main.banner-main h1, .checkout-banner h1 {
+    .banner-main.banner-main h1{
+        font-size: 2.5em;
+    } 
+    .checkout-banner h1 {
             font-size: 2em;
     }
     .col3 div{
@@ -498,5 +503,15 @@ html,body{
         width: 100%;
         text-align: left;
         padding-bottom: 16px;
+    }
+    .modal-content.callus-popup .modal-footer {
+        text-align: center;
+    }
+    .modal-content.callus-popup {
+        max-width: 80% !important;
+        top: 15%;
+    }
+    .modal-content.callus-popup {
+        text-align: center;
     }
 }
