@@ -29,7 +29,7 @@ class ListLabs extends React.Component {
 					Fleb.hideLoader();
 					_this.setState({
 						loading:false,
-						gotList:false
+						gotList:true
 					})
 				}
 				, success: function (resp) {
@@ -108,7 +108,7 @@ class ListLabs extends React.Component {
 						</div>
 					</div>
 					<div className="lab-img img-block">
-						<img src={"https://www.flebie.com/img/"+lab.labName+"_multi.jpg"}/>
+						<img src={"/public/images"+lab.labName+"_multi.jpg"}/>
 					</div>
 					<div className="lab-footer">
 						<h3>{lab.labName}</h3>
@@ -141,7 +141,12 @@ class ListLabs extends React.Component {
 				</div>
 				</div>
 			</div>
-		})
+		});
+		if(this.state.labList.length === 0 && this.state.gotList){
+			labListUI = <div className="no-content">
+			<p> No labs are available!!!</p>
+			</div>
+		}
         return (
             <div className="search-main">
 				{loader}

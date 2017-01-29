@@ -27,7 +27,10 @@ module.exports = function() {
   router.get('/multisearchlabs', searchController.renderPage);
   router.get('/checkout', checkoutController.renderPage);
   router.get('/test/list', testListController.renderPage);
-  router.get('/paymentresponse',confirmController.renderPage);
+  router.get('/paymentResponse',confirmController.renderPage);
+  router.post('/paymentresponse',confirmController.processPayment);
+
+  //paymentresponse
   router.get('/listlabsfortest',listlabsfortestController.renderPage);
     router.get('/aboutus',otherPageController.aboutus);
   router.get('/faqs',otherPageController.faqs);

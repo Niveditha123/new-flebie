@@ -26,7 +26,7 @@ class Search extends React.Component {
 					, method: 'get'
 					, error: function (err) {
 						_this.setState({
-							gotList:false,
+							gotList:true,
 							loading:false,
 							tests:qP.split(";")						
 						})  
@@ -154,7 +154,7 @@ class Search extends React.Component {
 						</div>
 					</div>
 					<div className="lab-img img-block">
-						<img src={"https://www.flebie.com/img/"+lab.labName+"_multi.jpg"}/>
+						<img src={"/public/images/"+lab.labName+"_multi.jpg"}/>
 					</div>
 					<div className="lab-footer">
 						<h3>{lab.labName}</h3>
@@ -188,6 +188,11 @@ class Search extends React.Component {
 				</div>
 			</div>
 		})
+		if(this.state.labList.length === 0 && this.state.gotList){
+			labListUI = <div className="no-content">
+			<p> No labs are available!!!</p>
+			</div>
+		}
         return (
             <div className="search-main">
 				{loader}

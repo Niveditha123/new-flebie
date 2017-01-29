@@ -244,15 +244,8 @@ class CheckOut extends React.Component {
             , contentType: 'application/json'
             , method: 'post'
             , error: function (err) { 
-                 _this.setState({
-                    enablePayment:true,
-                    activetab:"paymentBlock",
-                    editableCart:false
-                },function(){
-                    var cartBtn = document.getElementById("cartPl");
-                    cartBtn.classList.add("hide");
-                    Fleb.hideLoader();
-                })
+                alert("Not able to create order. Please try again later or try different Time slot");
+                Fleb.hideLoader();
             }
             , success: function (resp) {
                 debugger;
@@ -301,6 +294,7 @@ class CheckOut extends React.Component {
     applyOffer(e){
         var _this=this;
         var val = this.refs.offerInput.value;
+        debugger;
         if(val.length <2){
             alert("please enter valid code");
         }else{
@@ -382,18 +376,30 @@ class CheckOut extends React.Component {
             return false;
         }
         Fleb.showLoader();
-        var form = [
-            '<form class="hidden" id="paymentForm" action="https://www.citruspay.com/flebie" >',
-                '<input type="hidden" name="email" value='+this.state.patientData.email+'/>',
-                '<input type="hidden" name="merchantTxnId" value='+Fleb.orderResp.txId+'/>',
-                '<input type="hidden" name="orderAmount" value='+Fleb.orderResp.amount+'/>',
-                '<input type="hidden" name="currency" value="INR"/>',
-                '<input type="hidden" name="secSignature" value='+Fleb.orderResp.signature+'/>',
-                '<input type="hidden" name="returnUrl" value="https://www.flebie.com/paymentresponse"/>',
-            '</form>'
-        ].join("\n");
+        var paymentResp = {
+            email:this.state.patientData.email,
+            merchantTxnId:Fleb.orderResp.txId,
+            orderAmount:Fleb.orderResp.amount,
+            currency:"INR",
+            secSignature:Fleb.orderResp.signature,
+            returnUrl:"https://www.flebie.com/paymentresponse"
+        }
+        var form = document.createElement("form");
+        form.setAttribute("method","post");
+        form.setAttribute("id","paymentForm");
+        form.setAttribute("enctype","application/x-www-form-urlencoded");
+        form.setAttribute("action","https://www.citruspay.com/flebie");
+        var frg = document.createDocumentFragment();
+        for (var key in paymentResp) {
+            var input = document.createElement("input");
+            input.setAttribute("value",paymentResp[key]);
+            input.setAttribute("name",key);
+            input.setAttribute("type","hidden");
+            frg.appendChild(input);
+        }
+        form.appendChild(frg);
         // html: '<div ...>\n<h1 ...>Constructing HTML Elements<h1>\n</div>'
-        this.refs.fakeForm.innerHTML = form;
+        this.refs.fakeForm.appendChild(form);
         var paymentForm = document.getElementById("paymentForm");
         debugger;
         paymentForm.submit();

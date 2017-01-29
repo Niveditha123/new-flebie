@@ -5,7 +5,8 @@ class PopularLabs extends React.Component {
     constructor(props){
 		super(props);
         this.state={
-            popularLabs:[]
+            popularLabs:[],
+			gotList:false
         }
     }
     loadPopLabs(){
@@ -19,13 +20,15 @@ class PopularLabs extends React.Component {
 					, method: 'get'
 					, error: function (err) {
 						_this.setState({
-                            popularLabs:[]
+                            popularLabs:[],
+							gotList:true
                         })  
 						Fleb.hideLoader();
 					}
 					, success: function (resp) {
 						    _this.setState({
-                                popularLabs:resp
+                                popularLabs:resp,
+								gotList:true
                             })   
 							Fleb.hideLoader(); 
 					}
@@ -56,7 +59,7 @@ class PopularLabs extends React.Component {
 						</div>
 					</div>
 					<div className="lab-img img-block">
-						<img src={"https://www.flebie.com/img/"+lab.labName+"_multi.jpg"}/>
+						<img src={"/public/images"+lab.labName+"_multi.jpg"}/>
 					</div>
 					<div className="lab-footer">
 						<h3>{lab.labName}</h3>
@@ -89,6 +92,11 @@ class PopularLabs extends React.Component {
 				</div>
 			</a>
         })
+		if(this.state.popularLabs.length === 0 && this.state.gotList){
+			popLabsUI = <div className="no-content">
+			<p> No labs are available!!!</p>
+			</div>
+		}
         return (
             <div className="poplabs-main ">
                 <div className="banner-main">

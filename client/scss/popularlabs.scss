@@ -1,7 +1,7 @@
 
 @import '../../node_modules/react-dates/lib/css/_datepicker.css';
 html{
-    background-image: url("https://www.flebie.com/img/ListPage_Cover.jpg");
+    background-image: url("/public/images/ListPage_Cover.jpg");
     background-repeat: no-repeat;
     background-size: 100% 325px;
 }
@@ -47,7 +47,7 @@ html{
     position: relative;
     z-index: 2;
     color: black;
-    background: url("https://www.flebie.com/img/price_ribbon.png");
+    background: url("/public/images/price_ribbon.png");
     background-size: cover;
     padding-bottom: 5px;
     padding-left: 10px;

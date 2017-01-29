@@ -66,7 +66,7 @@ html{
         padding: 1em;
 }
 .logo-block{
-        background-image: url(https://www.flebie.com/img/ComingSoonPage_logo.png);
+        background-image: url("/public/images/ComingSoonPage_logo.png");
     background-size: contain;
     height: 50px;
     background-repeat: no-repeat;
@@ -76,7 +76,7 @@ html{
 .container-main {
     padding:100px 1em  180px 1em;
     width: 100%;
-    background-image: url(https://www.flebie.com/img/ListPage_Cover.jpg);
+    background-image: url("/public/images/ListPage_Cover.jpg");
     background-repeat: no-repeat;
     background-size: 100% 325px;
     background-clip: padding-box;
@@ -516,6 +516,10 @@ html,body{
     height: 100%;
     z-index: 8888;
     background: rgba(242, 242, 242, 0.65);
+}
+.no-content{
+    padding: 1em;
+    color: #861616;
 }
 @media (max-width: 1023px){
     html{
