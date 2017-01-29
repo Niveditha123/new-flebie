@@ -6,16 +6,14 @@ class ConfirmCtrl extends React.Component {
 		super(props);
         this.state={
             confirmResponse:{
-                items:[],
-                totalItems:0,
-                labname:"",
-                totalListPrice:0,
-                totalPrice : 0
-            }
+                orderItems:[],
+                grossTotal:0,
+            },
+            error:false
         }
     }
     getConfirmResponse(){
-        var list= {
+       /* var list= {
             "totalItems": 3,
             "totalPrice": 1269,
             "totalListPrice": 1410,
@@ -45,7 +43,33 @@ class ConfirmCtrl extends React.Component {
             };
                 this.setState({
                     confirmResponse:list
-                })
+                })*/
+
+
+                var _this = this;
+
+				var qP = Fleb.getQueryVariable("id");
+
+				reqwest({			
+					url:"/getOrder?id="+qP
+					,headers:{
+						"Access-Control-Allow-Origin":"*"
+					}
+					, method: 'get'
+					, error: function (err) {
+						_this.setState({
+                            error:true						
+						})  
+					}
+					, success: function (resp) {
+						_this.setState({
+							confirmResponse:resp,
+                            error:false
+						})     
+					}
+			})
+
+
     }
     componentDidMount(){
         this.getConfirmResponse.bind(this)()
@@ -53,7 +77,6 @@ class ConfirmCtrl extends React.Component {
     render(){
         var listUI=[];
     var _this = this;
-    var headerUI= <h3 className="">{this.state.confirmResponse.labname}</h3>
       var head=<div className="test-head-row">
         <div className="item-head">
         TESTNAME        
@@ -61,27 +84,32 @@ class ConfirmCtrl extends React.Component {
         <div className="item-qnt">
         QTY
         </div>
-        <div className="item-mrp">
-        MRP
-        </div>
         <div className="item-price">
         PRICE
         </div>
+        <div className="item-mrp">
+        MRP
+        </div>
       </div>;
-      var list =  this.state.confirmResponse.items.map(function(item,index){
+      var list=[];
+
+      
+    if(!this.state.error){
+         var list =  this.state.confirmResponse.orderItems.map(function(item,index){
           return <div className="test-row">
             <div className="item-head">
-            {item.testname}
+            {item.testName}
             </div>
             <div className="item-qnt">
             
             {item.quantity}
             </div>
-            <div className="item-mrp">
-            <span className="icon icon-rupee"></span>{item.listPrice}
-            </div>
             <div className="item-price">
-            <span className="icon icon-rupee"></span>{item.price}
+            <span className="icon icon-rupee"></span>{item.itemTotal}
+            </div>
+            <div className="item-mrp">
+            <span className="icon icon-rupee"></span>{item.itemMRP
+}
             </div>
           </div>
         });
@@ -89,13 +117,20 @@ class ConfirmCtrl extends React.Component {
           <div  className="price-tot-label item-head">You Pay</div>
           <div className="item-qnt"> </div>
           <div className="item-mrp"></div>
-          <div className="item-price"><span className="icon icon-rupee"></span>{this.state.confirmResponse.totalPrice}</div>
+          <div className="item-price"><span className="icon icon-rupee"></span>{this.state.confirmResponse.grossTotal}</div>
         </div>;
         listUI = <div className="list-content">
       {head}
        {list}
        {priceUI}
       </div>
+    }else{
+        list =<div className="no-content">
+            <p> Not able to get the order details</p>
+        </div>
+        
+    }
+    
 
         return (<div className="confirm-main">
             <div className="banner-main">
@@ -105,6 +140,8 @@ class ConfirmCtrl extends React.Component {
                 <h2 className="confirm-head">Thank You for your order with us. Please check your inbox for your order details.  <br/>
                     <span className="icon icon-smile"/>
                 </h2>
+                <h3 className="">Order Summary</h3>
+                
                 {listUI}
             </div>
         </div>);

@@ -195,6 +195,27 @@ class CheckOut extends React.Component {
     dateChanged(date){
         this.getTimeSlots.bind(this)(date)
     }
+    updateOrder(){
+        var payLoad = Fleb.orderResp;
+        payLoad.paymentMode ="COD";
+
+        reqwest({
+            url: '/updateTransaction'
+            , type: 'json'
+            ,data:JSON.stringify(payLoad)
+            , contentType: 'application/json'
+            , method: 'put'
+            , error: function (err) { 
+                alert("Not able to make payment");
+                Fleb.hideLoader();
+            }
+            , success: function (resp) {
+                location.href="paymentresponse?id="+Fleb.orderResp.orderId
+            }   
+            }) 
+
+        //updateTransaction
+    }
     getSchedulingInfo(){
         var _this = this;
         debugger;
@@ -218,7 +239,6 @@ class CheckOut extends React.Component {
             return false;
         }
         Fleb.showLoader();
-        
         var payLoad = {
             "consumerId": 1,
             "convenienceFee": 12,
@@ -236,7 +256,7 @@ class CheckOut extends React.Component {
             "orderDetails":this.state.patientData,
                 "orderItems": orderItems
             }
-            debugger;
+        Fleb.payLoadOrder = payLoad;
             reqwest({
                 url: '/createOrder'
             , type: 'json'
@@ -250,15 +270,21 @@ class CheckOut extends React.Component {
             , success: function (resp) {
                 debugger;
                 Fleb.orderResp = resp;
-                _this.setState({
-                    enablePayment:true,
-                    activetab:"paymentBlock",
-                    editableCart:false
-                },function(){
-                    Fleb.hideLoader();
-                    var cartBtn = document.getElementById("cartPl");
-                    cartBtn.classList.add("hide");
-                })
+                Fleb.hideLoader();
+                if(Fleb.orderResp.orderId){
+                    _this.setState({
+                        enablePayment:true,
+                        activetab:"paymentBlock",
+                        editableCart:false
+                    },function(){
+
+                        var cartBtn = document.getElementById("cartPl");
+                        cartBtn.classList.add("hide");
+                    })
+                }else{
+                    alert("Not able to create order with this date. Please choose different date or time");
+                    return false;
+                }
                 }
             }) 
 
@@ -294,23 +320,11 @@ class CheckOut extends React.Component {
     applyOffer(e){
         var _this=this;
         var val = this.refs.offerInput.value;
+        var code = val.toUpperCase();
         debugger;
-        if(val.length <2){
-            alert("please enter valid code");
-        }else{
-            var orderId="";
-            if(Fleb.orderResp){
-                if(!Fleb.orderResp.orderId){
-                    alert("Not a valid cart!! Please Create new cart to apply Offer");
-                    return false;
-                }
-                orderId= Fleb.orderResp.orderId
-            }else{
-                alert("Please try again later");
-                return false;
-            }
              Fleb.showLoader();
-            var promoCode='promoCode='+val+'&orderId='+orderId;
+            var promoCode='promoCode='+code+'&orderId='+orderId;
+
             reqwest({			
 				url:"/applyOffer?"+promoCode
 				,headers:{
@@ -334,18 +348,10 @@ class CheckOut extends React.Component {
                         Fleb.hideLoader();
 				}
 		})
-
-        }
     }
     removeOffer(e){
         var orderId="";
-        if(Fleb.orderResp){
-            orderId= Fleb.orderResp.orderId
-        }else{
-            alert("Please try again later");
-            return false;
-        }
-        Fleb.showLoader();
+Fleb.showLoader();
         var _this=this;
         var promoCode='&orderId='+orderId;
             reqwest({			
@@ -371,18 +377,35 @@ class CheckOut extends React.Component {
     }
     makePayment(){
         debugger;
+
+        //paymentOpt
         if(!Fleb.orderResp){
             alert("Please try another Lab or Date");
             return false;
         }
+
+        var paymentMethod = document.querySelector(".payment-main").querySelectorAll(".paymentOpt");
+        var payMethod="";
+        for(var i=0;i<paymentMethod.length;i++){
+            var radio = paymentMethod[i];
+            if(radio.checked){
+                  payMethod= radio.value;             
+            }
+        }
+
         Fleb.showLoader();
+        if(payMethod ==="COD"){
+            this.updateOrder.bind(this)();
+            return false;
+        }
+
         var paymentResp = {
             email:this.state.patientData.email,
             merchantTxnId:Fleb.orderResp.txId,
             orderAmount:Fleb.orderResp.amount,
             currency:"INR",
             secSignature:Fleb.orderResp.signature,
-            returnUrl:"https://www.flebie.com/paymentresponse"
+            returnUrl:"https://www.flebie.com/paymentresponse?id="+Fleb.orderResp.orderId
         }
         var form = document.createElement("form");
         form.setAttribute("method","post");
@@ -443,9 +466,12 @@ class CheckOut extends React.Component {
             </div>
         </div>
         var timeSlotArrayUI = [];
+        var istomo =false;
+        var isToday = false;
         debugger;
-        if(this.state.timeSlotArray.length == 0){
-            if(moment(this.state.date).format('MM/DD/YYYY') == moment().format('MM/DD/YYYY')){
+
+        if(moment(this.state.date).format('MM/DD/YYYY') == moment().format('MM/DD/YYYY')){
+            isToday=true;
                 var d = new Date();
                 var currentTime = d.getHours();
                 var restrict = 0;
@@ -461,34 +487,29 @@ class CheckOut extends React.Component {
                     })
                 }
                 
-            }else{
-            //timeSlotArrayUI=<option value="">No Slots Available For This Date</option>
-            timeSlotArrayUI = this.state.timeSlotArray.map(function(item,index){
-                    return <option value={item}>{item}</option>
-            })
-                    
             }
-        }else{
-            var d = new Date();
-            var currentTime = d.getHours();
-            var restrict = 0;
-            var istomo=false;
             if(moment().add(1,'days').format('YYYY-MM-DD') == moment(this.state.date).format('YYYY-MM-DD') ){
                 istomo=true;
             }
-            
-            if(currentTime >=22 && istomo){
-                restrict = 7;
-            }
-            if(currentTime >=6 && !istomo){
-                restrict =currentTime+4;
-            }
-            timeSlotArrayUI = this.state.timeSlotArray.map(function(item,index){
-                if(index >=restrict){
-                    return <option value={item}>{item}</option>
+            if(istomo){
+                var d = new Date();
+                var currentTime = d.getHours();
+                restrict=0
+                if(currentTime >=22 ){
+                    restrict = 7;
                 }
-            })
-        }
+                timeSlotArrayUI = this.state.timeSlotArray.map(function(item,index){
+                    if(index >=restrict){
+                        return <option value={item}>{item}</option>
+                    }
+                })
+            }
+
+            if(!istomo && !isToday){
+                timeSlotArrayUI = this.state.timeSlotArray.map(function(item,index){
+                        return <option value={item}>{item}</option>
+                })
+            }
 
          var schedulingUI = <div id="SchedulingBlock" className={(this.state.activetab==="SchedulingBlock")?"tab-main fade-in":"fade-out"}>
                 <p>Convenience fee of INR 100 will be levied on home collection orders</p>
@@ -545,13 +566,13 @@ class CheckOut extends React.Component {
             <div className="clearfix payment-main">
                 <div className="radio">
                     <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="Cash On Delivery" defaultChecked/>
+                        <input type="radio" name="optionsRadios" className="paymentOpt" id="optionsRadios1" value="COD" defaultChecked/>
                         Cash On Delivery
                     </label>
                 </div>
                 <div className="radio">
                     <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="Credit Card/Debit Card/Net Banking"/>
+                        <input type="radio" name="optionsRadios" className="paymentOpt"  id="optionsRadios2" value="Credit Card/Debit Card/Net Banking"/>
                         Credit Card/Debit Card/Net Banking
                     </label>
                 </div>

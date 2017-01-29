@@ -597,7 +597,7 @@ class PopularPackages extends React.Component {
 						</div>
 					</div>
 					<div className="lab-img img-block">
-                        <img src={"/public/images"+test.name+"_pkg.jpg"}/>
+                        <img src={"/public/images/"+test.name+"_pkg.jpg"}/>
 					</div>
 					<div className="lab-footer">
 						<h3>{test.name}</h3>

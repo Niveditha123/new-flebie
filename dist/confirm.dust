@@ -10,7 +10,7 @@
 <div id="root" class="container-main"> </div>
 {/body}
 
-
+<meta id="dataDump">
 {<pageScripts}
 <script src="/public/scripts/confirmbundle.js"></script>
 {/pageScripts}

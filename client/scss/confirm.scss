@@ -1,7 +1,5 @@
-@import '../../node_modules/react-dates/lib/css/_datepicker.css';
 .container-main{
     padding-bottom: 210px;
-    background-image: none;
 }
 .confirm-head{
     text-align:center;
@@ -23,7 +21,11 @@
 .fr.nv-xtra{
     padding-right: 0px
 }
-
+.confirm-test-main {
+    padding: 1em;
+    background: rgba(255, 255, 255, 0.42);
+    margin-top: 40px;
+}
 
 @media (max-width: 1023px){
 

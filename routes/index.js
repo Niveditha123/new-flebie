@@ -48,10 +48,12 @@ module.exports = function() {
   router.get("/getAvailableSlots",checkoutController.getAvailableSlots);
   router.post("/createOrder",checkoutController.createOrder);
   router.post("/setTimeSlot",checkoutController.setTimeSlot);
-  router.post("/applyOffer",checkoutController.applyOffer);
-  router.post("/removeOffer",checkoutController.removeOffer);
+  router.get("/applyOffer",checkoutController.applyOffer);
+  router.get("/removeOffer",checkoutController.removeOffer);
   router.get("/getLabs",popularlabsController.getLabs);
    router.get("/getPopTests",populartestsController.getPopTest);
+   router.get("/getOrder",confirmController.getOrder);
+   router.put("/updateTransaction",checkoutController.updateTransaction);
   //getPopTest
 
 
