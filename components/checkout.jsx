@@ -382,7 +382,7 @@ class CheckOut extends React.Component {
             '<form class="hidden" id="paymentForm" action="https://www.citruspay.com/flebie" >',
                 '<input type="hidden" name="email" value='+this.state.patientData.email+'/>',
                 '<input type="hidden" name="merchantTxnId" value='+Fleb.orderResp.txId+'/>',
-                '<input type="hidden" name="orderAmount" value='+Fleb.amount+'/>',
+                '<input type="hidden" name="orderAmount" value='+Fleb.orderResp.amount+'/>',
                 '<input type="hidden" name="currency" value="INR"/>',
                 '<input type="hidden" name="secSignature" value='+Fleb.orderResp.signature+'/>',
                 '<input type="hidden" name="returnUrl" value="https://www.flebie.com/paymentresponse"/>',
