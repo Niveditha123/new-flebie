@@ -306,7 +306,11 @@ class CheckOut extends React.Component {
         }else{
             var orderId="";
             if(Fleb.orderResp){
-                orderId= Fleb.orderResp.txId
+                if(!Fleb.orderResp.orderId){
+                    alert("Not a valid cart!! Please Create new cart to apply Offer");
+                    return false;
+                }
+                orderId= Fleb.orderResp.orderId
             }else{
                 alert("Please try again later");
                 return false;
@@ -342,7 +346,7 @@ class CheckOut extends React.Component {
     removeOffer(e){
         var orderId="";
         if(Fleb.orderResp){
-            orderId= Fleb.orderResp.txId
+            orderId= Fleb.orderResp.orderId
         }else{
             alert("Please try again later");
             return false;
