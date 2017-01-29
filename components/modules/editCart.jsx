@@ -37,39 +37,14 @@ class OpenCartModalContent extends React.Component{
         totalListPrice:0,
         totalPrice : 0,
         openModal:false
-      }
+      },
+      offerResp:{
+        orderLevelDiscount:0
+      },
+      convenienceFee:0
     }
   }
   getUserTests(){
-    var list= {
-      "totalItems": 3,
-      "totalPrice": 1269,
-      "totalListPrice": 1410,
-      "items": [
-        {
-          "testname": "Total Iron Binding Capacity (TIBC)",
-          "price": 189,
-          "listPrice": 210,
-          "quantity": 1,
-          "isHomeCollectible": true,
-          "labtestid": "QH9hPLiNmH"
-        },
-        {
-          "testname": "Thyroxine Binding Globulin (TBG), Serum",
-          "price": 540,
-          "listPrice": 600,
-          "quantity": 2,
-          "isHomeCollectible": true,
-          "labtestid": "FiKTBW1HXr"
-        }
-      ],
-      "userEmail": "",
-      "homeCollectible": true,
-      "labname": "Thyrocare",
-      "labId": "DhdJqyTrhg",
-      "labAddress": "#5/3/1, 24th Main, Parangipalya, HSR Layout, Sector-2, Bangalore - 560102."
-    };
-
     var testInfo={
         items:[],
         totalItems:0,
@@ -88,12 +63,32 @@ class OpenCartModalContent extends React.Component{
        this.getUserTests.bind(this)();
       document.body.addEventListener('updateCart',this.updateCart.bind(this));
       document.body.addEventListener('toggleCartModal',this.toggleCartModal.bind(this));
+      //offerApplied
+      document.body.addEventListener('offerApplied',this.OfferProcess.bind(this));
+      //convenienceFee
+      document.body.addEventListener('convenienceFee',this.convenienceFeeProces.bind(this));
        
 	}
   toggleCartModal(e){
     this.setState({
       openModal:e.data.flag
     })
+  }
+  convenienceFeeProces(e){
+    var data= e.data.list;
+    this.setState({
+      convenienceFee:data.convenienceFee
+    })
+  }
+  OfferProcess(e){
+    var data= e.data.list;
+    var ofResp={
+      orderLevelDiscount:data.orderLevelDiscount
+    };
+    this.setState({
+      offerResp:ofResp
+    })
+
   }
   updateCart(e){
     console.log(e.data,this.props.triggerElem,"yooo")
@@ -168,6 +163,7 @@ class OpenCartModalContent extends React.Component{
     }
   }
   render(){
+    debugger;
     var listUI=[];
     var _this = this;
     var headerUI= <h3 className={(this.props.header)?"":"hide"}>{this.state.testsList.labname}</h3>
@@ -206,12 +202,19 @@ class OpenCartModalContent extends React.Component{
         });
         var discountUI=<div className="disc-row col2-row">
           <div  className="discount-label">You Saved</div>
-          <div className="text-right"><span className="icon icon-rupee"></span>{this.state.testsList.totalListPrice-this.state.testsList.totalPrice}</div>
+          <div className="text-right"><span className="icon icon-rupee"></span>{(this.state.testsList.totalListPrice-this.state.testsList.totalPrice)+this.state.offerResp.orderLevelDiscount}</div>
         </div>;
         var priceUI=<div className="price-row col2-row">
           <div  className="price-tot-label">Total Price</div>
-          <div className="text-right"><span className="icon icon-rupee"></span>{this.state.testsList.totalPrice}</div>
+          <div className="text-right"><span className="icon icon-rupee"></span>{(this.state.testsList.totalPrice-this.state.offerResp.orderLevelDiscount)+this.state.convenienceFee}</div>
         </div>;
+        var convenienceFeeUI = [];
+        if(this.state.convenienceFee>0){
+          convenienceFeeUI = <div  className="clearfix conv-fee col2-row">
+            <div  className="price-tot-label">convenience Fee</div>
+            <div className="text-right"><span className="icon icon-rupee"></span>{this.state.convenienceFee}</div>
+          </div>
+        }
 
       listUI = <div className="list-ui">
       <div className="list-cont-inner">
@@ -221,6 +224,7 @@ class OpenCartModalContent extends React.Component{
           </div>
       </div>
       {discountUI}
+      {convenienceFeeUI}
       {priceUI}
       </div>
     }else{

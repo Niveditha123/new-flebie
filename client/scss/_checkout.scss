@@ -200,6 +200,18 @@ span.required {
         float: none;
     }
 }
+.offer-msg.success {
+    font-size: 1.1em;
+    icon-thumbs-up {
+        color: #04aa10;
+    }
+}
+.offer-msg.failed{
+    font-size: 1.1em;
+    icon-thumbs-up {
+        color:#c50606;
+    }
+}
 
 @media (max-width: 1023px){
     .checkout-banner p {

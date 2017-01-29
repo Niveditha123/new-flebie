@@ -59,7 +59,7 @@ class PopularLabs extends React.Component {
 						</div>
 					</div>
 					<div className="lab-img img-block">
-						<img src={"/public/images"+lab.labName+"_multi.jpg"}/>
+						<img src={"/public/images/"+lab.labName+"_multi.jpg"}/>
 					</div>
 					<div className="lab-footer">
 						<h3>{lab.labName}</h3>

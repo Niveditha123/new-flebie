@@ -20,7 +20,6 @@ class CheckOut extends React.Component {
             focused:false,
             timeSlotArray:[],
             isOffer:"",
-            applyOfferResp:{},
             offer:"",
             timeStringArray : ["Select Time", "7:00:00 AM-7:30:00 AM", "7:30:00 AM-8:00:00 AM", "8:00:00 AM-8:30:00 AM","8:30:00 AM-9:00:00 AM","9:00:00 AM-9:30:00 AM", "9:30:00 AM-10:00:00 AM", "10:00:00 AM-10:30:00 AM","10:30:00 AM-11:00:00 AM","11:00:00 AM-11:30:00 AM","11:30:00 AM-12:00:00 PM","12:00:00 PM-12:30:00 PM","12:30:00 PM-1:00:00 PM","1:00:00 PM-1:30:00 PM","1:30:00 PM-2:00:00 PM","2:00:00 PM-2:30:00 PM","2:30:00 PM-3:00:00 PM","3:00:00 PM-3:30:00 PM","3:30:00 PM-4:00:00 PM","4:00:00 PM-4:30:00 PM","4:30:00 PM-5:00:00 PM"]
         }
@@ -278,6 +277,7 @@ class CheckOut extends React.Component {
 
 
                 //hard coded ordered resp
+                Fleb.eventDispatcher("convenienceFee",{convenienceFee:100});
                var pResp= {
                     "amount": 704,
                     "createdAt": "2017-01-29T12:44:24.255Z",
@@ -308,6 +308,7 @@ class CheckOut extends React.Component {
                 debugger;
                 Fleb.orderResp = resp;
                 Fleb.hideLoader();
+                Fleb.eventDispatcher("convenienceFee",{convenienceFee:100});
                 if(Fleb.orderResp.orderId){
                     _this.setState({
                         enablePayment:true,
@@ -332,6 +333,7 @@ class CheckOut extends React.Component {
                     "updatedAt": "2017-01-29T12:44:24.255Z"
                 };
                 Fleb.orderResp= pResp;
+                Fleb.eventDispatcher("convenienceFee",{convenienceFee:100});
                 if(Fleb.orderResp.orderId){
                     _this.setState({
                         enablePayment:true,
@@ -407,11 +409,14 @@ class CheckOut extends React.Component {
                         Fleb.hideLoader();
 				}
 				, success: function (resp) {
-                     //Fleb.applyOfferResp = resp;
+                     Fleb.applyOfferResp = resp;
+                     var respData = {
+                         orderLevelDiscount:(resp.orderLevelDiscount)?resp.orderLevelDiscount:0
+                     }
+                     Fleb.eventDispatcher("offerApplied",respData);
 						_this.setState({
                             isOffer:true,
-                            offer:val,
-                            applyOfferResp:Fleb.applyOfferResp
+                            offer:val
 						}) 
                         Fleb.hideLoader();
 				}
@@ -435,6 +440,7 @@ Fleb.showLoader();
 				}
 				, success: function (resp) {
                      Fleb.applyOfferResp = resp;
+                     Fleb.eventDispatcher("offerApplied",{orderLevelDiscount:0});
 						_this.setState({
                             isOffer:false,
                             offer:""
@@ -672,16 +678,16 @@ Fleb.showLoader();
                         <button onClick={this.applyOffer.bind(this)} className={(!this.state.isOffer)?"btn btn-default":"hide"}>Apply</button>
                         <button onClick={this.removeOffer.bind(this)} className={(this.state.isOffer)?"btn btn-default":"hide"}>remove</button>
                     </div>
-                    <div className={(this.state.isOffer=== true)?"offer-msg success":"hide"}>
+
+                </div>
+            </div>
+                <div className={(this.state.isOffer=== true)?"offer-msg success":"hide"}>
                         <p><span className="icon icon-thumbs-up"></span> Promo Code has been applied successfully</p>
                     </div>
 
                     <div className={(this.state.isOffer=== false)?"offer-msg failed":"hide"}>
                         <p><span className="icon icon-thumbs-down"></span> Promo Code has not been applied</p>
                     </div>
-
-                </div>
-            </div>
             <div  className="text-center make-payment clearfix">
                     <button id="MakePayment" className="btn btn-success fr btn-next curved" onClick={this.makePayment.bind(this)}>Proceed to Pay</button>                
             </div>
@@ -712,7 +718,7 @@ Fleb.showLoader();
                     <div className="order-summary">
                         <h3>Order Summary</h3>
                         <div className="order-block">
-                            <OpenCartModalContent  triggerElem={false} isEditable={this.state.editableCart} header={true}/>
+                            <OpenCartModalContent  triggerElem={false}  isEditable={this.state.editableCart} header={true}/>
                         </div>
                     </div>
 
