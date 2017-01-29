@@ -19,7 +19,8 @@ class CheckOut extends React.Component {
             date: moment(),
             focused:false,
             timeSlotArray:[],
-            isOffer:false,
+            isOffer:"",
+            applyOfferResp:{},
             offer:"",
             timeStringArray : ["Select Time", "7:00:00 AM-7:30:00 AM", "7:30:00 AM-8:00:00 AM", "8:00:00 AM-8:30:00 AM","8:30:00 AM-9:00:00 AM","9:00:00 AM-9:30:00 AM", "9:30:00 AM-10:00:00 AM", "10:00:00 AM-10:30:00 AM","10:30:00 AM-11:00:00 AM","11:00:00 AM-11:30:00 AM","11:30:00 AM-12:00:00 PM","12:00:00 PM-12:30:00 PM","12:30:00 PM-1:00:00 PM","1:00:00 PM-1:30:00 PM","1:30:00 PM-2:00:00 PM","2:00:00 PM-2:30:00 PM","2:30:00 PM-3:00:00 PM","3:00:00 PM-3:30:00 PM","3:30:00 PM-4:00:00 PM","4:00:00 PM-4:30:00 PM","4:30:00 PM-5:00:00 PM"]
         }
@@ -71,6 +72,13 @@ class CheckOut extends React.Component {
                 css:"fl w50 age-block"
             }
         ];
+        var localCart = localStorage.getItem("cartInfo");
+        if(!localCart){
+            alert("Cart is empty")
+            return false;
+        }else{
+            Fleb.localCart=JSON.parse(localCart);
+        }
         this.setState({
             patientDetailsInfo:patientForm
         })
@@ -264,7 +272,36 @@ class CheckOut extends React.Component {
             , contentType: 'application/json'
             , method: 'post'
             , error: function (err) { 
-                alert("Not able to create order. Please try again later or try different Time slot");
+                
+                
+                //alert("Not able to create order. Please try again later or try different Time slot");
+
+
+                //hard coded ordered resp
+               var pResp= {
+                    "amount": 704,
+                    "createdAt": "2017-01-29T12:44:24.255Z",
+                    "emailId": "adarsha.shetty.1989@gmail.com",
+                    "orderId": 182,
+                    "signature": "051ce42acb75178beb2eb9cb1e723e070f7b4bbf",
+                    "transactionId": 67,
+                    "txId": "a98df027-f055-4b9f-b167-a9634da35b7f",
+                    "updatedAt": "2017-01-29T12:44:24.255Z"
+                };
+                Fleb.orderResp= pResp;
+                if(Fleb.orderResp.orderId){
+                    _this.setState({
+                        enablePayment:true,
+                        activetab:"paymentBlock",
+                        editableCart:false
+                    },function(){
+
+                        var cartBtn = document.getElementById("cartPl");
+                        cartBtn.classList.add("hide");
+                    })
+                }
+                // hard code templte 
+
                 Fleb.hideLoader();
             }
             , success: function (resp) {
@@ -282,8 +319,37 @@ class CheckOut extends React.Component {
                         cartBtn.classList.add("hide");
                     })
                 }else{
-                    alert("Not able to create order with this date. Please choose different date or time");
-                    return false;
+
+//hard coded ordered resp
+               var pResp= {
+                    "amount": 704,
+                    "createdAt": "2017-01-29T12:44:24.255Z",
+                    "emailId": "adarsha.shetty.1989@gmail.com",
+                    "orderId": 182,
+                    "signature": "051ce42acb75178beb2eb9cb1e723e070f7b4bbf",
+                    "transactionId": 67,
+                    "txId": "a98df027-f055-4b9f-b167-a9634da35b7f",
+                    "updatedAt": "2017-01-29T12:44:24.255Z"
+                };
+                Fleb.orderResp= pResp;
+                if(Fleb.orderResp.orderId){
+                    _this.setState({
+                        enablePayment:true,
+                        activetab:"paymentBlock",
+                        editableCart:false
+                    },function(){
+
+                        var cartBtn = document.getElementById("cartPl");
+                        cartBtn.classList.add("hide");
+                    })
+                }
+                // hard code templte 
+
+
+
+
+                    //alert("Not able to create order with this date. Please choose different date or time");
+                   // return false;
                 }
                 }
             }) 
@@ -321,6 +387,7 @@ class CheckOut extends React.Component {
         var _this=this;
         var val = this.refs.offerInput.value;
         var code = val.toUpperCase();
+        var orderId = Fleb.orderResp.orderId;
         debugger;
              Fleb.showLoader();
             var promoCode='promoCode='+code+'&orderId='+orderId;
@@ -340,10 +407,11 @@ class CheckOut extends React.Component {
                         Fleb.hideLoader();
 				}
 				, success: function (resp) {
-                     Fleb.applyOfferResp = resp;
+                     //Fleb.applyOfferResp = resp;
 						_this.setState({
                             isOffer:true,
-                            offer:val
+                            offer:val,
+                            applyOfferResp:Fleb.applyOfferResp
 						}) 
                         Fleb.hideLoader();
 				}
@@ -353,6 +421,7 @@ class CheckOut extends React.Component {
         var orderId="";
 Fleb.showLoader();
         var _this=this;
+        var orderId=Fleb.orderResp.orderId;
         var promoCode='&orderId='+orderId;
             reqwest({			
 				url:"/removeOffer?"+promoCode
@@ -427,6 +496,19 @@ Fleb.showLoader();
         debugger;
         paymentForm.submit();
     }
+    changeWalkIn(e){
+        var checked= e.target.value;
+        if(checked ==="WalkIn"){
+            this.state.orderType=="WalkIn"
+            this.setState({
+                orderType:checked
+            })
+        }else{
+            this.setState({
+                orderType:""
+            })
+        }
+    }
     render(){
         var tabContentUI =[];
         var patientDetailsForm=[];
@@ -468,15 +550,13 @@ Fleb.showLoader();
         var timeSlotArrayUI = [];
         var istomo =false;
         var isToday = false;
-        debugger;
-
         if(moment(this.state.date).format('MM/DD/YYYY') == moment().format('MM/DD/YYYY')){
             isToday=true;
                 var d = new Date();
                 var currentTime = d.getHours();
                 var restrict = 0;
                 if(currentTime >=14){
-                    timeSlotArrayUI= <option value="">No Slots Available For This Date</option>
+                    timeSlotArrayUI= <option value="">No Booking allowed after 2:00 PM on the same day</option>
                 }
                 if(currentTime < 14){
                     restrict = currentTime+6;
@@ -510,15 +590,21 @@ Fleb.showLoader();
                         return <option value={item}>{item}</option>
                 })
             }
+            var labAddress="";
+            if(this.state.orderType=="WalkIn"){
+                labAddress= Fleb.localCart.labAddress;
+            }else{
+                labAddress=""
+            }
 
          var schedulingUI = <div id="SchedulingBlock" className={(this.state.activetab==="SchedulingBlock")?"tab-main fade-in":"fade-out"}>
-                <p>Convenience fee of INR 100 will be levied on home collection orders</p>
-                <div className="clearfix">
+                <p className={(this.state.orderType=="HomeCol")?"":"hide"}>Convenience fee of INR 100 will be levied on home collection orders</p>
+                <div className="clearfix hide">
                     <label className="radio-inline first-radio">
-                        <input type="radio" name="ordertype" defaultChecked id="ordertype1" value="Home Collection"/> Home Collection
+                        <input type="radio" name="ordertype" defaultChecked onChange={this.changeWalkIn.bind(this)} id="ordertype1" value="HomeCol"/> Home Collection
                     </label>
                     <label className="radio-inline">
-                        <input type="radio" name="ordertype" id="ordertype2" value="Walk-in Appointment"/> Walk-in Appointment
+                        <input type="radio" name="ordertype" id="ordertype2" onChange={this.changeWalkIn.bind(this)} value="WalkIn"/> Walk-in Appointment
                     </label>
                 </div>
                 <h4 className="sel-head">Select Date and Timeslot</h4>
@@ -543,8 +629,9 @@ Fleb.showLoader();
                         <input type="textarea" 
                             id="address"
                             className="form-control"
+                            defaultValue={labAddress}
                             placeholder="Enter Adrress"/>
-
+                            
                         <span className={"hide"}>*</span>
                         <div ref={"errInput"} className="err-msg fade-out">"Please Enter Addres"</div>
                     </div>
@@ -553,6 +640,7 @@ Fleb.showLoader();
                         <input type="textarea" 
                             id="comments"
                             ref="commentBox"
+                            defaultValue={labAddress}
                             className="form-control"/>
 
                         <span className={"hide"}>*</span>
@@ -584,6 +672,14 @@ Fleb.showLoader();
                         <button onClick={this.applyOffer.bind(this)} className={(!this.state.isOffer)?"btn btn-default":"hide"}>Apply</button>
                         <button onClick={this.removeOffer.bind(this)} className={(this.state.isOffer)?"btn btn-default":"hide"}>remove</button>
                     </div>
+                    <div className={(this.state.isOffer=== true)?"offer-msg success":"hide"}>
+                        <p><span className="icon icon-thumbs-up"></span> Promo Code has been applied successfully</p>
+                    </div>
+
+                    <div className={(this.state.isOffer=== false)?"offer-msg failed":"hide"}>
+                        <p><span className="icon icon-thumbs-down"></span> Promo Code has not been applied</p>
+                    </div>
+
                 </div>
             </div>
             <div  className="text-center make-payment clearfix">
@@ -616,7 +712,7 @@ Fleb.showLoader();
                     <div className="order-summary">
                         <h3>Order Summary</h3>
                         <div className="order-block">
-                            <OpenCartModalContent triggerElem={false} isEditable={this.state.editableCart} header={true}/>
+                            <OpenCartModalContent  triggerElem={false} isEditable={this.state.editableCart} header={true}/>
                         </div>
                     </div>
 

@@ -101,6 +101,7 @@ class Search extends React.Component {
 			"totalPrice":cartData.totalOfferPrice,
 			"userEmail":"",
 			"homeCollectible":cartData.lab.isAvailableForHC,
+			"isAvailableForOB":cartData.lab.isAvailableForOB,
 			"items":itemsArr
 		};
 			Fleb.eventDispatcher("updateCart",cartitem);

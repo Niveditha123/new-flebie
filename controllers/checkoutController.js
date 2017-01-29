@@ -52,7 +52,7 @@ console.log(query);
     };
 var code = req.query.promoCode;
 var orderId = req.query.orderId;
-console.log(query," applyoffer");
+console.log(code,orderId," applyoffer");
   request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/promotion/applyPromotionCode?promoCode='+code+'&orderId='+orderId)
           .headers(headers)
           .end(function (response) {
@@ -70,7 +70,7 @@ console.log(query," applyoffer");
 
     };
 var orderId = req.query.orderId;
-console.log(query,"remove");
+console.log(orderId,"remove");
   request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/promotion/ignorePromotionCode?orderId='+orderId)
           .headers(headers)
           .end(function (response) {

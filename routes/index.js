@@ -54,6 +54,7 @@ module.exports = function() {
    router.get("/getPopTests",populartestsController.getPopTest);
    router.get("/getOrder",confirmController.getOrder);
    router.put("/updateTransaction",checkoutController.updateTransaction);
+   router.get('/getPopPackages',popularpackagesController.getPopPackages);
   //getPopTest
 
 
