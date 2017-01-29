@@ -179,12 +179,13 @@ class OpenCartModalContent extends React.Component{
         <div className="item-qnt">
         Quantity
         </div>
-        <div className="item-mrp">
-        MRP
-        </div>
         <div className="item-price">
         Price
         </div>
+        <div className="item-mrp">
+        MRP
+        </div>
+        
       </div>;
 
       var list =  this.state.testsList.items.map(function(item,index){
@@ -199,6 +200,8 @@ class OpenCartModalContent extends React.Component{
             <div className="item-mrp">
               <span className="icon icon-rupee"></span>{item.listPrice*item.quantity}
             </div>
+            
+            
           </div>
         });
         var discountUI=<div className="disc-row col2-row">

@@ -314,7 +314,7 @@ class CheckOut extends React.Component {
              Fleb.showLoader();
             var promoCode='promoCode='+val+'&orderId='+orderId;
             reqwest({			
-				url:"/applyOffer"+promoCode
+				url:"/applyOffer?"+promoCode
 				,headers:{
 					"Access-Control-Allow-Origin":"*"
 				}
@@ -351,7 +351,7 @@ class CheckOut extends React.Component {
         var _this=this;
         var promoCode='&orderId='+orderId;
             reqwest({			
-				url:"/removeOffer"+promoCode
+				url:"/removeOffer?"+promoCode
 				,headers:{
 					"Access-Control-Allow-Origin":"*"
 				}
@@ -389,7 +389,7 @@ class CheckOut extends React.Component {
             '</form>'
         ].join("\n");
         // html: '<div ...>\n<h1 ...>Constructing HTML Elements<h1>\n</div>'
-        this.ref.fakeForm.innerHTML = form;
+        this.refs.fakeForm.innerHTML = form;
         var paymentForm = document.getElementById("paymentForm");
         debugger;
         paymentForm.submit();
@@ -592,7 +592,7 @@ class CheckOut extends React.Component {
 
 
                 </div>
-                <div ref="fakeForm"/>
+                <div ref="fakeForm" id="fakeFormPlace"/>
         </div>
         );
     }
