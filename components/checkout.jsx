@@ -39,7 +39,7 @@ class CheckOut extends React.Component {
                 css:"clearfix"
             },
             {
-                name:"email",
+                name:"emailId",
                 id:2,
                 errMsg:"Please Enter Email Id",
                 required:true,
@@ -219,7 +219,7 @@ class CheckOut extends React.Component {
             , success: function (resp) {
                 location.href="paymentresponse?id="+Fleb.orderResp.orderId
             }   
-            }) 
+            });
 
         //updateTransaction
     }
@@ -242,7 +242,7 @@ class CheckOut extends React.Component {
             location.href="";
         }
         if(!Fleb.slotResp){
-            alert("Plaese choose a time!");
+            alert("Please choose a time!");
             return false;
         }
         Fleb.showLoader();
@@ -262,7 +262,7 @@ class CheckOut extends React.Component {
             "status": "PENDING",
             "orderDetails":this.state.patientData,
                 "orderItems": orderItems
-            }
+            };
         Fleb.payLoadOrder = payLoad;
             reqwest({
                 url: '/createOrder'
@@ -273,7 +273,7 @@ class CheckOut extends React.Component {
             , error: function (err) { 
                 
                 
-                //alert("Not able to create order. Please try again later or try different Time slot");
+                alert("Not able to create order. Please try again later or try different Time slot");
 
 
                 //hard coded ordered resp
@@ -322,7 +322,7 @@ class CheckOut extends React.Component {
                 }else{
 
 //hard coded ordered resp
-               var pResp= {
+               /*var pResp= {
                     "amount": 704,
                     "createdAt": "2017-01-29T12:44:24.255Z",
                     "emailId": "adarsha.shetty.1989@gmail.com",
@@ -331,8 +331,8 @@ class CheckOut extends React.Component {
                     "transactionId": 67,
                     "txId": "a98df027-f055-4b9f-b167-a9634da35b7f",
                     "updatedAt": "2017-01-29T12:44:24.255Z"
-                };
-                Fleb.orderResp= pResp;
+                };*/
+                Fleb.orderResp= resp;
                 Fleb.eventDispatcher("convenienceFee",{convenienceFee:100});
                 if(Fleb.orderResp.orderId){
                     _this.setState({
