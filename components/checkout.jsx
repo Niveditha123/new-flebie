@@ -21,6 +21,7 @@ class CheckOut extends React.Component {
             timeSlotArray:[],
             isOffer:"",
             offer:"",
+            paymentType:"COD",
             timeStringArray : ["Select Time", "7:00:00 AM-7:30:00 AM", "7:30:00 AM-8:00:00 AM", "8:00:00 AM-8:30:00 AM","8:30:00 AM-9:00:00 AM","9:00:00 AM-9:30:00 AM", "9:30:00 AM-10:00:00 AM", "10:00:00 AM-10:30:00 AM","10:30:00 AM-11:00:00 AM","11:00:00 AM-11:30:00 AM","11:30:00 AM-12:00:00 PM","12:00:00 PM-12:30:00 PM","12:30:00 PM-1:00:00 PM","1:00:00 PM-1:30:00 PM","1:30:00 PM-2:00:00 PM","2:00:00 PM-2:30:00 PM","2:30:00 PM-3:00:00 PM","3:00:00 PM-3:30:00 PM","3:30:00 PM-4:00:00 PM","4:00:00 PM-4:30:00 PM","4:30:00 PM-5:00:00 PM"]
         }
     }
@@ -81,6 +82,9 @@ class CheckOut extends React.Component {
         this.setState({
             patientDetailsInfo:patientForm
         })
+        Fleb.applyOfferResp={
+            orderLevelDiscount:0
+        }
 	}
     openSection(e){
         var target = e.target.getAttribute("data-target");
@@ -93,7 +97,6 @@ class CheckOut extends React.Component {
         var inputArray= elem.querySelectorAll(".form-control");
         var patientData={};
         var isError=true;
-        debugger;
         for(var i =0;i<inputArray.length;i++){
             var input = inputArray[i];
             var type = input.getAttribute("type");
@@ -188,7 +191,6 @@ class CheckOut extends React.Component {
                         Fleb.hideLoader();
 				}
 				, success: function (resp) {
-                    debugger;
 					 var slotArray = _this.state.timeStringArray.slice();
                      Fleb.getSlotResp = resp;
 						_this.setState({
@@ -225,7 +227,6 @@ class CheckOut extends React.Component {
     }
     getSchedulingInfo(){
         var _this = this;
-        debugger;
         var orderComments = this.refs.commentBox.value;
         var data = localStorage.getItem("cartInfo");
         var orderItems = [];
@@ -277,7 +278,7 @@ class CheckOut extends React.Component {
 
 
                 //hard coded ordered resp
-                Fleb.eventDispatcher("convenienceFee",{convenienceFee:100});
+               /* Fleb.eventDispatcher("convenienceFee",{convenienceFee:100});
                var pResp= {
                     "amount": 704,
                     "createdAt": "2017-01-29T12:44:24.255Z",
@@ -299,13 +300,12 @@ class CheckOut extends React.Component {
                         var cartBtn = document.getElementById("cartPl");
                         cartBtn.classList.add("hide");
                     })
-                }
+                }*/
                 // hard code templte 
 
                 Fleb.hideLoader();
             }
             , success: function (resp) {
-                debugger;
                 Fleb.orderResp = resp;
                 Fleb.hideLoader();
                 Fleb.eventDispatcher("convenienceFee",{convenienceFee:100});
@@ -321,37 +321,8 @@ class CheckOut extends React.Component {
                     })
                 }else{
 
-//hard coded ordered resp
-               /*var pResp= {
-                    "amount": 704,
-                    "createdAt": "2017-01-29T12:44:24.255Z",
-                    "emailId": "adarsha.shetty.1989@gmail.com",
-                    "orderId": 182,
-                    "signature": "051ce42acb75178beb2eb9cb1e723e070f7b4bbf",
-                    "transactionId": 67,
-                    "txId": "a98df027-f055-4b9f-b167-a9634da35b7f",
-                    "updatedAt": "2017-01-29T12:44:24.255Z"
-                };*/
-                Fleb.orderResp= resp;
-                Fleb.eventDispatcher("convenienceFee",{convenienceFee:100});
-                if(Fleb.orderResp.orderId){
-                    _this.setState({
-                        enablePayment:true,
-                        activetab:"paymentBlock",
-                        editableCart:false
-                    },function(){
-
-                        var cartBtn = document.getElementById("cartPl");
-                        cartBtn.classList.add("hide");
-                    })
-                }
-                // hard code templte 
-
-
-
-
-                    //alert("Not able to create order with this date. Please choose different date or time");
-                   // return false;
+                    alert("Not able to create order with this date. Please choose different date or time");
+                   return false;
                 }
                 }
             }) 
@@ -360,7 +331,6 @@ class CheckOut extends React.Component {
        
     }
     setTimeSlot(e){
-        debugger;
         var value = e.target.value;
         Fleb.selectedTime = value;
         var payLoad = {        
@@ -390,7 +360,6 @@ class CheckOut extends React.Component {
         var val = this.refs.offerInput.value;
         var code = val.toUpperCase();
         var orderId = Fleb.orderResp.orderId;
-        debugger;
              Fleb.showLoader();
             var promoCode='promoCode='+code+'&orderId='+orderId;
 
@@ -409,16 +378,24 @@ class CheckOut extends React.Component {
                         Fleb.hideLoader();
 				}
 				, success: function (resp) {
-                     Fleb.applyOfferResp = resp;
-                     var respData = {
-                         orderLevelDiscount:(resp.orderLevelDiscount)?resp.orderLevelDiscount:0
-                     }
-                     Fleb.eventDispatcher("offerApplied",respData);
-						_this.setState({
+                    if(resp.orderLevelDiscount){
+                        Fleb.applyOfferResp = resp;
+                        var respData = {
+                            orderLevelDiscount:(resp.orderLevelDiscount)?resp.orderLevelDiscount:0
+                        }
+                        Fleb.eventDispatcher("offerApplied",respData);
+                        _this.setState({
                             isOffer:true,
                             offer:val
-						}) 
-                        Fleb.hideLoader();
+                        })    
+                    }else{
+                        _this.setState({
+                            isOffer:false,
+                            offer:""
+                        }) 
+                    }
+
+                    Fleb.hideLoader();
 				}
 		})
     }
@@ -451,8 +428,6 @@ Fleb.showLoader();
 
     }
     makePayment(){
-        debugger;
-
         //paymentOpt
         if(!Fleb.orderResp){
             alert("Please try another Lab or Date");
@@ -477,7 +452,7 @@ Fleb.showLoader();
         var paymentResp = {
             email:this.state.patientData.email,
             merchantTxnId:Fleb.orderResp.txId,
-            orderAmount:Fleb.orderResp.amount,
+            orderAmount:Fleb.orderResp.amount-Fleb.applyOfferResp.orderLevelDiscount,
             currency:"INR",
             secSignature:Fleb.orderResp.signature,
             returnUrl:"https://www.flebie.com/paymentresponse?id="+Fleb.orderResp.orderId
@@ -499,7 +474,6 @@ Fleb.showLoader();
         // html: '<div ...>\n<h1 ...>Constructing HTML Elements<h1>\n</div>'
         this.refs.fakeForm.appendChild(form);
         var paymentForm = document.getElementById("paymentForm");
-        debugger;
         paymentForm.submit();
     }
     changeWalkIn(e){
@@ -514,6 +488,13 @@ Fleb.showLoader();
                 orderType:""
             })
         }
+    }
+    selectedPayType(e){
+        var checked = e.target.value;
+        console.log(checked);
+        this.setState({
+            paymentType:checked
+        })
     }
     render(){
         var tabContentUI =[];
@@ -660,13 +641,13 @@ Fleb.showLoader();
             <div className="clearfix payment-main">
                 <div className="radio">
                     <label>
-                        <input type="radio" name="optionsRadios" className="paymentOpt" id="optionsRadios1" value="COD" defaultChecked/>
+                        <input type="radio" name="optionsRadios" className="paymentOpt" id="optionsRadios1" onChange={this.selectedPayType.bind(this)} value="COD" defaultChecked/>
                         Cash On Delivery
                     </label>
                 </div>
                 <div className="radio">
                     <label>
-                        <input type="radio" name="optionsRadios" className="paymentOpt"  id="optionsRadios2" value="Credit Card/Debit Card/Net Banking"/>
+                        <input type="radio" name="optionsRadios" className="paymentOpt" onChange={this.selectedPayType.bind(this)}  id="optionsRadios2" value="online"/>
                         Credit Card/Debit Card/Net Banking
                     </label>
                 </div>
@@ -686,10 +667,10 @@ Fleb.showLoader();
                     </div>
 
                     <div className={(this.state.isOffer=== false)?"offer-msg failed":"hide"}>
-                        <p><span className="icon icon-thumbs-down"></span> Promo Code has not been applied</p>
+                        <p><span className="icon icon-thumb-down"></span> Promo Code has not been applied</p>
                     </div>
             <div  className="text-center make-payment clearfix">
-                    <button id="MakePayment" className="btn btn-success fr btn-next curved" onClick={this.makePayment.bind(this)}>Proceed to Pay</button>                
+                    <button id="MakePayment" className="btn btn-success fr btn-next curved" onClick={this.makePayment.bind(this)}>{(this.state.paymentType=="COD")?"Confirm Order":"Proceed to Pay"}</button>                
             </div>
         </div>
 

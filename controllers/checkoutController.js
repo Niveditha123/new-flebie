@@ -60,7 +60,7 @@ console.log(code,orderId," applyoffer");
             if(response.status == 200){
               res.send(response.body);
             }else{
-              res.send([])
+              res.send({})
             }
           });
   },
@@ -78,7 +78,7 @@ console.log(orderId,"remove");
             if(response.status == 200){
               res.send(response.body);
             }else{
-              res.send([])
+              res.send({})
             }
           });
   },

@@ -9,7 +9,9 @@ class ConfirmCtrl extends React.Component {
                 orderItems:[],
                 grossTotal:0,
             },
-            error:false
+            error:false,
+            loading:true,
+            convenienceFee:100
         }
     }
     getConfirmResponse(){
@@ -49,6 +51,7 @@ class ConfirmCtrl extends React.Component {
                 var _this = this;
 
 				var qP = Fleb.getQueryVariable("id");
+                
 
 				reqwest({			
 					url:"/getOrder?id="+qP
@@ -57,21 +60,26 @@ class ConfirmCtrl extends React.Component {
 					}
 					, method: 'get'
 					, error: function (err) {
+                        Fleb.hideLoader();
 						_this.setState({
-                            error:true						
+                            error:true,
+                            loading:false						
 						})  
 					}
 					, success: function (resp) {
 						_this.setState({
 							confirmResponse:resp,
-                            error:false
+                            error:false,
+                            loading:false
 						})     
+                        Fleb.hideLoader();
 					}
 			})
 
 
     }
     componentDidMount(){
+        Fleb.showLoader();
         this.getConfirmResponse.bind(this)()
 	}
     render(){
@@ -94,7 +102,7 @@ class ConfirmCtrl extends React.Component {
       var list=[];
 
       
-    if(!this.state.error){
+    if(!this.state.error && !this.state.loading){
          var list =  this.state.confirmResponse.orderItems.map(function(item,index){
           return <div className="test-row">
             <div className="item-head">
@@ -108,20 +116,26 @@ class ConfirmCtrl extends React.Component {
             <span className="icon icon-rupee"></span>{item.itemTotal}
             </div>
             <div className="item-mrp">
-            <span className="icon icon-rupee"></span>{item.itemMRP
-}
+            <span className="icon icon-rupee"></span>{item.itemMRP}
             </div>
           </div>
         });
+        var convinienceFee= priceUI=<div className="price-row test-row">
+          <div  className="price-tot-label item-head">convenience Fee</div>
+          <div className="item-qnt"> </div>
+          <div className="item-mrp"></div>
+          <div className="item-price"><span className="icon icon-rupee"></span>{this.state.convenienceFee}</div>
+        </div>;
         var priceUI=<div className="price-row test-row">
           <div  className="price-tot-label item-head">You Pay</div>
           <div className="item-qnt"> </div>
           <div className="item-mrp"></div>
-          <div className="item-price"><span className="icon icon-rupee"></span>{this.state.confirmResponse.grossTotal}</div>
+          <div className="item-price"><span className="icon icon-rupee"></span>{this.state.confirmResponse.grossTotal+this.state.convenienceFee}</div>
         </div>;
         listUI = <div className="list-content">
       {head}
        {list}
+       {convinienceFee}
        {priceUI}
       </div>
     }else{

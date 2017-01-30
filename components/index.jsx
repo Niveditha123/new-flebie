@@ -85,7 +85,9 @@ class Index extends React.Component {
 				})
 			}else{
 				this.setState({
-					errrMsgs:"No Results Found"
+					errrMsgs:"No Results Found",
+					showSuggest:false,
+					filterList:[]
 				})
 			}
 		}else{

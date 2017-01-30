@@ -159,11 +159,10 @@ class OpenCartModalContent extends React.Component{
     if(this.state.testsList.items.length > 0){
       location.href="/test/list?labId="+labId;
     }else{
-      location.href="";
+      location.href="/";
     }
   }
   render(){
-    debugger;
     var listUI=[];
     var _this = this;
     var headerUI= <h3 className={(this.props.header)?"":"hide"}>{this.state.testsList.labname}</h3>
