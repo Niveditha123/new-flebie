@@ -42,4 +42,4 @@ require('https').createServer({
 	key: fs.readFileSync('certs/files.flebie.key'),
 	cert: fs.readFileSync('certs/7f2d4718b1db9ceb.crt'),
 	ca: [fs.readFileSync('certs/gd_bundle-g2-g1.crt')] // <----- note this part
-}, app).listen(config.PORT);
+}, app).listen(443);
