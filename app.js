@@ -32,6 +32,6 @@ var isProduction = process.env.NODE_ENV === 'production';
 
 setup(app);
 
-app.listen(config.PORT,function(){
+app.listen(443,function(){
 	console.log("App listening on port "+config.PORT);
 });
