@@ -4,6 +4,16 @@ html{
     //background-repeat: no-repeat;
     //background-size: 100% 325px;
 }
+body{
+    min-height: 100%;
+    position: relative;
+    padding-bottom: 220px;
+    footer{
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+    }
+}
 .container-main{
-    //padding-bottom: 210px;
+    padding-bottom: 10px;
 }
