@@ -4,6 +4,7 @@ require ("./layout.js");
 import Styles from '../scss/layout.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import reqwest from 'reqwest';
 import  OpenCartModalContent from '../../components/modules/editCart.jsx';
 
 
@@ -41,11 +42,39 @@ class LoginModalContent extends React.Component{
     }
   }
   loginCtrl(e){
+    var _this=this;
     var userName = this.refs.userName.value;
     var passWord= this.refs.passwordInp.value;
     var passObj = {
       username:userName,
       password:passWord
+    }
+    if(userName === "" || passWord === "" ){
+      this.setState({
+        loginError:"Please enter the credentials"
+      })
+    }else{
+      Fleb.showLoader();
+      reqwest({
+                url: '/signin'
+            , type: 'json'
+            ,data:JSON.stringify(passObj)
+            , contentType: 'application/json'
+            , method: 'post'
+            , error: function (err) { 
+              debugger;
+              _this.setState({
+                  loginError:"Please enter the credentials"
+                })
+                Fleb.hideLoader();
+            }
+            , success: function (resp) {
+              Fleb.hideLoader();
+              location.href="/dashboard"
+
+                }
+            })
+
     }
     // make api call, here
   }
@@ -67,7 +96,8 @@ class LoginModalContent extends React.Component{
        <div className="modal-footer">
           <button type="submit" data-dismiss="modal" onClick={this.loginCtrl.bind(this)} className="btn btn-success curved">
           Login</button>
-          <div className={(this.state.loginError=="")?"hide":"error-alert"}>
+          <div className={(this.state.loginError=="")?"hide":"error-alert text-center"}>
+          {this.state.loginError}
           </div>
         </div>
        </div>;

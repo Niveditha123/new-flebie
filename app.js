@@ -3,12 +3,14 @@ var express = require("express");
 var config 	= require("./config/index.js");
 var setup 	= require("./setup/index.js");
 var bodyParser = require("body-parser");
+var cookieParser = require('cookie-parser')
 var path = require('path');
 
 
 var app = express();
 app.use("/public/",express.static(__dirname + '/public'));
 app.use(compression({filter: shouldCompress}));
+app.use(cookieParser())
 app.use(bodyParser.urlencoded({
     extended: true
 }));

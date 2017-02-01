@@ -11,6 +11,7 @@ var confirmController = require("../controllers/confirmController");
 var listlabsfortestController = require('../controllers/listlabsfortestController');
 var dashboardController = require("../controllers/dashboardController.js");
 var otherPageController = require("../controllers/otherpagesController.js");
+var userController = require("../controllers/userController.js");
  
 module.exports = function() {
 
@@ -57,6 +58,9 @@ module.exports = function() {
    router.get('/getPopPackages',popularpackagesController.getPopPackages);
   //getPopTest
 
+
+  //user apis
+router.post("/signIn",userController.signIn);
 
   return router;
 }
