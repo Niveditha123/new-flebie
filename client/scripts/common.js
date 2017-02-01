@@ -70,7 +70,10 @@ class LoginModalContent extends React.Component{
             }
             , success: function (resp) {
               Fleb.hideLoader();
-              location.href="/dashboard"
+              location.href="/dashboard";
+                console.log("Resp is : "+ resp.body.role);
+               
+              
 
                 }
             })

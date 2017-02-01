@@ -17,10 +17,13 @@ class Dashboard extends React.Component {
     render(){
       
         return (
-            <div className="dashboard-main ">
-                <h1>Dashboard</h1>
-                
+            
+            <div id="root" className="dashboard-main">
+                <div></div>
+                <div style={{ color: "grey" , textAlign: "center" }} className="alert alert-danger" id="connectionAlert" ></div>
+                <div className="container-fluid" style={{backgroundColor: "rgba(255,255,255,0.60)"}} ></div>
             </div>
+            
         );
     }
 }

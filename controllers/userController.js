@@ -18,39 +18,42 @@ function decrypt(text){
   dec += decipher.final('utf8');
   return dec;
 }
- 
+
 module.exports = {
-  
-  signIn:function(req,res,next){
+
+    signIn:function(req,res,next){
 
         var headers={
 
-    };
-    console.log(req.body);
-var payLoad={
-  "isActive": 1,
-  "username": req.body.username,
-  "password":req.body.password,
-  //"accessKey": "VOBXC2COBXcN4bl01iyxfUmAoXbL9FTKibMR+svYow0=",
-  "company": "asasI14",
-  "role": "LABADMIN"
-}
-var text = payLoad.username+":"+payLoad.password;
-var ebc = encrypt(text);
-var dbc = decrypt(ebc);
-payLoad.accessKey=ebc;
-request.put('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/user/loginAsUser')
-        .headers({
-          'Accept': 'application/json', 
-          'Content-Type': 'application/json'})
-        .send(payLoad)
-        .end(function (response) {
-          console.log(response.body,"payment COD");
-          if(response.body){
-            res.cookie('ums',response.body.accessKey);
-            res.send({"ums":response.body.accessKey})
-          }
-        });
-  }
+        };
+        console.log(req.body);
+        var payLoad={
+            "isActive": 1,
+            "username": req.body.username,
+            "password":req.body.password,
+            "company": "asasI14",
+            "role": "LABADMIN"
+        };
+        var text = payLoad.username+":"+payLoad.password;
+
+        var ebc = encrypt(text);
+        console.log("Encrypted string is: "+ebc);
+//var dbc = decrypt(ebc);
+        payLoad.accessKey=ebc;
+        request.put('http://localhost:8081/api/v0.1/user/loginWithCredentials')
+            .headers({
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'})
+            .send(payLoad)
+            .end(function (response) {
+                console.log(response.body,"payment COD");
+                if(response.body){
+                    res.cookie('ums',response.body.sessionKey);
+                    res.cookie('role',response.body.role);
+                    res.cookie('username',response.body.role);
+                    res.send({"role":response.body.role})
+                }
+            });
+    }
 
 };
