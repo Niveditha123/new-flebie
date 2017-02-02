@@ -247,9 +247,11 @@ class CheckOut extends React.Component {
             return false;
         }
         Fleb.showLoader();
+        var userDetails = this.state.patientData;
+        userDetails["address"] = this.refs.addressInfo.value;
         var payLoad = {
             "consumerId": 1,
-            "convenienceFee": 12,
+            "convenienceFee": 0,
             "grossMRP": data.totalListPrice,
             "grossTotal": 0,
             "orderComments": orderComments,
@@ -261,8 +263,8 @@ class CheckOut extends React.Component {
             "scheduleDate": Fleb.slotResp.slotDate,
             "scheduleTime": Fleb.slotResp.slotTime,
             "status": "PENDING",
-            "orderDetails":this.state.patientData,
-                "orderItems": orderItems
+            "orderDetails":userDetails,
+            "orderItems": orderItems
             };
         Fleb.payLoadOrder = payLoad;
             reqwest({
@@ -308,7 +310,7 @@ class CheckOut extends React.Component {
             , success: function (resp) {
                 Fleb.orderResp = resp;
                 Fleb.hideLoader();
-                Fleb.eventDispatcher("convenienceFee",{convenienceFee:100});
+                Fleb.eventDispatcher("convenienceFee",{convenienceFee:(resp.convenienceFee)?resp.convenienceFee:0});
                 if(Fleb.orderResp.orderId){
                     _this.setState({
                         enablePayment:true,
@@ -337,7 +339,8 @@ class CheckOut extends React.Component {
             "slotDate": moment(this.state.date).format(),
             "slotTime":Fleb.selectedTime.split("-")[0]
         };
-        Fleb.showLoader();
+        Fleb.slotResp= payLoad;
+       /* Fleb.showLoader();
          reqwest({
                 url: '/setTimeSlot'
             , type: 'json'
@@ -352,7 +355,7 @@ class CheckOut extends React.Component {
                 Fleb.slotResp = resp;
                 Fleb.hideLoader();
                 }
-            })
+            })*/
 
     }
     applyOffer(e){
@@ -617,6 +620,7 @@ Fleb.showLoader();
                             id="address"
                             className="form-control"
                             defaultValue={labAddress}
+                            ref="addressInfo"
                             placeholder="Enter Adrress"/>
                             
                         <span className={"hide"}>*</span>

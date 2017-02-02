@@ -210,7 +210,7 @@ class OpenCartModalContent extends React.Component{
         var convenienceFeeUI = [];
         if(this.state.convenienceFee>0){
           convenienceFeeUI = <div  className="clearfix conv-fee col2-row">
-            <div  className="price-tot-label">convenience Fee</div>
+            <div  className="price-tot-label">Convenience Fee</div>
             <div className="text-right"><span className="icon icon-rupee"></span>{this.state.convenienceFee}</div>
           </div>
         }

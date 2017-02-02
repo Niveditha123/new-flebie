@@ -11,7 +11,7 @@ class ConfirmCtrl extends React.Component {
             },
             error:false,
             loading:true,
-            convenienceFee:100
+            convenienceFee:0
         }
     }
     getConfirmResponse(){
