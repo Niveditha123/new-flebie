@@ -51,7 +51,7 @@ module.exports = {
                     res.cookie('ums',response.body.sessionKey);
                     res.cookie('role',response.body.role);
                     res.cookie('username',response.body.role);
-                    res.send({"role":response.body.role})
+                    res.send({"role":response.body.role});
                 }
             });
     }
