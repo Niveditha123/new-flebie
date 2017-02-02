@@ -12,6 +12,8 @@ var listlabsfortestController = require('../controllers/listlabsfortestControlle
 var dashboardController = require("../controllers/dashboardController.js");
 var otherPageController = require("../controllers/otherpagesController.js");
 var userController = require("../controllers/userController.js");
+var pageOneController = require("../controllers/pageOneController.js");
+var pageTwoController = require("../controllers/pageTwoController.js");
  
 module.exports = function() {
 
@@ -30,6 +32,9 @@ module.exports = function() {
   router.get('/test/list', testListController.renderPage);
   router.get('/paymentResponse',confirmController.renderPage);
   router.post('/paymentresponse',confirmController.processPayment);
+
+    router.get('/pageOne',pageOneController.renderPage);
+  router.get('/pageTwo',pageTwoController.renderPage)
 
   //paymentresponse
   router.get('/listlabsfortest',listlabsfortestController.renderPage);

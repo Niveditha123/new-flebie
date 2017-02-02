@@ -67,6 +67,13 @@ gulp.task("copyFonts",function(){
     });
 })
 
+gulp.task("copyCSS",function(){
+    ncp("./client/css","./public/styles",function(){
+        console.log("font copied!!!");
+    });
+})
+
+
 gulp.task("makedist",function(){
 
 
@@ -119,9 +126,9 @@ gulp.task('clean-dist', function(){
 });
 
 gulp.task("default", function(){
-	runSequence('clean-dist','clean-public',"copyFonts","font-icon" ,'makedist',"copyimages","webpack");
+	runSequence('clean-dist','clean-public',"copyFonts","font-icon" ,"copyCSS",'makedist',"copyimages","webpack");
 });
 
 gulp.task("prod", function(){
-	runSequence('clean-dist',"clean-public","copyFonts","font-icon" ,"copyimages","webpackProdConfig");
+	runSequence('clean-dist',"clean-public","copyFonts","font-icon","copyCSS" ,"copyimages","webpackProdConfig");
 });

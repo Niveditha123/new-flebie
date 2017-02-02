@@ -27,7 +27,9 @@ module.exports = {
             confirm: ['./client/scripts/confirm.js'],
             listlabsfortest:['./client/scripts/listlabsfortest.js'],
             dashboard:['./client/scripts/dashboard.js'],
-            other:['./client/scripts/other.js']
+            other:['./client/scripts/other.js'],
+            pageTwo:['./client/scripts/pageTwo.js'],
+            pageOne:['./client/scripts/pageOne.js']
         },
         output: {
             path: path.join(__dirname, 'public'),

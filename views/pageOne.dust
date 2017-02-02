@@ -1,0 +1,16 @@
+{>"layouts/master" /}
+
+{<pageStyles}
+<link rel="stylesheet"  type="text/css" href="/public/styles/pageOne.css"></link>
+{/pageStyles}
+
+
+{<title}Search{/title}
+{<body}
+<div id="root" class="container-main"> </div>
+{/body}
+
+<meta id="dataDump">
+{<pageScripts}
+<script src="/public/scripts/pageOnebundle.js"></script>
+{/pageScripts}
