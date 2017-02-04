@@ -1,5 +1,6 @@
 import React from 'react';import Modal from './utils/modal.jsx';
-//import reqwest from  'reqwest';
+import reqwest from  'reqwest';
+
 var najax = require('najax');
 
 class Index extends React.Component {
