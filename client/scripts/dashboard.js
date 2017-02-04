@@ -28,7 +28,7 @@ $(document).ready(function () {
   initializeFromCalendar();
   initializeToCalendar();
   getOrdersOfStatus();
-  setInterval(getOrdersOfStatus, 10000);
+  setInterval(getOrdersOfStatus, 30000);
   localStorage.removeItem('shoppingCart');
 
 });
@@ -91,17 +91,16 @@ var getOrdersOfStatus = function()
 {
 
   var status = $('select[id="statusFilter"]').val();
-  console.log("Status is: "+status);
   var date = $('select[id="dateFilter"]').val();
   var fromDate = $("#fromDate").val();
   var toDate = $("#toDate").val();
   var urlToUse = '';
   if (date == 'ALL') {
-    urlToUse = "http://localhost:8081/api/v0.1/order/getOrdersBetweenDates?startPosition=0&maxResult=10&statuses=" + status + '&startDate=' + fromDate + '&endDate=' + toDate;
+    urlToUse = "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/getOrdersBetweenDates?startPosition=0&maxResult=10&statuses=" + status + '&startDate=' + fromDate + '&endDate=' + toDate;
   }
   else {
     //urlToUse = "/getOrders?orderstatus="+status+"&date="+date;
-    urlToUse = "http://localhost:8081/api/v0.1/order/getOrdersBetweenDates?startPosition=0&maxResult=10&statuses=" + status + '&startDate=' + fromDate + '&endDate=' + toDate;
+    urlToUse = "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/getOrdersBetweenDates?startPosition=0&maxResult=10&statuses=" + status + '&startDate=' + fromDate + '&endDate=' + toDate;
   }
   $.ajax({
     url: urlToUse,
@@ -115,7 +114,6 @@ var getOrdersOfStatus = function()
         sorted_order_dates.push(new Date(r1));
       }
       sorted_order_dates = sorted_order_dates.sort(date_sort_asc);
-      console.log("sorted order dates are: "+sorted_order_dates[0].toString());
       var sorted_order_rows = [];
       sorted_order_rows = orders;
       /*for (var j in sorted_order_dates) {
@@ -133,7 +131,6 @@ var getOrdersOfStatus = function()
 
         }
       }*/
-      console.log("sorted order rows are: "+sorted_order_rows);
       var order_rows = [];
       for (var i in sorted_order_rows) {
         status = sorted_order_rows[i].status;
@@ -148,8 +145,7 @@ var getOrdersOfStatus = function()
         {
           cashToBeCollected = sorted_order_rows[i].price;
         }
-        console.log('sorted order rows are: '+JSON.stringify(sorted_order_rows));
-        order_rows += "<tr><td><a class='btn btn-info' href='http://localhost:8081/api/v0.1/order/getOrder?orderId=" + sorted_order_rows[i].orderId + "'>" + sorted_order_rows[i].orderDetails.firstName + "</a></td><td>" + sorted_order_rows[i].orderDetails.address + "</td><td>" + sorted_order_rows[i].orderDetails.phoneNumber + "</td><td>" + status + "</td><td>" + sorted_order_rows[i].scheduleTime + "</td><td>" + sorted_order_rows[i].orderDetails.emailId+ "</td></tr>";
+        order_rows += "<tr><td><a class='btn btn-info' href='/editOrder?id=" + sorted_order_rows[i].orderId + "'>" + sorted_order_rows[i].orderDetails.firstName + "</a></td><td>" + sorted_order_rows[i].orderDetails.address + "</td><td>" + sorted_order_rows[i].orderDetails.phoneNumber + "</td><td>" + status + "</td><td>" + sorted_order_rows[i].scheduleTime + "</td><td>" + sorted_order_rows[i].orderDetails.emailId+ "</td></tr>";
 
         //delete sorted_order_rows[i].cost;
         delete sorted_order_rows[i].orderId;
@@ -338,7 +334,7 @@ var noTimeSlotLeftForToday = function(string1) // Method to populate timeslots d
 var fetchTimeSlotsForTheDate = function() {
 
   console.log('Entered here');
-  var dateObject = moment($('#slotDate').val(), 'DD/MM/YYYY').format('DD/MM/YYYY');
+  var dateObject = moment($('#slotDate').val(), 'YYYY-MM-DD').format('YYYY-MM-DD');
   console.log('Date object is: ' + dateObject);
   if (dateObject != 'Invalid date') {
     setTimeSelection(dateObject, restrictBookingAfter2PMOnCurrentDate, noTimeSlotLeftForToday);
@@ -349,7 +345,7 @@ var fetchTimeSlotsForTheDate = function() {
     if (oldValue != null) {
       $('#slotDate').val(oldValue);
     } else {
-      $('#slotDate').val(moment(new Date(), 'DD/MM/YYYY').add('days', 1).format('DD/MM/YYYY'));
+      $('#slotDate').val(moment(new Date(), 'YYYY-MM-DD').add('days', 1).format('YYYY-MM-DD'));
 
     }
   }
@@ -359,9 +355,14 @@ var fetchTimeSlotsForTheDate = function() {
 };
 
 
+$("#slotDate").change(function(){
+  fetchTimeSlotsForTheDate();
+});
 
 
-
+$("#refreshButton").click(function(){
+  getOrdersOfStatus();
+});
 
 
 
@@ -391,7 +392,7 @@ var setTimeSelection = function( date1, callback1, callback2){
 
   var currentDate = new Date();
   var tempDate = new Date();
-  var date = new Date(parseInt(date1.split("/")[2]), parseInt(date1.split("/")[1]) - 1, parseInt(date1.split("/")[0]));
+  var date = new Date(parseInt(date1.split("-")[0]), parseInt(date1.split("-")[1]) - 1, parseInt(date1.split("/")[2]));
 
   var dateDifference = null;
   if(date.getMonth() == currentDate.getMonth() && date.getFullYear() == currentDate.getFullYear())
@@ -493,10 +494,17 @@ var setTimeSelection = function( date1, callback1, callback2){
     console.log('Dateslot to fetch is: '+dateslot);
 
     // Getting timeslot from database
-    flebieavailability = $.ajax({url: "/checkavailability?dateslot="+dateslot, success: function(result){ //Logic to find timeslots for a given day from back-end, which have no availability
-      console.log("Slot availability is: "+JSON.stringify(result.slotavailability));
-
-
+     $.ajax({url: "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/timeSlot/getAvailableSlots?slotDate="+date1, success: function(result){ //Logic to find timeslots for a given day from back-end, which have no availability
+       if(result["timeSlots"] == null)
+       {
+         flebieavailability = [];
+       }
+       else 
+       {
+         flebieavailability = result['timeSlots'];
+       }
+       
+      console.log("Flebie availability is: "+flebieavailability);
     }, failure: function (error) {
       console.log("Error while fetching timeslot is:"+error.message);
 
@@ -530,17 +538,14 @@ var setTimeSelection = function( date1, callback1, callback2){
     {
       $('#slotTime').val(optionString + "Trying to check for availability of other time slots \n");
     }
-
+    console.log("Getting timeslots");
   }
-
-
+  var interval = 0;
+  
   var  checkAvailability = setInterval(function(){
-    var interval = 0;
 
-    if( flebieavailability != null   &&  flebieavailability['responseJSON'] != null )
+    if( flebieavailability != null)
     {
-      flebieavailability = flebieavailability['responseJSON']['slotavailability'];
-      console.log("Json is: "+JSON.stringify(flebieavailability));
 
       clearInterval(checkAvailability);
       console.log("Cleared Interval");
@@ -549,16 +554,18 @@ var setTimeSelection = function( date1, callback1, callback2){
       {
         for(var j in flebieavailability)
         {
-          if( flebieavailability[j] == timeStringArray[i] && $.inArray( timeStringArray[i], disabledStringArray ) === -1)
+          console.log("Flebie availability is: "+flebieavailability[j]);
+          if( flebieavailability[j] == timeStringArray[i].split("-")[0] && $.inArray( flebieavailability[j], disabledStringArray ) === -1)
           {
-            disabledStringArray.push(flebieavailability[j]);
+            disabledStringArray.push(timeStringArray[i]);
+            break;
 
           }
 
         }
       }
 
-
+      console.log("Disabled time string is: "+disabledStringArray);
       if ( disabledStringArray == timeStringArray)
       {
         callback2.apply(); // Invoking callback method for display when all time slots are disabled
@@ -571,7 +578,6 @@ var setTimeSelection = function( date1, callback1, callback2){
           {
             if(timeStringArray[i] != "Select Time")
             {
-              console.log("Option string is: "+optionString);
 
               optionString = optionString + "" + timeStringArray[i] +"\n";
 
@@ -723,3 +729,142 @@ var date_sort_asc = function (date1, date2) {
   if (date1 < date2) return -1;
   return 0;
 };
+
+
+function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
+
+//If JSONData is not an object then JSON.parse will parse the JSON string in an Object
+
+  var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+
+  var CSV = '';
+
+//Set Report title in first row or line
+
+//This condition will generate the Label/Header
+
+  if (ShowLabel) {
+
+    var row = '';
+
+//This loop will extract the label from 1st index of on array
+
+    for (var index in arrData[0]) {
+
+      if(index!= 'UserName1')
+
+//Now convert each value to string and comma-seprated
+
+        row += index + ',';
+
+    }
+
+    row = row.slice(0, -1);
+
+//append Label row with line break
+
+    CSV += row + '\r\n';
+
+  }
+
+//1st loop is to extract each row
+
+  for (var i = 0; i < arrData.length; i++) {
+
+    var row = '';
+
+//2nd loop will extract each column and convert it in string comma-seprated
+
+    for (var index in arrData[i]) {
+
+
+      var data = null;
+      data = arrData[i][index].toString().replace(/\r?\n|\r/g, " ").replace(/,/g,"");
+
+      row += '' +data+ ',';
+
+    }
+    row = row.replace(/,\s*$/, "");
+    var len = row.length - 1;
+    row.slice(0, len);
+
+//add a line break after each row
+
+    CSV += row + '\r\n';
+
+  }
+
+  if (CSV == '') {
+
+    alert('Invalid data');
+
+    return;
+
+  }
+
+//Generate a file name
+
+  var fileName = '';
+
+//this will remove the blank-spaces from the title and replace it with an underscore
+
+  fileName += ReportTitle.replace(/ /g, '');
+
+//Initialize file format you want csv or xls
+
+  var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+
+var  blob = new Blob([CSV], { type: 'text/csv' }); //new way as anchor tag download not supported in latest chrome so use Blob
+
+  var csvUrl = URL.createObjectURL(blob);  //Now file with proper filename is downloaded with proper extension
+
+//this trick will generate a temp <a /> tag
+
+  var link = document.createElement('a');
+
+  link.href = csvUrl;
+
+//set the visibility hidden so it will not effect on your web-layout
+
+  link.style = 'visibility:hidden';
+
+  link.download = fileName + '.csv';
+
+//this part will append the anchor tag and remove it after automatic click
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+
+}
+
+
+
+
+
+
+
+
+
+var getOrdersAsCSV = function () {
+  var jsonData = localStorage.getItem('csvData');
+  //console.log("Json data is: "+jsonData);
+  
+  var requiredJsonData = [];
+  for (var i in jsonData) {
+   var requiredJson = {"orderId": jsonData[i].orderId};
+    requiredJsonData.push(requiredJson);
+    
+  }
+  JSONToCSVConvertor(JSON.parse(jsonData), 'OrdersReport', 'Orders');
+};
+
+$("#getCSVData").click(
+    function () {
+      getOrdersAsCSV();
+    }
+    
+);
+

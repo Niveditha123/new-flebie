@@ -19,7 +19,7 @@ module.exports = {
           .end(function (response) {
             console.log(response.status);
             if(response.status == 200){
-              console.log(response.body,"oder details");
+              console.log(response.body,"order details");
               res.send(response.body);
             }else{
               res.send({})

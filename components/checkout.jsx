@@ -29,7 +29,7 @@ class CheckOut extends React.Component {
         console.log("popular");
         var patientForm= [
             {
-                name:"firstname",
+                name:"firstName",
                 id:1,
                 errMsg:"Please Enter Valid Name",
                 required:true,
@@ -51,7 +51,7 @@ class CheckOut extends React.Component {
                 css:"clearfix"
             },
             {
-                name:"phone",
+                name:"phoneNumber",
                 id:3,
                 errMsg:"Please Enter Phone number",
                 required:true,

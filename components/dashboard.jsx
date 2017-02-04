@@ -17,6 +17,7 @@ class Dashboard extends React.Component {
     render(){
       
         return (
+            
             <div className="dashboard-main">
                 <h1 style={{textAlign: "center"}}>LAB ADMIN DASHBOARD</h1> 
                 <div style={{ color: "grey" , textAlign: "center" }} className="alert alert-danger" id="connectionAlert" >Not connected to internet</div> 
@@ -53,7 +54,7 @@ class Dashboard extends React.Component {
                             <div className="col-lg-10">
                             </div>
                             <div className="col-lg-2">
-                                <button className="btn btn-info" style={{backgroundColor: "#00CF17", color:"black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", float: "right"}}>
+                                <button id="refreshButton" className="btn btn-info" style={{backgroundColor: "#00CF17", color:"black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", float: "right"}}>
                                     <span className="glyphicon glyphicon-refresh">  Refresh </span>
                                 </button>
                             </div> 
@@ -93,7 +94,7 @@ class Dashboard extends React.Component {
                     <br/>
                     </div>
                     <div className="row">
-                        <button className="btn btn-info" id="getCSVData" style={{ backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", textAlign: "right"}}>
+                        <button  className="btn btn-info" id="getCSVData" style={{ backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", textAlign: "right"}}>
                             <span className="glyphicon glyphicon-download-alt">Export</span>
                         </button>
                     </div>    

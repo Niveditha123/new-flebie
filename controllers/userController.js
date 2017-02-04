@@ -40,7 +40,7 @@ module.exports = {
         console.log("Encrypted string is: "+ebc);
 //var dbc = decrypt(ebc);
         payLoad.accessKey=ebc;
-        request.put('http://localhost:8081/api/v0.1/user/loginWithCredentials')
+        request.put('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/user/loginWithCredentials')
             .headers({
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'})

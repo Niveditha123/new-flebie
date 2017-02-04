@@ -29,7 +29,7 @@ module.exports = {
             dashboard:['./client/scripts/dashboard.js'],
             other:['./client/scripts/other.js'],
             pageTwo:['./client/scripts/pageTwo.js'],
-            pageOne:['./client/scripts/pageOne.js']
+            editOrder:['./client/scripts/editOrder.js']
         },
         output: {
             path: path.join(__dirname, 'public'),
