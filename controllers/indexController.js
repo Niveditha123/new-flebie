@@ -44,7 +44,13 @@ module.exports = {
     };
 
  request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests')
-        .headers(headers)
+        .headers(
+            {
+                'Accept': 'application/json',
+                'Access-Control-Allow-Origin':'*',
+                'Content-Type': 'application/json'
+            }
+        )
         .end(function (response) {
           console.log(response.status);
           if(response.status == 200){

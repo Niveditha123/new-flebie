@@ -15,11 +15,13 @@ module.exports = {
       var headers={
 
     };
-var query = req.query.slotDate;
+      console.log("Headers are: "+headers);
+      var query = req.query.slotDate;
 console.log(query);
   request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/timeSlot/getAvailableSlots?slotDate='+query)
           .headers(headers)
           .end(function (response) {
+            
             console.log(response.body,"timeslot");
             if(response.status == 200){
               res.send(response.body);

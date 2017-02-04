@@ -43,7 +43,8 @@ class Index extends React.Component {
 		
   najax.get({
             url: "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests", 
-						method:"get",    
+	  		method:"get",
+	  		headers: {"Access-Control-Allow-Origin":"*"},
             cache: false,
             success: function(resp){                          
                 _this.setState({
