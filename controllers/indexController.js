@@ -44,13 +44,7 @@ module.exports = {
     };
 
  request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests')
-        .headers(
-            {
-                'Accept': 'application/json',
-                'Access-Control-Allow-Origin':'*',
-                'Content-Type': 'application/json'
-            }
-        )
+        .headers(headers)
         .end(function (response) {
           console.log(response.status);
           if(response.status == 200){
@@ -65,12 +59,12 @@ module.exports = {
 };
 
 var getUserUsingSessionKey = function(sessionKey, user){
+    var headers={
+
+    };
     
     request.put('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/user/getUserUsingSessionKey')
-        .headers({
-            'Accept': 'application/json',
-            'Access-Control-Allow-Origin':'*',
-            'Content-Type': 'application/json'})
+        .headers(headers)
         .send({"sessionKey": sessionKey})
         .end(function (response) {
             console.log(response.status);

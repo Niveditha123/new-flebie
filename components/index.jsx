@@ -19,7 +19,7 @@ class Index extends React.Component {
 	}
 	loadTests(){
 		var _this = this;
-		/*reqwest({			
+		reqwest({			
 				url:"/getList"
 				,headers:{
 					"Access-Control-Allow-Origin":"*"
@@ -39,9 +39,9 @@ class Index extends React.Component {
 							listLoadError:false
 						})     
 				}
-		})*/
+		});
 		
-  najax.get({
+  /*najax.get({
             url: "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests", 
 	  		method:"get",
 	  		headers: {"Access-Control-Allow-Origin":"*"},
@@ -59,7 +59,7 @@ class Index extends React.Component {
 							listLoadError:true
 						})  
 				}           
-        }); 
+        }); */
 	}
 	componentDidMount(){
 		this.loadTests.bind(this)();
