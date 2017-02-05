@@ -1,7 +1,7 @@
 import React from 'react';
 import reqwest from 'reqwest';
 
-class PageTwo extends React.Component {
+class OrderSummaryPage extends React.Component {
     constructor(props){
 		super(props);
         this.state={
@@ -27,4 +27,4 @@ class PageTwo extends React.Component {
         );
     }
 }
-export default PageTwo;
+export default OrderSummaryPage;

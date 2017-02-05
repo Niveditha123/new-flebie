@@ -31,9 +31,9 @@ class OpenCartModalContent extends React.Component{
 		super(props);
     this.state={
       testsList:{
-        items:[],
+        orderItems:[],
         totalItems:0,
-        labname:"",
+        labName:"",
         totalListPrice:0,
         totalPrice : 0,
         openModal:false
@@ -46,12 +46,12 @@ class OpenCartModalContent extends React.Component{
   }
   getUserTests(){
     var testInfo={
-        items:[],
+        orderItems:[],
         totalItems:0,
-        labname:"",
+        labName:"",
         totalListPrice:0,
         totalPrice : 0
-      }
+      };
     var localData= localStorage.getItem("cartInfo")
       this.setState({
         testsList:(localData)?JSON.parse(localData):testInfo
@@ -101,14 +101,14 @@ class OpenCartModalContent extends React.Component{
   deleteOne(e){
     var itemId= e.target.getAttribute("data-id");
     var dataList = this.state.testsList;
-    var item = dataList.items[itemId];
+    var item = dataList.orderItems[itemId];
     if(item.quantity == 1){
-      dataList.items.splice( itemId, 1);
+      dataList.orderItems.splice( itemId, 1);
       this.setState({
         testInfo:{
-          items:[],
+          orderItems:[],
           totalItems:0,
-          labname:"",
+          labName:"",
           totalListPrice:0,
           totalPrice : 0
         }     
@@ -128,7 +128,7 @@ class OpenCartModalContent extends React.Component{
   addOne(e){
     var itemId= e.target.getAttribute("data-id");
     var dataList = this.state.testsList;
-    var item = dataList.items[itemId];
+    var item = dataList.orderItems[itemId];
     item.quantity= item.quantity+1;
     dataList.totalItems = dataList.totalItems+1;
     dataList.totalListPrice = dataList.totalListPrice+item.listPrice;
@@ -141,8 +141,8 @@ class OpenCartModalContent extends React.Component{
   deleteTest(e){
     var itemId= e.target.getAttribute("data-id");
     var dataList = this.state.testsList;
-    var item = dataList.items[itemId];
-    dataList.items.splice( itemId, 1);
+    var item = dataList.orderItems[itemId];
+    dataList.orderItems.splice( itemId, 1);
     dataList.totalItems = dataList.totalItems-item.quantity;
     dataList.totalListPrice = dataList.totalListPrice-(item.quantity*item.listPrice);
     dataList.totalPrice = dataList.totalPrice-(item.quantity*item.price);
@@ -156,7 +156,7 @@ class OpenCartModalContent extends React.Component{
   }
   gotoTestList(){
     var labId = this.state.testsList.labId;
-    if(this.state.testsList.items.length > 0){
+    if(this.state.testsList.orderItems.length > 0){
       location.href="/test/list?labId="+labId;
     }else{
       location.href="/";
@@ -165,8 +165,8 @@ class OpenCartModalContent extends React.Component{
   render(){
     var listUI=[];
     var _this = this;
-    var headerUI= <h3 className={(this.props.header)?"":"hide"}>{this.state.testsList.labname}</h3>
-    if(this.state.testsList.items.length >0 ){
+    var headerUI= <h3 className={(this.props.header)?"":"hide"}>{this.state.testsList.labName}</h3>
+    if(this.state.testsList.orderItems.length >0 ){
       var head=<div className="test-head-row">
         <div className="item-head">
         Item
@@ -183,10 +183,10 @@ class OpenCartModalContent extends React.Component{
         
       </div>;
 
-      var list =  this.state.testsList.items.map(function(item,index){
+      var list =  this.state.testsList.orderItems.map(function(item,index){
           return <div className="test-row">
             <div className="item-head">
-            {item.testname}
+            {item.testName}
             </div>
             <ItemQ item={item} isEditable={_this.props.isEditable} index={index} key={index} ctx={_this}/>
             <div className="item-price">
@@ -242,8 +242,8 @@ class OpenCartModalContent extends React.Component{
         {listUI}
        </div>
        <div className="modal-footer clearfix">
-        <label className={(this.state.testsList.items.length > 0)?"footer-label fl":"hide"} >{this.state.testsList.labname}</label>
-        <button type="submit" onClick={this.gotoCheckout.bind(this)} data-dismiss="modal"  className={(this.state.testsList.items.length > 0)?"btn fr btn-success curved":"hide"}>
+        <label className={(this.state.testsList.orderItems.length > 0)?"footer-label fl":"hide"} >{this.state.testsList.labName}</label>
+        <button type="submit" onClick={this.gotoCheckout.bind(this)} data-dismiss="modal"  className={(this.state.testsList.orderItems.length > 0)?"btn fr btn-success curved":"hide"}>
           Checkout</button>
         <button type="submit" onClick={this.gotoTestList.bind(this)}   className="btn fr  curved">
           Add Tests</button>

@@ -1,5 +1,6 @@
 var compression = require("compression");
 var express = require("express");
+
 var config 	= require("./config/index.js");
 var setup 	= require("./setup/index.js");
 var bodyParser = require("body-parser");

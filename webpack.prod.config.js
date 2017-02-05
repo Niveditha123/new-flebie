@@ -28,7 +28,7 @@ module.exports = {
             listlabsfortest:['./client/scripts/listlabsfortest.js'],
             dashboard:['./client/scripts/dashboard.js'],
             other:['./client/scripts/other.js'],
-            pageTwo:['./client/scripts/pageTwo.js'],
+            orderSummaryPage:['./client/scripts/orderSummaryPage.js'],
             editOrder:['./client/scripts/editOrder.js']
         },
         output: {

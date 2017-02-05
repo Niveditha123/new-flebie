@@ -1,7 +1,7 @@
 {>"layouts/master" /}
 
 {<pageStyles}
-<link rel="stylesheet"  type="text/css" href="/public/styles/pageTwo.css"></link>
+<link rel="stylesheet"  type="text/css" href="/public/styles/orderSummaryPage.css"></link>
 {/pageStyles}
 
 
@@ -12,5 +12,5 @@
 
 <meta id="dataDump">
 {<pageScripts}
-<script src="/public/scripts/pageTwobundle.js"></script>
+<script src="/public/scripts/orderSummaryPagebundle.js"></script>
 {/pageScripts}

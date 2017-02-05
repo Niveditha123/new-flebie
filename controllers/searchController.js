@@ -9,7 +9,7 @@ module.exports = {
 
     };
 ;
-console.log(req.query.tests, "url")
+console.log(req.query.tests, "url");
 var query = req.query.tests;
   request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromTestNames?tests='+query)
           .headers(headers)

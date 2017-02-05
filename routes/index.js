@@ -1,9 +1,11 @@
 var express = require("express");
+var Mailgun = require('mailgun-js');
+var config 	= require("../config/index.js");
 var indexController = require("../controllers/indexController");
 var searchController = require("../controllers/searchController");
 var checkoutController = require("../controllers/checkoutController");
 var testListController = require("../controllers/testListController");
-
+var mailController = require("../controllers/mailController");
 var populartestsController = require("../controllers/populartestsController");
 var popularlabsController = require("../controllers/popularlabsController");
 var popularpackagesController = require("../controllers/popularpackagesController");
@@ -13,7 +15,7 @@ var dashboardController = require("../controllers/dashboardController.js");
 var otherPageController = require("../controllers/otherpagesController.js");
 var userController = require("../controllers/userController.js");
 var editOrderController = require("../controllers/editOrderController.js");
-var pageTwoController = require("../controllers/pageTwoController.js");
+var orderSummaryController = require("../controllers/orderSummaryController.js");
  
 module.exports = function() {
 
@@ -34,7 +36,7 @@ module.exports = function() {
   router.post('/paymentresponse',confirmController.processPayment);
 
     router.get('/editOrder', editOrderController.renderPage);
-  router.get('/pageTwo',pageTwoController.renderPage);
+  router.get('/orderSummaryPage',orderSummaryController.renderPage);
 
   //paymentresponse
   router.get('/listlabsfortest',listlabsfortestController.renderPage);
@@ -61,10 +63,12 @@ module.exports = function() {
    router.get("/getOrder",confirmController.getOrder);
    router.put("/updateTransaction",checkoutController.updateTransaction);
    router.get('/getPopPackages',popularpackagesController.getPopPackages);
+    router.get("/getOrderSummary",confirmController.getOrder);
+    router.get('/orderSummaryEmail', mailController.sendOrderSummaryEmail);
   //getPopTest
 
 
   //user apis
 router.post("/signIn",userController.signIn);
   return router;
-}
+};
