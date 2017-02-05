@@ -83,26 +83,26 @@ class Search extends React.Component {
 		var cartData = item.data;
 		var itemsArr =cartData.labTests.map(function(test,index){
 			return{
-				"testname": test.labTestName,
+				"testName": test.labTestName,
 				"price": test.offerPrice,
 				"listPrice": test.MRP,
 				"quantity": 1,
 				"isHomeCollectible": test.test.isHomeCollectible,
-				"labtestid": test.labTestId
+				"labTestId": test.labTestId
 			}
 
 		});
 		var cartitem = {
 			"labAddress":cartData.lab.address,
 			"labId":cartData.lab.labId,
-			"labname":cartData.lab.labName,
+			"labName":cartData.lab.labName,
 			"totalItems":cartData.labTests.length,
 			"totalListPrice":cartData.totalMRP,
 			"totalPrice":cartData.totalOfferPrice,
 			"userEmail":"",
-			"homeCollectible":cartData.lab.isAvailableForHC,
+			"isHomeCollectible":cartData.lab.isAvailableForHC,
 			"isAvailableForOB":cartData.lab.isAvailableForOB,
-			"items":itemsArr
+			"orderItems":itemsArr
 		};
 			Fleb.eventDispatcher("updateCart",cartitem);
 		document.getElementById("openCart").click();

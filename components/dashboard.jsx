@@ -61,12 +61,12 @@ class Dashboard extends React.Component {
                     </div>
                             <div className="row">
                                 <div className="col-xs-6 form-inline">
-                                    <label for="exampleInputName2">From</label>
+                                    <label htmlFor="exampleInputName2">From</label>
                                     <input className="form-control text-center required_field" type="text" name="fromDate" id="fromDate"/>
                                 </div>
                                 
                                 <div className="col-xs-6 form-inline">
-                                <label for="exampleInputName21">To</label>
+                                <label htmlFor="exampleInputName21">To</label>
                                     <input className="form-control text-center required_field" type="text" name="toDate" id="toDate"/>
                                 </div>   
                             </div> 

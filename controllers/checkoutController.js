@@ -15,7 +15,7 @@ module.exports = {
       var headers={
 
     };
-      console.log("Headers are: "+headers);
+      
       var query = req.query.slotDate;
 console.log(query);
   request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/timeSlot/getAvailableSlots?slotDate='+query)

@@ -45,12 +45,13 @@ class EditOrder extends React.Component {
                     error:false,
                     loading:false
                 });
+                Fleb.hideLoader();
                 var localCartInfo = localStorage.getItem("cartInfo");
                 if(localCartInfo == null)
                 {
-                    localStorage.setItem("cartInfo", JSON.stringify(this.state.order));
+                    localStorage.setItem("cartInfo", JSON.stringify(resp));
                 }
-                Fleb.hideLoader();
+                
             }
         })
 
@@ -105,7 +106,7 @@ class EditOrder extends React.Component {
                     </div>
                     <div className="row">
                         <div className="col-sm-12">
-                            <textarea id="address" name="address" required="required" style={{width: "100%"}} >{this.state.order.orderDetails.address}</textarea>
+                            <textarea id="address" name="address" required="required" style={{width: "100%"}}>{this.state.order.orderDetails.address}</textarea>
                         </div>
                     </div>
                     <div className="row">
@@ -123,14 +124,14 @@ class EditOrder extends React.Component {
                     </div>
                     <div className="row">
                         <div className="col-sm-12">
-                            <textarea id="comments" name="comments" style={{width: "100%"}} >{this.state.order.orderComments}</textarea>
+                            <textarea id="comments" name="comments" style={{width: "100%"}}>{this.state.order.orderComments}</textarea>
                         </div>
                     </div>
                     <label id="labid" className="hidden">
                         <button id="updateOrder" style={{backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className="btn btn-info">UPDATE</button>
                     </label>
                 </form>;
-            var addTests = <a id="addTestButton" href={'/test/list?labId='+this.state.order.labId} style={{backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className="btn btn-info">ADD TESTS</a>;
+            var addTests = <a id="addTestButton" href={`/test/list?labId=${this.state.order.labId}`} style={{backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className="btn btn-info">ADD TESTS</a>;
             var backButton = <a id="goToDashboard" href="/dashboard" style={{backgroundColor: "red", color: "yellow", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className="btn btn-info">BACK</a>;
             var orderItems =  this.state.order.orderItems.map(function(item,index){
                 return <tr>
@@ -167,10 +168,13 @@ class EditOrder extends React.Component {
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                    <div className="container">
                         {addTests}
                         {backButton}
-                            
-                        </div>
+                    </div>
+                    
+                
                     <div id="cancelOrder" role="dialog" className="modal right fade text-muted">
                         <div className="modal-dialog modal-md">
                             <div className="modal-content">

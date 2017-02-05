@@ -8,7 +8,7 @@ class TestList extends React.Component {
 		super(props);
         this.state={
             testList:{
-                items:[]
+                orderItems:[]
             },
 			labDetails:"",
 			loaded:false,
@@ -36,8 +36,8 @@ class TestList extends React.Component {
 	filteringList(){
 		var _this = this;
 		var newList=[];
-		for(var i=0;i <this.state.testList.items.length;i++){
-			var item = this.state.testList.items[i];
+		for(var i=0;i <this.state.testList.orderItems.length;i++){
+			var item = this.state.testList.orderItems[i];
 			var name = item.labTestName.toLowerCase();
 			if(name.indexOf(_this.state.inputFilter.toLowerCase()) > -1){
 				newList.push(item)
@@ -55,7 +55,7 @@ class TestList extends React.Component {
 
 			var qP = Fleb.getQueryVariable("labId");
 			var list={
-                items:[]
+				orderItems:[]
             }
 		      /*  najax.get({
             url: "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromLabId?labId="+qP, 
@@ -81,7 +81,7 @@ class TestList extends React.Component {
 					, error: function (err) {
 						_this.setState({
 							testList:{
-								items:[]
+								orderItems:[]
 							},
 			  				loaded:false,
 							  labId:qP
@@ -91,7 +91,7 @@ class TestList extends React.Component {
 						if(Array.isArray(resp)){
 							_this.setState({
 								testList:{
-									items:resp
+									orderItems:resp
 								},
 								loaded:true,
 								labId:qP
@@ -158,25 +158,25 @@ class TestList extends React.Component {
 		var cartList = localStorage.getItem("cartInfo");
 		if(cartList){
 			cartList = JSON.parse(cartList);
-			var item = this.findAnItem(test,cartList.items,"testname");
+			var item = this.findAnItem(test,cartList.orderItems,"testName");
 			if(item.in){
-				cartList.items[item.pos].quantity+=1;
+				cartList.orderItems[item.pos].quantity+=1;
 				cartList.totalItems+=1;
 				cartList.totalListPrice +=item.data.listPrice;
 				cartList.totalPrice +=item.data.price;
 			}
 			else{
-				var newitem = this.findAnItem(test,this.state.testList.items,"labTestName");
+				var newitem = this.findAnItem(test,this.state.testList.orderItems,"labTestName");
 					if(newitem.in){
 						var testItem ={
-								"testname": newitem.data.labTestName,
+								"testName": newitem.data.labTestName,
 								"price": newitem.data.offerPrice,
 								"listPrice": newitem.data.MRP,
 								"quantity": 1,
 								"isHomeCollectible":false,
-								"labtestid": newitem.data.labTestId
+								"labTestId": newitem.data.labTestId
 							}
-						cartList.items.push(testItem);
+						cartList.orderItems.push(testItem);
 						cartList.totalItems+=1;
 						cartList.totalListPrice+=testItem.listPrice;
 						cartList.totalPrice+=testItem.price;
@@ -189,8 +189,8 @@ class TestList extends React.Component {
 			else{
 				var cartInfo = {
 					"userEmail":"",
-					"homeCollectible": this.state.labDetails.isAvailableForHC,
-					"labname": this.state.labDetails.labName,
+					"isHomeCollectible": this.state.labDetails.isAvailableForHC,
+					"labName": this.state.labDetails.labName,
 					"labId": this.state.labDetails.labId,
 					"location": this.state.labDetails.location,
 					"operatingHours": this.state.labDetails.operatingHours,
@@ -199,18 +199,18 @@ class TestList extends React.Component {
 					"inHouseConsultationAvailable": this.state.labDetails.inHouseConsultationAvailable,
 					"isAvailableForHC": this.state.labDetails.isAvailableForHC,
 					"isAvailableForOB": this.state.labDetails.isAvailableForOB,
-					items:[]
+					orderItems:[]
 				}
-				var cartItem = this.findAnItem(test,this.state.testList.items,"labTestName");
+				var cartItem = this.findAnItem(test,this.state.testList.orderItems,"labTestName");
 				var newTest ={
-					"testname": cartItem.data.labTestName,
+					"testName": cartItem.data.labTestName,
 					"price": cartItem.data.MRP,
 					"listPrice": cartItem.data.offerPrice,
 					"quantity": 1,
 					"isHomeCollectible":false,
-					"labtestid": cartItem.data.labTestId
-				}
-				cartInfo.items.push(newTest);
+					"labTestId": cartItem.data.labTestId
+				};
+				cartInfo.orderItems.push(newTest);
 				cartInfo.totalItems=1;
 				cartInfo["totalListPrice"]=cartItem.data.MRP;
 				cartInfo["totalPrice"]=cartItem.data.offerPrice;
@@ -260,7 +260,7 @@ class TestList extends React.Component {
 			</div>
 			listTableUI.push(labListHeader);
 			if(!this.state.inputFilter){
-				listTableContent = this.state.testList.items.map(_this.getRows.bind(this));					
+				listTableContent = this.state.testList.orderItems.map(_this.getRows.bind(this));					
 			}else{
 				listTableContent = this.state.filterList.map(_this.getRows.bind(this));				
 			}

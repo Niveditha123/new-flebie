@@ -60,21 +60,21 @@ class PopularPackages extends React.Component {
         var cart={
             labAddress:data.lab.address,
             labId:data.lab.labTestId,
-            labname:data.lab.labName,
+            labName:data.lab.labName,
             totalItems:1,
             totalListPrice:data.MRP,
             totalPrice:data.offerPrice,
             userEmail:"",
             isAvailableForOB:data.lab.isAvailableForOB,
-            homeCollectible:data.testId.isHomeCollectible,
+            isHomeCollectible:data.testId.isHomeCollectible,
             labId:data.lab.labId,
-            items:[{
+            orderItems:[{
                 isHomeCollectible:data.isHomeCollectible,
-                labtestid:data.labTestId,
+                labTestId:data.labTestId,
                 listPrice:data.MRP,
                 price:data.offerPrice,
                 quantity:1,
-                testname:data.labTestName
+                testName:data.labTestName
             }]
         };
         return cart;
@@ -85,24 +85,24 @@ class PopularPackages extends React.Component {
         var localData = localStorage.getItem("cartInfo");
         if(localData){
             var cartInfo = JSON.parse(localData);
-            if(cartInfo.labname == id){
+            if(cartInfo.labName == id){
                 var item = this.findAnItem(id,this.state.popPackages,"labTestName");
-                var localItem = this.findAnItem(test,cartInfo.items,"testname");
+                var localItem = this.findAnItem(test,cartInfo.orderItems,"testName");
                 if(localItem.in){
-                    cartInfo.items[localItem.pos].quantity+=1;
+                    cartInfo.orderItems[localItem.pos].quantity+=1;
                     cartInfo.totalItems+=1;
                     cartInfo.totalListPrice +=item.data.MRP;
                     cartInfo.totalPrice +=item.data.offerPrice;
                 }else{
                     var newItem ={
-                        "testname":item.data.labTestName,
+                        "testName":item.data.labTestName,
                         "price":item.data.offerPrice,
                         "listPrice":item.data.MRP,
                         "quantity":1,
                         //"isHomeCollectible":item.data.test.isHomeCollectible,
-                        "labtestid":item.data.labTestId
+                        "labTestId":item.data.labTestId
                     }
-                    cartInfo.items.push(newItem);
+                    cartInfo.orderitems.push(newItem);
                     cartInfo.totalItems+=1;
                     cartInfo.totalListPrice+=item.data.offerPrice;
                     cartInfo.totalPrice+=item.data.MRP;
