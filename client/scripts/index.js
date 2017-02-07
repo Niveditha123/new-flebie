@@ -17,6 +17,11 @@ import Styles from '../scss/index.scss';
 
 //const App = React.createClass(PopularTests)
 
+
+ /*document.addEventListener("DOMContentLoaded", function(event) {
+    var data = JSON.parse(document.getElementById("dataDump").getAttribute("value"))
+  });*/
+
 ReactDOM.render(
   <Index data={{hello:"world"}} />,
   document.getElementById('root')

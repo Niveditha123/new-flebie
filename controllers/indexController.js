@@ -32,7 +32,11 @@ module.exports = {
 
       }
       else {
-          res.render("index");
+          var value = {
+      title: "Dashboard",
+    prop1:"value1"};
+    var prop = JSON.stringify(value);
+          res.render("index",{data:prop});
       }
     
   },

@@ -9,7 +9,7 @@
 {<body}
 <div id="root" class="container-main"> </div>
 {/body}
-
+<meta id="dataDump" value={data} />
 
 {<pageScripts}
 <script src="/public/scripts/indexbundle.js"></script>
