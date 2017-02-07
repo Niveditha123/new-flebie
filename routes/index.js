@@ -16,7 +16,8 @@ var otherPageController = require("../controllers/otherpagesController.js");
 var userController = require("../controllers/userController.js");
 var editOrderController = require("../controllers/editOrderController.js");
 var orderSummaryController = require("../controllers/orderSummaryController.js");
- 
+var dashboardController = require("../controllers/dashboardController.js");
+
 module.exports = function() {
 
   var router = express.Router();
@@ -61,6 +62,7 @@ module.exports = function() {
   router.get("/getLabs",popularlabsController.getLabs);
    router.get("/getPopTests",populartestsController.getPopTest);
    router.get("/getOrder",confirmController.getOrder);
+    router.get("/getOrdersBetweenDates", dashboardController.getOrdersBetweenDates);
    router.put("/updateTransaction",checkoutController.updateTransaction);
    router.get('/getPopPackages',popularpackagesController.getPopPackages);
     router.get("/getOrderSummary",confirmController.getOrder);

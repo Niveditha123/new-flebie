@@ -46,11 +46,6 @@ class EditOrder extends React.Component {
                     loading:false
                 });
                 Fleb.hideLoader();
-                var localCartInfo = localStorage.getItem("cartInfo");
-                if(localCartInfo == null)
-                {
-                    localStorage.setItem("cartInfo", JSON.stringify(resp));
-                }
                 
             }
         })
@@ -60,6 +55,7 @@ class EditOrder extends React.Component {
 
     render(){
 
+        var _this=this;
         if(!this.state.error && !this.state.loading){
             var orderDetailsForm =
                 <form>
@@ -126,12 +122,11 @@ class EditOrder extends React.Component {
                         <div className="col-sm-12">
                             <textarea id="comments" name="comments" style={{width: "100%"}}>{this.state.order.orderComments}</textarea>
                         </div>
+                        <input id="labId" className="hidden"/>
                     </div>
-                    <label id="labid" className="hidden">
-                        <button id="updateOrder" style={{backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className="btn btn-info">UPDATE</button>
-                    </label>
                 </form>;
-            var addTests = <a id="addTestButton" href={`/test/list?labId=${this.state.order.labId}`} style={{backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className="btn btn-info">ADD TESTS</a>;
+            var update = <button id="updateOrder" style={{backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className=" hidden btn btn-info">UPDATE</button>
+            var addTests = <a id="addTestButton" href={`/test/list?labId=${this.state.order.labId}`} style={{backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className="hidden btn btn-info">ADD TESTS</a>;
             var backButton = <a id="goToDashboard" href="/dashboard" style={{backgroundColor: "red", color: "yellow", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className="btn btn-info">BACK</a>;
             var orderItems =  this.state.order.orderItems.map(function(item,index){
                 return <tr>

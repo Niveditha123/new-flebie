@@ -1,4 +1,5 @@
 var request =  require('unirest');
+var userController = require('../controllers/userController.js');
 module.exports = {
      
     
@@ -8,7 +9,8 @@ module.exports = {
       var user = null;
       if(req.cookies.ums != null)
       {
-          res.render("dashboard");
+          var labId = userController.decrypt(req.cookies.labId);
+          res.redirect("/dashboard?labId="+labId);
           /*console.log("Trying to get user"+req.cookies.ums);
           user = getUserUsingSessionKey(req.cookies.ums, user);
           

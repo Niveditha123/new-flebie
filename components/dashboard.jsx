@@ -1,21 +1,129 @@
+
+var moment = require('moment');
+var DatePicker = require('react-datepicker');
+require('react-datepicker/dist/react-datepicker.css');
+import { SingleDatePicker } from 'react-dates';
 import React from 'react';
 import reqwest from 'reqwest';
+
+
+
 
 class Dashboard extends React.Component {
     constructor(props){
 		super(props);
+        var labId = Fleb.getQueryVariable("labId");
         this.state={
-            test:[]
+            orders: null,
+            loaded: false,
+            startDate : moment(),
+            slotDate : moment(),
+            endDate : moment().add(1,"days"),
+            labId: labId    
         }
     }
     
     componentDidMount(){
-        
+        this.getOrders.bind(this)();
         
 	}
+    date_sort_asc(date1, date2) {
+    // This is a comparison function that will result in dates being sorted in
+    // ASCENDING order. As you can see, JavaScript's native comparison operators
+    // can be used to compare dates. This was news to me.
+    if (date1 > date2) return 1;
+    if (date1 < date2) return -1;
+    return 0;
+    }
+    fetchTimeSlotsForTheDate() {
+
+    console.log('Entered here');
+    var dateObject = moment(document.getElementById("slotDate").value, 'YYYY-MM-DD').format('YYYY-MM-DD');
+    console.log('Date object is: ' + dateObject);
+    setTimeSelection(dateObject, restrictBookingAfter2PMOnCurrentDate, noTimeSlotLeftForToday);
+   
+    }
+    handleStartDateChange(date){
+    this.setState({
+        startDate: date
+    });
+        this.getOrders();
+    }
+    handleEndDateChange(date){
+        this.setState({
+            endDate: date
+        });
+        this.getOrders();
+    }
+    
+	getOrders(){
+        var _this = this;
+        _this.setState({
+            loaded : false
+            });
+
+        var status = document.getElementById("statusFilter").value;
+        var fromDate = document.getElementById("fromDate").value;
+        var toDate = document.getElementById("toDate").value;
+        var date = document.getElementById("slotDate").value;
+        var urlToUse = '';
+        if (date == 'ALL') {
+            urlToUse = "/getOrdersBetweenDates?startPosition=0&maxResult=10&statuses=" + status + '&startDate=' + fromDate + '&endDate=' + toDate;
+        }
+        else {
+            urlToUse = "/getOrdersBetweenDates?startPosition=0&maxResult=10&statuses=" + status + '&startDate=' + fromDate + '&endDate=' + toDate;
+        }
+
+        reqwest({
+            url: urlToUse
+            ,headers:{
+                "Access-Control-Allow-Origin":"*"
+            }
+            , method: 'get'
+            , error: function (err) {
+                _this.setState({
+                    error:true,
+                    loaded:false
+                })
+            }
+            , success: function (resp) {
+                
+                var orders = resp;
+                if(orders.length != 0)
+                {
+                    
+                    _this.setState({
+                        orders: orders,
+                        error:false,
+                        loaded:true
+                    });
+                    localStorage.removeItem('csvData');
+                    localStorage.setItem('csvData', JSON.stringify(sorted_order_rows));
+                }
+                
+
+
+            }
+        })
+        
+    }
 
     render(){
-      
+
+        var rowsOfOrders = null;
+        var newOrderLink = null;
+        var _this = this;
+        if( this.state.loaded == true && this.state.orders != null)
+        {
+
+            rowsOfOrders = _this.state.orders.map(function(order,index){
+
+                return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{order.status}</td><td>{order.scheduleTime}</td><td>{order.orderDetails.emailId}</td></tr>
+            });
+
+        }
+            
+        
         return (
             
             <div className="dashboard-main">
@@ -35,7 +143,7 @@ class Dashboard extends React.Component {
                             </select>
                         </div>
                         <div className="col-xs-6 text-right">
-                            <a className="btn btn-info" id="createANewOrder" style={{backgroundColor:"#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}}> New Order</a>
+                            <a className="btn btn-info"  href={`/test/list?labId=${this.state.labId}`} id="createANewOrder" style={{backgroundColor:"#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}}> New Order</a>                       
                         </div>
                         
                     </div>
@@ -44,7 +152,7 @@ class Dashboard extends React.Component {
                             <label> CHECK AVAILABILITY</label>
                         </div>
                         <div className="col-xs-3">
-                            <input className="form-control text-center required_field" type="text" name="slotDate" id="slotDate"/>
+                            <DatePicker id="slotDate" onChange={this.getOrders.bind(this)}  dateFormat="YYYY-MM-DD"/>
                         </div>
                         <div className="col-xs-5">
                             <textarea className="slot-time form-control" name="slotTime" id="slotTime" readOnly  style={{height: "250px", float: "center"}}/>
@@ -54,7 +162,7 @@ class Dashboard extends React.Component {
                             <div className="col-lg-10">
                             </div>
                             <div className="col-lg-2">
-                                <button id="refreshButton" className="btn btn-info" style={{backgroundColor: "#00CF17", color:"black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", float: "right"}}>
+                                <button id="refreshButton"  onClick={this.getOrders.bind(this)} className="btn btn-info" style={{backgroundColor: "#00CF17", color:"black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", float: "right"}}>
                                     <span className="glyphicon glyphicon-refresh">  Refresh </span>
                                 </button>
                             </div> 
@@ -62,12 +170,13 @@ class Dashboard extends React.Component {
                             <div className="row">
                                 <div className="col-xs-6 form-inline">
                                     <label htmlFor="exampleInputName2">From</label>
-                                    <input className="form-control text-center required_field" type="text" name="fromDate" id="fromDate"/>
+                                    <DatePicker id="fromDate" selected={this.state.startDate} onChange={this.handleStartDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
+
                                 </div>
                                 
                                 <div className="col-xs-6 form-inline">
                                 <label htmlFor="exampleInputName21">To</label>
-                                    <input className="form-control text-center required_field" type="text" name="toDate" id="toDate"/>
+                                    <DatePicker id="toDate" selected={this.state.endDate} onChange={this.handleEndDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
                                 </div>   
                             </div> 
 
@@ -86,6 +195,7 @@ class Dashboard extends React.Component {
                             </tr>
                             </thead>
                             <tbody id="bodyoftable">
+                                {rowsOfOrders}
                             </tbody>
 
                         </table>

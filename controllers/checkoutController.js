@@ -1,13 +1,9 @@
 var request =  require('unirest');
 module.exports = {
   renderPage:function(req,res,next){
-      if(req.cookies.ums != null)
-      {
-          res.render("dashboard");
-      }else 
-      {
+      
           res.render("checkout");
-      }
+      
     
   },
   getAvailableSlots:function(req,res,next){
@@ -32,10 +28,13 @@ console.log(query);
   },
   createOrder:function(req,res,next){
     console.log(req.body);
+      console.log("Session key is: "+req.cookies.sessionKey);
     request.post('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/createOrder')
       .headers({
         'Accept': 'application/json', 
-        'Content-Type': 'application/json'})
+        'Content-Type': 'application/json', 
+          'Authorization': req.cookies.ums
+      })
       .send(req.body)
       .end(function (response) {
         console.log(response.body,"order");

@@ -6,15 +6,15 @@ var crypto = require('crypto'),
 
 
 function encrypt(text){
-  var cipher = crypto.createCipher(algorithm,password)
-  var crypted = cipher.update(text,'utf8','hex')
+  var cipher = crypto.createCipher(algorithm,password);
+  var crypted = cipher.update(text,'utf8','hex');
   crypted += cipher.final('hex');
   return crypted;
 }
  
 function decrypt(text){
-  var decipher = crypto.createDecipher(algorithm,password)
-  var dec = decipher.update(text,'hex','utf8')
+  var decipher = crypto.createDecipher(algorithm,password);
+  var dec = decipher.update(text,'hex','utf8');
   dec += decipher.final('utf8');
   return dec;
 }
@@ -38,7 +38,7 @@ module.exports = {
 
         var ebc = encrypt(text);
         console.log("Encrypted string is: "+ebc);
-//var dbc = decrypt(ebc);
+        var dbc = decrypt(ebc);
         payLoad.accessKey=ebc;
         request.put('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/user/loginWithCredentials')
             .headers({
@@ -49,11 +49,49 @@ module.exports = {
                 console.log(response.body,"payment COD");
                 if(response.body){
                     res.cookie('ums',response.body.sessionKey);
-                    res.cookie('role',response.body.role);
-                    res.cookie('username',response.body.role);
-                    res.send({"role":response.body.role});
+                    res.cookie('role',encrypt(response.body.role));
+                    res.cookie('username',encrypt(response.body.username));
+                    res.cookie('company',encrypt(response.body.company));
+                    res.cookie('labId',encrypt(response.body.userDetails.labId.toString()));
+                    res.send({"role":response.body.role,"labId": response.body.userDetails.labId.toString()});
                 }
             });
+    },
+
+
+    encrypt: function (text){
+    var cipher = crypto.createCipher(algorithm,password);
+    var crypted = cipher.update(text,'utf8','hex');
+    crypted += cipher.final('hex');
+    return crypted;
+},
+
+ decrypt: function(text){
+    var decipher = crypto.createDecipher(algorithm,password);
+    var dec = decipher.update(text,'hex','utf8');
+    dec += decipher.final('utf8');
+    return dec;
+},
+    
+    getUser: function(){
+            var sessionKey = null;
+            var role = null; 
+            var labId = null;
+            var company = null;
+            var username = null;
+            if(req.cookies.sessionKey != null)
+            {
+                sessionKey = userController.decrypt(req.cookies.sessionKey);
+                role = userController.decrypt(req.cookies.role);
+                if(req.cookies.labId != null )
+                {
+                    labId = userController.decrypt(req.cookies.labId);
+                }
+                company = userController.decrypt(req.cookies.company);
+                username = userController.decrypt(req.cookies.username);
+            }
+            return {sessionKey: sessionKey, role: role, labId: labId, company: company, username: username};
     }
+    
 
 };

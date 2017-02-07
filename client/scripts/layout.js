@@ -24,6 +24,7 @@ Fleb.eventDispatcher = function(name,data){
       document.body.dispatchEvent(event);
   }
 
+  
 
 Fleb.getQueryVariable = function(variable) {
     var query = window.location.search.substring(1);
