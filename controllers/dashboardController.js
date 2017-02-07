@@ -4,8 +4,6 @@ module.exports = {
   renderPage:function(req,res,next){
     console.log(req.cookies.ums);
     var role = null;
-    var labId = null;
-    var company = null;
     if(req.cookies.role != null)
     {
       role = userController.decrypt(req.cookies.role);
@@ -13,8 +11,6 @@ module.exports = {
     }
     if(role == "LABADMIN")
     {
-      labId = userController.decrypt(req.cookies.labId);
-      company =  userController.decrypt(req.cookies.company);
       res.render("dashboard");
     }
     
@@ -28,8 +24,14 @@ module.exports = {
     var endDate = req.query.endDate;
     
     console.log(statuses+"-"+startDate+"-"+endDate);
-    request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/getOrdersBetweenDates?startPosition=0&maxResult=10&statuses='+statuses+'&startDate='+startDate+'&endDate='+endDate+'&orderOriginPerson=11')
-        .headers(headers)
+    request.get('http://localhost:8081/api/v0.1/order/getOrdersBetweenDates?startPosition=0&maxResult=10&statuses='+statuses+'&startDate='+startDate+'&endDate='+endDate+'&orderOriginPerson=2')
+        .headers(
+            {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': req.cookies.ums
+            }
+        )
         .end(function (response) {
           console.log(response.status);
           if(response.status == 200){

@@ -50,7 +50,7 @@ module.exports = {
                 if(response.body){
                     res.cookie('ums',response.body.sessionKey);
                     res.cookie('role',encrypt(response.body.role));
-                    res.cookie('username',encrypt(response.body.role));
+                    res.cookie('username',encrypt(response.body.username));
                     res.cookie('company',encrypt(response.body.company));
                     res.cookie('labId',encrypt(response.body.userDetails.labId.toString()));
                     res.send({"role":response.body.role,"labId": response.body.userDetails.labId.toString()});
@@ -71,6 +71,27 @@ module.exports = {
     var dec = decipher.update(text,'hex','utf8');
     dec += decipher.final('utf8');
     return dec;
-}
+},
+    
+    getUser: function(){
+            var sessionKey = null;
+            var role = null; 
+            var labId = null;
+            var company = null;
+            var username = null;
+            if(req.cookies.sessionKey != null)
+            {
+                sessionKey = userController.decrypt(req.cookies.sessionKey);
+                role = userController.decrypt(req.cookies.role);
+                if(req.cookies.labId != null )
+                {
+                    labId = userController.decrypt(req.cookies.labId);
+                }
+                company = userController.decrypt(req.cookies.company);
+                username = userController.decrypt(req.cookies.username);
+            }
+            return {sessionKey: sessionKey, role: role, labId: labId, company: company, username: username};
+    }
+    
 
 };

@@ -13,7 +13,6 @@ class Dashboard extends React.Component {
     constructor(props){
 		super(props);
         var labId = Fleb.getQueryVariable("labId");
-        console
         this.state={
             orders: null,
             loaded: false,
@@ -90,43 +89,11 @@ class Dashboard extends React.Component {
             , success: function (resp) {
                 
                 var orders = resp;
-                
-
-                var sorted_order_dates = [];
                 if(orders.length != 0)
                 {
-                    for (var i in orders) {
-                        var r1 = moment(orders[i].scheduleDate, 'YYYY-MM-DDTHH:mm:ssZ').format('YYYY-MM-DDTHH:mm:ssZ');
-                        sorted_order_dates.push(new Date(r1));
-                    }
-                    sorted_order_dates = sorted_order_dates.sort(this.date_sort_asc);
-                    var sorted_order_rows = [];
-                    sorted_order_rows = orders;
-                    /*for (var j in sorted_order_dates) {
-                     for (var i in orders) {
-                     var r1 = orders[i].scheduleTime;
-
-                     var dateobj = new Date(r1);
-
-
-                     if (( dateobj.toUTCString() == sorted_order_dates[j].toUTCString() ) && ( $.inArray(orders[i], sorted_order_rows) == -1)) {
-                     console.log("Entered here");
-                     sorted_order_rows.push(orders[i]);
-                     break;
-                     }
-
-                     }
-                     }*/
-                    var order_rows = resp;
-                    for (var i in sorted_order_rows) {
-                        status = sorted_order_rows[i].status;
-
-                        //delete sorted_order_rows[i].cost;
-                        delete sorted_order_rows[i].orderId;
-                        delete sorted_order_rows[i].price;
-                    }
+                    
                     _this.setState({
-                        orders: sorted_order_rows,
+                        orders: orders,
                         error:false,
                         loaded:true
                     });

@@ -28,10 +28,13 @@ console.log(query);
   },
   createOrder:function(req,res,next){
     console.log(req.body);
-    request.post('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/createOrder')
+      console.log("Session key is: "+req.cookies.sessionKey);
+    request.post('http://localhost:8081/api/v0.1/order/createOrder')
       .headers({
         'Accept': 'application/json', 
-        'Content-Type': 'application/json'})
+        'Content-Type': 'application/json', 
+          'Authorization': req.cookies.ums
+      })
       .send(req.body)
       .end(function (response) {
         console.log(response.body,"order");
