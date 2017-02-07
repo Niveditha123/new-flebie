@@ -80,6 +80,14 @@ class ConfirmCtrl extends React.Component {
     }
     componentDidMount(){
         Fleb.showLoader();
+        var cartList= {
+					orderItems:[],
+					totalItems:0,
+					labName:"",
+					totalListPrice:0,
+					totalPrice : 0
+				};
+        Fleb.eventDispatcher("updateCart",cartList);
         this.getConfirmResponse.bind(this)()
 	}
     render(){
