@@ -18,17 +18,17 @@ $(document).ready(function () {
   $('#userDisplay').show();
   var todaysDate = moment(new Date(), 'YYYY-MM-DD');
   todaysDate = todaysDate.format('YYYY-MM-DD');
-  initializeScheduleCalendar();
-  $("#slotDate").val(moment(new Date(), 'YYYY-MM-DD').add('days', 1).format('YYYY-MM-DD'));
-  setTimeSelection( $('#slotDate').val(), restrictBookingAfter2PMOnCurrentDate, noTimeSlotLeftForToday );
-  $("#fromDate").val(todaysDate);
-  $("#toDate").val(moment(new Date(), 'YYYY-MM-DD').add('days', 1).format('YYYY-MM-DD'));
+  //initializeScheduleCalendar();
+  //$("#slotDate").val(moment(new Date(), 'YYYY-MM-DD').add('days', 1).format('YYYY-MM-DD'));
+  //setTimeSelection( $('#slotDate').val(), restrictBookingAfter2PMOnCurrentDate, noTimeSlotLeftForToday );
+  //$("#fromDate").val(todaysDate);
+  //$("#toDate").val(moment(new Date(), 'YYYY-MM-DD').add('days', 1).format('YYYY-MM-DD'));
   //var dateFilterHTML = "<option value='"+moment().format('DD/MM/YYYY')+"'>TODAY</option>"+"<option value='"+moment().add(1, 'day').format('DD/MM/YYYY')+"'>TOMORROW</option>"+"<option value='"+moment().add(2, 'day').format('DD/MM/YYYY')+"'>"+moment().add(2, 'day').format('DD/MM/YYYY')+"</option>"+"<option value='ALL' >ALL</option>";
   //$("#dateFilter").html(dateFilterHTML);
-  initializeFromCalendar();
-  initializeToCalendar();
-  getOrdersOfStatus();
-  setInterval(getOrdersOfStatus, 30000);
+  //initializeFromCalendar();
+  //initializeToCalendar();
+  //getOrdersOfStatus();
+  //setInterval(getOrdersOfStatus, 30000);
   localStorage.removeItem('shoppingCart');
 
 });
@@ -87,7 +87,7 @@ var assignFlebieForSlot = function(flebieObject)
 
 
 
-var getOrdersOfStatus = function()
+/*var getOrdersOfStatus = function()
 {
 
   var status = $('select[id="statusFilter"]').val();
@@ -116,7 +116,7 @@ var getOrdersOfStatus = function()
       sorted_order_dates = sorted_order_dates.sort(date_sort_asc);
       var sorted_order_rows = [];
       sorted_order_rows = orders;
-      /*for (var j in sorted_order_dates) {
+      /!*for (var j in sorted_order_dates) {
         for (var i in orders) {
           var r1 = orders[i].scheduleTime;
         
@@ -130,7 +130,7 @@ var getOrdersOfStatus = function()
           }
 
         }
-      }*/
+      }*!/
       var order_rows = [];
       for (var i in sorted_order_rows) {
         status = sorted_order_rows[i].status;
@@ -145,7 +145,7 @@ var getOrdersOfStatus = function()
         {
           cashToBeCollected = sorted_order_rows[i].price;
         }
-        order_rows += "<tr><td><a class='btn btn-info' href='/editOrder?id=" + sorted_order_rows[i].orderId + "'>" + sorted_order_rows[i].orderDetails.firstName + "</a></td><td>" + sorted_order_rows[i].orderDetails.address + "</td><td>" + sorted_order_rows[i].orderDetails.phoneNumber + "</td><td>" + status + "</td><td>" + sorted_order_rows[i].scheduleTime + "</td><td>" + sorted_order_rows[i].orderDetails.emailId+ "</td></tr>";
+        order_rows += "<tr><td><a class='btn btn-info' href={`/editOrder?id=" + sorted_order_rows[i].orderId + "'>" + sorted_order_rows[i].orderDetails.firstName + "</a></td><td>" + sorted_order_rows[i].orderDetails.address + "</td><td>" + sorted_order_rows[i].orderDetails.phoneNumber + "</td><td>" + status + "</td><td>" + sorted_order_rows[i].scheduleTime + "</td><td>" + sorted_order_rows[i].orderDetails.emailId+ "</td></tr>";
 
         //delete sorted_order_rows[i].cost;
         delete sorted_order_rows[i].orderId;
@@ -171,7 +171,7 @@ var getOrdersOfStatus = function()
             $('#connectionAlert').show();
           }
       );
-};
+};*/
 
 var sampleCollected = function (i) {
   var orderId = $("tbody>tr:nth-child(" + (i + 1) + ")>td:nth-child(1)>a").text();
@@ -861,10 +861,10 @@ var getOrdersAsCSV = function () {
   JSONToCSVConvertor(JSON.parse(jsonData), 'OrdersReport', 'Orders');
 };
 
-$("#getCSVData").click(
+/*$("#getCSVData").click(
     function () {
       getOrdersAsCSV();
     }
     
-);
+);*/
 

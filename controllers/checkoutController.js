@@ -1,13 +1,9 @@
 var request =  require('unirest');
 module.exports = {
   renderPage:function(req,res,next){
-      if(req.cookies.ums != null)
-      {
-          res.render("dashboard");
-      }else 
-      {
+      
           res.render("checkout");
-      }
+      
     
   },
   getAvailableSlots:function(req,res,next){
