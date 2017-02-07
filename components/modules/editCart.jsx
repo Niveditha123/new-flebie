@@ -35,9 +35,9 @@ class OpenCartModalContent extends React.Component{
         totalItems:0,
         labName:"",
         totalListPrice:0,
-        totalPrice : 0,
-        openModal:false
+        totalPrice : 0
       },
+       openModal:false,
       offerResp:{
         orderLevelDiscount:0
       },

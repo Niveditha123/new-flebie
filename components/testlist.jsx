@@ -131,7 +131,15 @@ class TestList extends React.Component {
 	}
     componentDidMount(){
 		this.loadAllTests.bind(this)();
+		/*Fleb.eventDispatcher("updateCart",{
+        orderItems:[],
+        totalItems:0,
+        labName:"",
+        totalListPrice:0,
+        totalPrice : 0
+      })*/
 		this.loadLabDetails.bind(this)();
+		//debugger;
 		this.setState({
 		_notificationSystem : this.refs.notificationSystem
 	});
@@ -158,15 +166,27 @@ class TestList extends React.Component {
 		var cartList = localStorage.getItem("cartInfo");
 		if(cartList){
 			cartList = JSON.parse(cartList);
+
+
+			if(cartList.labName !== this.state.labDetails.labName){
+				cartList= {
+					orderItems:[],
+					totalItems:0,
+					labName:"",
+					totalListPrice:0,
+					totalPrice : 0
+				}
+			} 
 			var item = this.findAnItem(test,cartList.orderItems,"testName");
+			var newitem = this.findAnItem(test,this.state.testList.orderItems,"labTestName");
 			if(item.in){
 				cartList.orderItems[item.pos].quantity+=1;
 				cartList.totalItems+=1;
-				cartList.totalListPrice +=item.data.listPrice;
-				cartList.totalPrice +=item.data.price;
+				cartList.totalListPrice +=newitem.data.MRP;
+				cartList.totalPrice +=newitem.data.offerPrice;
 			}
 			else{
-				var newitem = this.findAnItem(test,this.state.testList.orderItems,"labTestName");
+				
 					if(newitem.in){
 						var testItem ={
 								"testName": newitem.data.labTestName,
@@ -180,11 +200,26 @@ class TestList extends React.Component {
 						cartList.totalItems+=1;
 						cartList.totalListPrice+=testItem.listPrice;
 						cartList.totalPrice+=testItem.price;
+						cartList["userEmail"]="";
+						cartList["isHomeCollectible"]=this.state.labDetails.isAvailableForHC;
+						cartList["labName"]= this.state.labDetails.labName;
+						cartList["labId"]= this.state.labDetails.labId;
+						cartList["location"]= this.state.labDetails.location;
+						cartList["operatingHours"]= this.state.labDetails.operatingHours;
+						cartList["phoneNumber"] =this.state.labDetails.phoneNumber;
+						cartList["labAddress"]= this.state.labDetails.address;
+						cartList["inHouseConsultationAvailable"]= this.state.labDetails.inHouseConsultationAvailable;
+						cartList["isAvailableForHC"]= this.state.labDetails.isAvailableForHC;
+						cartList["isAvailableForOB"]= this.state.labDetails.isAvailableForOB;
 					}
 				}
 				var testMsg = test+" successfully added to your cart!!!"
 				this._addNotification(testMsg);
-			Fleb.eventDispatcher("updateCart",cartList);				
+
+				Fleb.eventDispatcher("updateCart",cartList);
+				if(cartList.totalItems == 1){
+					document.getElementById("openCart").click();
+				}				
 			}
 			else{
 				var cartInfo = {
@@ -215,7 +250,10 @@ class TestList extends React.Component {
 				cartInfo["totalListPrice"]=cartItem.data.MRP;
 				cartInfo["totalPrice"]=cartItem.data.offerPrice;
 
-				Fleb.eventDispatcher("updateCart",cartInfo);								
+				Fleb.eventDispatcher("updateCart",cartInfo);	
+				if(cartList.totalItems == 1){
+					document.getElementById("openCart").click();
+				}								
 
 		}
 		
