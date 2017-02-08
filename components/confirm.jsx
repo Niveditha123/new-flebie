@@ -199,7 +199,7 @@ class ConfirmCtrl extends React.Component {
         listUI = <div className="list-content">
       {head}
        {list}
-       {convinienceFee}
+       {convenienceFee}
        {priceUI}
       </div>
     }else{
