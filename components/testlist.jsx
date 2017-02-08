@@ -29,7 +29,7 @@ class TestList extends React.Component {
     });
   }
 	getCurrentUser(){
-
+        console.log("Entered get current user");
 		reqwest({
 			url:"/getCurrentUser"
 			,headers:{
@@ -221,12 +221,13 @@ class TestList extends React.Component {
 				cartList.orderItems[item.pos].quantity+=1;
 				cartList.totalItems+=1;
 				cartList.totalListPrice +=newitem.data.MRP;
-				if(this.state.user != null && this.state.user.role != "LABADMIN")
+				if(this.state.user != null && this.state.user.role == "LABADMIN")
 				{
-					cartList.totalPrice +=newitem.data.offerPrice;
+					
+					cartList.totalPrice +=newitem.data.MRP;
 				}
 				else {
-					cartList.totalPrice +=newitem.data.MRP;
+					cartList.totalPrice +=newitem.data.offerPrice;
 				}
 				
 			}
@@ -234,17 +235,10 @@ class TestList extends React.Component {
 				
 					if(newitem.in){
 						var testItem = null;
-						if(this.state.user != null && this.state.user.role != "LABADMIN")
+						if(this.state.user != null && this.state.user.role == "LABADMIN")
 						{
-							testItem = {
-								"testName": newitem.data.labTestName,
-								"price": newitem.data.offerPrice,
-								"listPrice": newitem.data.MRP,
-								"quantity": 1,
-								"isHomeCollectible":false,
-								"labTestId": newitem.data.labTestId
-							}
-						}else {
+							
+
 							testItem = {
 								"testName": newitem.data.labTestName,
 								"price": newitem.data.MRP,
@@ -252,7 +246,17 @@ class TestList extends React.Component {
 								"quantity": 1,
 								"isHomeCollectible":false,
 								"labTestId": newitem.data.labTestId
-							}
+							};
+							
+						}else {
+							testItem = {
+								"testName": newitem.data.labTestName,
+								"price": newitem.data.offerPrice,
+								"listPrice": newitem.data.MRP,
+								"quantity": 1,
+								"isHomeCollectible":false,
+								"labTestId": newitem.data.labTestId
+							};
 						}
 						cartList.orderItems.push(testItem);
 						cartList.totalItems+=1;
@@ -297,23 +301,25 @@ class TestList extends React.Component {
 				var cartItem = this.findAnItem(test,this.state.testList.orderItems,"labTestName");
 				var newTest = null;
 
-			if(this.state.user != null && this.state.user.role != "LABADMIN")
+			if(this.state.user != null && this.state.user.role == "LABADMIN")
 			{
+				
 				newTest = {
 					"testName": cartItem.data.labTestName,
 					"price": cartItem.data.MRP,
-					"listPrice": cartItem.data.offerPrice,
+					"listPrice": cartItem.data.MRP,
 					"quantity": 1,
 					"isHomeCollectible":false,
 					"labTestId": cartItem.data.labTestId
 				};
+				
 			}
 			else 
 			{
 				newTest = {
 					"testName": cartItem.data.labTestName,
 					"price": cartItem.data.MRP,
-					"listPrice": cartItem.data.MRP,
+					"listPrice": cartItem.data.offerPrice,
 					"quantity": 1,
 					"isHomeCollectible":false,
 					"labTestId": cartItem.data.labTestId
@@ -337,7 +343,19 @@ class TestList extends React.Component {
 	getRows(item,index){
 		
 				console.log("Role is: "+this.state.role);
-				if(this.state.user != null && this.state.user.role != "LABADMIN")
+				if(this.state.user != null && this.state.user.role == "LABADMIN")
+				{
+					
+
+					var row= <div key={index} className="tb-bd-row col4">
+						<div className="test-name">{item.labTestName}</div>
+						<div className="of-price"><span className="icon icon-rupee"/>{item.MRP}</div>
+						<div className="action-col">
+							<button id={index} onClick={this.addTests.bind(this)} data-name={item.labTestName} className="btn btn-success">Add</button>
+						</div>
+					</div>;
+				}
+				else 
 				{
 					var row= <div key={index} className="tb-bd-row col4">
 						<div className="test-name">{item.labTestName}</div>
@@ -346,17 +364,8 @@ class TestList extends React.Component {
 						<div className="action-col">
 							<button id={index} onClick={this.addTests.bind(this)} data-name={item.labTestName} className="btn btn-success">Add</button>
 						</div>
-					</div>
-				}
-				else 
-				{
-					var row= <div key={index} className="tb-bd-row col4">
-						<div className="test-name">{item.labTestName}</div>
-						<div className="of-price"><span className="icon icon-rupee"/>{item.MRP}</div>
-						<div className="action-col">
-							<button id={index} onClick={this.addTests.bind(this)} data-name={item.labTestName} className="btn btn-success">Add</button>
-						</div>
-					</div>
+					</div>;
+					
 				}
 				
 				return row;
@@ -382,20 +391,21 @@ class TestList extends React.Component {
 			</div>
 		}
 		if(this.state.loaded){
-			if(this.state.user != null && this.state.user.role != "LABADMIN")
+			if(this.state.user != null && this.state.user.role == "LABADMIN")
 			{
+				
 				labListHeader=<div className="tb-head-row col4">
 					<div className="test-name">TEST NAME</div>
 					<div className="of-price">OFFER PRICE</div>
-					<div className="mrp-price">MRP</div>
 					<div className="action-col"></div>
-				</div>
+				</div>;
 				
 			}
 			else {
 				labListHeader=<div className="tb-head-row col4">
 					<div className="test-name">TEST NAME</div>
 					<div className="of-price">OFFER PRICE</div>
+					<div className="mrp-price">MRP</div>
 					<div className="action-col"></div>
 				</div>
 			}
