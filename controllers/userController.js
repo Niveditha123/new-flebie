@@ -94,7 +94,11 @@ module.exports = {
                 user.company = company;
                 user.username = username;
             }
-            console.log("Response is: "+user);
+            else {
+                user.role = "USER";
+            }
+            
+            console.log("Current user is: "+user);
             res.send({"user": user});
     }
     
