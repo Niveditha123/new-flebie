@@ -73,24 +73,29 @@ module.exports = {
     return dec;
 },
     
-    getUser: function(){
+    getCurrentUser: function(req,res,next){
             var sessionKey = null;
             var role = null; 
             var labId = null;
             var company = null;
             var username = null;
+            var user = null;
             if(req.cookies.sessionKey != null)
             {
-                sessionKey = userController.decrypt(req.cookies.sessionKey);
                 role = userController.decrypt(req.cookies.role);
+                user.role = role;
                 if(req.cookies.labId != null )
                 {
                     labId = userController.decrypt(req.cookies.labId);
+                    user.labId = labId;
                 }
                 company = userController.decrypt(req.cookies.company);
                 username = userController.decrypt(req.cookies.username);
+                user.company = company;
+                user.username = username;
             }
-            return {sessionKey: sessionKey, role: role, labId: labId, company: company, username: username};
+            console.log("Response is: "+user);
+            res.send({"user": user});
     }
     
 

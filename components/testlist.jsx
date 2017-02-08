@@ -6,6 +6,7 @@ var NotificationSystem = require('react-notification-system');
 class TestList extends React.Component {
     constructor(props){
 		super(props);
+		
         this.state={
             testList:{
                 orderItems:[]
@@ -16,8 +17,10 @@ class TestList extends React.Component {
 			filtered:false,
 			filterList:[],
 			inputFilter:"",
+			user: null,
 			_notificationSystem: null,
-        }
+        };
+		
     }
  _addNotification(data) {
     this.state._notificationSystem.addNotification({
@@ -25,6 +28,38 @@ class TestList extends React.Component {
       level: 'success'
     });
   }
+	getCurrentUser(){
+
+		reqwest({
+			url:"/getCurrentUser"
+			,headers:{
+				"Access-Control-Allow-Origin":"*"
+			}
+			, method: 'get'
+			, error: function (err) {
+				console.log("Got an error ");
+				_this.setState({
+					testList:{
+						orderItems:[]
+					},
+					loaded:false,
+					labId:qP
+				})
+			}
+			, success: function (resp) {
+
+				console.log("Role in response is: "+resp.user.role);
+
+				this.setState({
+					user: resp.user
+				})
+			}
+		});
+		
+
+	}
+  
+  
 	ChangeInput(e){
 		this.setState({
 			inputFilter:e.target.value
@@ -56,7 +91,7 @@ class TestList extends React.Component {
 			var qP = Fleb.getQueryVariable("labId");
 			var list={
 				orderItems:[]
-            }
+            };
 		      /*  najax.get({
             url: "http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromLabId?labId="+qP, 
 						method:"get",    
@@ -89,6 +124,8 @@ class TestList extends React.Component {
 					}
 					, success: function (resp) {
 						if(Array.isArray(resp)){
+							
+							
 							_this.setState({
 								testList:{
 									orderItems:resp
@@ -130,6 +167,7 @@ class TestList extends React.Component {
 	})
 	}
     componentDidMount(){
+    	this.getCurrentUser.bind(this);
 		this.loadAllTests.bind(this)();
 		/*Fleb.eventDispatcher("updateCart",{
         orderItems:[],
@@ -183,12 +221,22 @@ class TestList extends React.Component {
 				cartList.orderItems[item.pos].quantity+=1;
 				cartList.totalItems+=1;
 				cartList.totalListPrice +=newitem.data.MRP;
-				cartList.totalPrice +=newitem.data.offerPrice;
+				if(this.state.user != null && this.state.user.role != "LABADMIN")
+				{
+					cartList.totalPrice +=newitem.data.offerPrice;
+				}
+				else {
+					cartList.totalPrice +=newitem.data.MRP;
+				}
+				
 			}
 			else{
 				
 					if(newitem.in){
-						var testItem ={
+						var testItem = null;
+						if(this.state.user != null && this.state.user.role != "LABADMIN")
+						{
+							testItem = {
 								"testName": newitem.data.labTestName,
 								"price": newitem.data.offerPrice,
 								"listPrice": newitem.data.MRP,
@@ -196,6 +244,16 @@ class TestList extends React.Component {
 								"isHomeCollectible":false,
 								"labTestId": newitem.data.labTestId
 							}
+						}else {
+							testItem = {
+								"testName": newitem.data.labTestName,
+								"price": newitem.data.MRP,
+								"listPrice": newitem.data.MRP,
+								"quantity": 1,
+								"isHomeCollectible":false,
+								"labTestId": newitem.data.labTestId
+							}
+						}
 						cartList.orderItems.push(testItem);
 						cartList.totalItems+=1;
 						cartList.totalListPrice+=testItem.listPrice;
@@ -237,7 +295,11 @@ class TestList extends React.Component {
 					orderItems:[]
 				}
 				var cartItem = this.findAnItem(test,this.state.testList.orderItems,"labTestName");
-				var newTest ={
+				var newTest = null;
+
+			if(this.state.user != null && this.state.user.role != "LABADMIN")
+			{
+				newTest = {
 					"testName": cartItem.data.labTestName,
 					"price": cartItem.data.MRP,
 					"listPrice": cartItem.data.offerPrice,
@@ -245,6 +307,20 @@ class TestList extends React.Component {
 					"isHomeCollectible":false,
 					"labTestId": cartItem.data.labTestId
 				};
+			}
+			else 
+			{
+				newTest = {
+					"testName": cartItem.data.labTestName,
+					"price": cartItem.data.MRP,
+					"listPrice": cartItem.data.MRP,
+					"quantity": 1,
+					"isHomeCollectible":false,
+					"labTestId": cartItem.data.labTestId
+				};
+			}
+			
+				
 				cartInfo.orderItems.push(newTest);
 				cartInfo.totalItems=1;
 				cartInfo["totalListPrice"]=cartItem.data.MRP;
@@ -259,14 +335,30 @@ class TestList extends React.Component {
 		
 	}
 	getRows(item,index){
-				var row= <div key={index} className="tb-bd-row col4">
-					<div className="test-name">{item.labTestName}</div>
-					<div className="of-price"><span className="icon icon-rupee"/>{item.offerPrice}</div>
-					<div className="mrp-price"><span className="icon icon-rupee"/>{item.MRP}</div>
-					<div className="action-col">
-						<button id={index} onClick={this.addTests.bind(this)} data-name={item.labTestName} className="btn btn-success">Add</button>
+		
+				console.log("Role is: "+this.state.role);
+				if(this.state.user != null && this.state.user.role != "LABADMIN")
+				{
+					var row= <div key={index} className="tb-bd-row col4">
+						<div className="test-name">{item.labTestName}</div>
+						<div className="of-price"><span className="icon icon-rupee"/>{item.offerPrice}</div>
+						<div className="mrp-price"><span className="icon icon-rupee"/>{item.MRP}</div>
+						<div className="action-col">
+							<button id={index} onClick={this.addTests.bind(this)} data-name={item.labTestName} className="btn btn-success">Add</button>
+						</div>
 					</div>
-				</div>
+				}
+				else 
+				{
+					var row= <div key={index} className="tb-bd-row col4">
+						<div className="test-name">{item.labTestName}</div>
+						<div className="of-price"><span className="icon icon-rupee"/>{item.MRP}</div>
+						<div className="action-col">
+							<button id={index} onClick={this.addTests.bind(this)} data-name={item.labTestName} className="btn btn-success">Add</button>
+						</div>
+					</div>
+				}
+				
 				return row;
 	}
     render(){
@@ -290,12 +382,24 @@ class TestList extends React.Component {
 			</div>
 		}
 		if(this.state.loaded){
-			labListHeader=<div className="tb-head-row col4">
-				<div className="test-name">TEST NAME</div>
-				<div className="of-price">OFFER PRICE</div>
-				<div className="mrp-price">MRP</div>
-				<div className="action-col"></div>
-			</div>
+			if(this.state.user != null && this.state.user.role != "LABADMIN")
+			{
+				labListHeader=<div className="tb-head-row col4">
+					<div className="test-name">TEST NAME</div>
+					<div className="of-price">OFFER PRICE</div>
+					<div className="mrp-price">MRP</div>
+					<div className="action-col"></div>
+				</div>
+				
+			}
+			else {
+				labListHeader=<div className="tb-head-row col4">
+					<div className="test-name">TEST NAME</div>
+					<div className="of-price">OFFER PRICE</div>
+					<div className="action-col"></div>
+				</div>
+			}
+			
 			listTableUI.push(labListHeader);
 			if(!this.state.inputFilter){
 				listTableContent = this.state.testList.orderItems.map(_this.getRows.bind(this));					

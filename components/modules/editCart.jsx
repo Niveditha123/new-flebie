@@ -165,28 +165,62 @@ class OpenCartModalContent extends React.Component{
   render(){
     var listUI=[];
     var _this = this;
+     
     var headerUI= <h3 className={(this.props.header)?"":"hide"}>{this.state.testsList.labName}</h3>
     if(this.state.testsList.orderItems.length >0 ){
-      var head=<div className="test-head-row">
-        <div className="item-head">
-        Item
-        </div>
-        <div className="item-qnt">
-        Quantity
-        </div>
-        <div className="item-price">
-        Price
-        </div>
-        <div className="item-mrp">
-        MRP
-        </div>
-        
-      </div>;
+      var hide_mrp = true;
+      var orderItems = this.state.testsList.orderItems;
+      for(var i in orderItems)
+      {
+        if(orderItems[i].price != orderItems[i].listPrice)
+        {
+          hide_mrp = false;
+        }
+      }
+      var head= null;
+      if(hide_mrp == false)
+      {
+        head = <div className="test-head-row">
+          <div className="item-head">
+            Item
+          </div>
+          <div className="item-qnt">
+            Quantity
+          </div>
+          <div className="item-price">
+            Price
+          </div>
+          <div className="item-mrp">
+            MRP
+          </div>
 
-      var list =  this.state.testsList.orderItems.map(function(item,index){
+        </div>;
+      }
+      else 
+      {
+        head = <div className="test-head-row">
+          <div className="item-head">
+            Item
+          </div>
+          <div className="item-qnt">
+            Quantity
+          </div>
+          <div className="item-price">
+            Price
+          </div>
+
+        </div>;
+      }
+          
+          
+
+      var list = null;
+      if(hide_mrp == false)
+      {
+        list = this.state.testsList.orderItems.map(function(item,index){
           return <div className="test-row">
             <div className="item-head">
-            {item.testName}
+              {item.testName}
             </div>
             <ItemQ item={item} isEditable={_this.props.isEditable} index={index} key={index} ctx={_this}/>
             <div className="item-price">
@@ -195,14 +229,37 @@ class OpenCartModalContent extends React.Component{
             <div className="item-mrp">
               <span className="icon icon-rupee"></span>{item.listPrice*item.quantity}
             </div>
-            
-            
+
+
           </div>
         });
-        var discountUI=<div className="disc-row col2-row">
+      }
+      else 
+      {
+        list = this.state.testsList.orderItems.map(function(item,index){
+          return <div className="test-row">
+            <div className="item-head">
+              {item.testName}
+            </div>
+            <ItemQ item={item} isEditable={_this.props.isEditable} index={index} key={index} ctx={_this}/>
+            <div className="item-price">
+              <span className="icon icon-rupee"></span>{item.price*item.quantity}
+            </div>
+          </div>
+        });
+      }
+          
+          
+        var discountUI= null;
+      if(hide_mrp == false)
+      {
+        discountUI = <div className="disc-row col2-row">
           <div  className="discount-label">You Saved</div>
           <div className="text-right"><span className="icon icon-rupee"></span>{(this.state.testsList.totalListPrice-this.state.testsList.totalPrice)+this.state.offerResp.orderLevelDiscount}</div>
         </div>;
+      }
+      
+            
         var priceUI=<div className="price-row col2-row">
           <div  className="price-tot-label">Total Price</div>
           <div className="text-right"><span className="icon icon-rupee"></span>{(this.state.testsList.totalPrice-this.state.offerResp.orderLevelDiscount)+this.state.convenienceFee}</div>

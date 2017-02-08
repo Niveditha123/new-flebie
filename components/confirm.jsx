@@ -12,6 +12,7 @@ class ConfirmCtrl extends React.Component {
             error:false,
             loading:true,
             convenienceFee:0
+            
         }
     }
     getConfirmResponse(){
@@ -93,53 +94,108 @@ class ConfirmCtrl extends React.Component {
     render(){
         var listUI=[];
     var _this = this;
-      var head=<div className="test-head-row">
-        <div className="item-head">
-        TESTNAME        
-        </div>
-        <div className="item-qnt">
-        QTY
-        </div>
-        <div className="item-price">
-        PRICE
-        </div>
-        <div className="item-mrp">
-        MRP
-        </div>
-      </div>;
+      var head= null;
+        if(this.state.confirmResponse.orderOriginPerson != 2)
+        {
+            head = <div className="test-head-row">
+                <div className="item-head">
+                    TESTNAME
+                </div>
+                <div className="item-qnt">
+                    QTY
+                </div>
+                <div className="item-price">
+                    PRICE
+                </div>
+                <div className="item-mrp">
+                    MRP
+                </div>
+            </div>;
+        }
+        else {
+            head = <div className="test-head-row">
+                <div className="item-head">
+                    TESTNAME
+                </div>
+                <div className="item-qnt">
+                    QTY
+                </div>
+                <div className="item-price">
+                    PRICE
+                </div>
+            </div>;
+        }
+        
+          
       var list=[];
 
       
     if(!this.state.error && !this.state.loading){
-         var list =  this.state.confirmResponse.orderItems.map(function(item,index){
-          return <div className="test-row">
-            <div className="item-head">
-            {item.testName}
-            </div>
-            <div className="item-qnt">
-            
-            {item.quantity}
-            </div>
-            <div className="item-price">
-            <span className="icon icon-rupee"></span>{item.itemTotal}
-            </div>
-            <div className="item-mrp">
-            <span className="icon icon-rupee"></span>{item.itemMRP}
-            </div>
-          </div>
-        });
-        var convinienceFee= priceUI=<div className="price-row test-row">
+         var list =  null;
+        if(this.state.confirmResponse.orderOriginPerson != 2)
+        {
+            list = this.state.confirmResponse.orderItems.map(function(item,index){
+                return <div className="test-row">
+                    <div className="item-head">
+                        {item.testName}
+                    </div>
+                    <div className="item-qnt">
+
+                        {item.quantity}
+                    </div>
+                    <div className="item-price">
+                        <span className="icon icon-rupee"></span>{item.itemTotal}
+                    </div>
+                    <div className="item-mrp">
+                        <span className="icon icon-rupee"></span>{item.itemMRP}
+                    </div>
+                </div>
+            });
+        }
+        else 
+        {
+            list = this.state.confirmResponse.orderItems.map(function(item,index){
+                return <div className="test-row">
+                    <div className="item-head">
+                        {item.testName}
+                    </div>
+                    <div className="item-qnt">
+
+                        {item.quantity}
+                    </div>
+                    <div className="item-price">
+                        <span className="icon icon-rupee"></span>{item.itemTotal}
+                    </div>
+                </div>
+            });
+        }
+             
+        var convenienceFee= priceUI=<div className="price-row test-row">
           <div  className="price-tot-label item-head">convenience Fee</div>
           <div className="item-qnt"> </div>
           <div className="item-mrp"></div>
           <div className="item-price"><span className="icon icon-rupee"></span>{this.state.convenienceFee}</div>
         </div>;
-        var priceUI=<div className="price-row test-row">
-          <div  className="price-tot-label item-head">You Pay</div>
-          <div className="item-qnt"> </div>
-          <div className="item-mrp"></div>
-          <div className="item-price"><span className="icon icon-rupee"></span>{this.state.confirmResponse.grossTotal+this.state.convenienceFee}</div>
-        </div>;
+        var priceUI= null;
+        if(this.state.confirmResponse.orderOriginPerson != 2)
+        {
+           priceUI = <div className="price-row test-row">
+               <div  className="price-tot-label item-head">You Pay</div>
+               <div className="item-qnt"> </div>
+               <div className="item-mrp"></div>
+               <div className="item-price"><span className="icon icon-rupee"></span>{this.state.confirmResponse.grossTotal+this.state.convenienceFee}</div>
+           </div>; 
+        }else 
+        {
+            priceUI = <div className="price-row test-row">
+                <div  className="price-tot-label item-head">You Pay</div>
+                <div className="item-qnt"> </div>
+                <div className="item-price"><span className="icon icon-rupee"></span>{this.state.confirmResponse.grossTotal+this.state.convenienceFee}</div>
+            </div>;
+        }
+            
+        
+            
         listUI = <div className="list-content">
       {head}
        {list}

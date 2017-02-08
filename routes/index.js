@@ -72,5 +72,6 @@ module.exports = function() {
 
   //user apis
 router.post("/signIn",userController.signIn);
+    router.get("/getCurrentUser",userController.getCurrentUser);
   return router;
 };

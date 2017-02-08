@@ -1,4 +1,5 @@
 var request =  require('unirest');
+var userController = require('../controllers/userController.js');
 module.exports = {
   renderPage:function(req,res,next){
     res.render("testlist");
@@ -12,6 +13,7 @@ module.exports = {
               request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromLabId?labId='+query)
                       .headers(headers)
                       .end(function (response) {
+                         
                         console.log(response.status);
                         if(response.status == 200){
                           res.send(response.body);

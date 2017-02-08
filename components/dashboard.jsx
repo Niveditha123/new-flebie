@@ -65,9 +65,8 @@ class Dashboard extends React.Component {
         var status = document.getElementById("statusFilter").value;
         var fromDate = document.getElementById("fromDate").value;
         var toDate = document.getElementById("toDate").value;
-        var date = document.getElementById("slotDate").value;
         var urlToUse = '';
-        if (date == 'ALL') {
+        if (status == 'ALL') {
             urlToUse = "/getOrdersBetweenDates?startPosition=0&maxResult=10&statuses=" + status + '&startDate=' + fromDate + '&endDate=' + toDate;
         }
         else {
@@ -98,7 +97,7 @@ class Dashboard extends React.Component {
                         loaded:true
                     });
                     localStorage.removeItem('csvData');
-                    localStorage.setItem('csvData', JSON.stringify(sorted_order_rows));
+                    localStorage.setItem('csvData', JSON.stringify(orders));
                 }
                 
 
@@ -127,8 +126,7 @@ class Dashboard extends React.Component {
         return (
             
             <div className="dashboard-main">
-                <h1 style={{textAlign: "center"}}>LAB ADMIN DASHBOARD</h1> 
-                <div style={{ color: "grey" , textAlign: "center" }} className="alert alert-danger" id="connectionAlert" >Not connected to internet</div> 
+                <h1 style={{textAlign: "center"}}>LAB ADMIN DASHBOARD</h1>
                 <div className="container-fluid" style={{backgroundColor: "rgba(255,255,255,0.60)"}} >
                     <div className="row">
                         <div className="col-xs-6">
@@ -152,10 +150,8 @@ class Dashboard extends React.Component {
                             <label> CHECK AVAILABILITY</label>
                         </div>
                         <div className="col-xs-3">
-                            <DatePicker id="slotDate" onChange={this.getOrders.bind(this)}  dateFormat="YYYY-MM-DD"/>
                         </div>
                         <div className="col-xs-5">
-                            <textarea className="slot-time form-control" name="slotTime" id="slotTime" readOnly  style={{height: "250px", float: "center"}}/>
                         </div>
                     </div>    
                     <div className="row">

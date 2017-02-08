@@ -6,6 +6,7 @@ var najax = require('najax');
 class Index extends React.Component {
 	constructor(props){
 		super(props);
+		
 		this.state = {
 			searchResults:[],
 			getLists:[],
@@ -17,6 +18,9 @@ class Index extends React.Component {
 			filterList:[],
 			errrMsgs:""
 		}
+	}
+	componentWillMount(){
+		
 	}
 	loadTests(){
 		var _this = this;
@@ -63,7 +67,9 @@ class Index extends React.Component {
         }); */
 	}
 	componentDidMount(){
+		
 		this.loadTests.bind(this)();
+		console.log("props are: "+JSON.parse(document.getElementById("dataDump").getAttribute("value")));
 	}
 	getResults(e){
 		let value = e.target.value;
@@ -161,6 +167,7 @@ class Index extends React.Component {
 		location.href = "/multisearchlabs";
 	}
 	render(){
+		
 		var results = [];
 		var selectedListUI = [];
 		var _this=this;
