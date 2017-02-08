@@ -204,9 +204,9 @@ class CheckOut extends React.Component {
     dateChanged(date){
         this.getTimeSlots.bind(this)(date)
     }
-    updateOrder(){
+    updateOrder(type){
         var payLoad = Fleb.orderResp;
-        payLoad.paymentMode ="COD";
+        payLoad.paymentMode =type;
 
         reqwest({
             url: '/updateTransaction'
@@ -447,8 +447,8 @@ Fleb.showLoader();
         }
 
         Fleb.showLoader();
-        if(payMethod ==="COD"){
-            this.updateOrder.bind(this)();
+        if(payMethod ==="COD" ||  payMethod=="PO" ){
+            this.updateOrder.bind(this)(payMethod);
             return false;
         }
 
@@ -640,6 +640,23 @@ Fleb.showLoader();
                     <button id="getSchdulingInfo" className="btn btn-success fr btn-next curved" onClick={this.getSchedulingInfo.bind(this)}>Next</button>
                     </div>
         </div>;
+        var alternatePayments=[];
+        if(this.props.data.userPtype<3){
+            alternatePayments = <div className="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" className="paymentOpt" onChange={this.selectedPayType.bind(this)}  id="optionsRadios2" value="online"/>
+                        Credit Card/Debit Card/Net Banking
+                    </label>
+                </div>
+        }
+        if(this.props.data.userPtype == 3){
+            alternatePayments = <div className="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" className="paymentOpt" onChange={this.selectedPayType.bind(this)}  id="optionsRadios2" value="PO"/>
+                        Paid Online
+                    </label>
+                </div>
+        }
         var paymentUI = <div id="paymentBlock" className={(this.state.activetab==="paymentBlock")?"tab-main fade-in":"fade-out"}>
             <h3>Payment</h3>
             <div className="clearfix payment-main">
@@ -649,12 +666,7 @@ Fleb.showLoader();
                         Cash On Delivery
                     </label>
                 </div>
-                <div className="radio">
-                    <label>
-                        <input type="radio" name="optionsRadios" className="paymentOpt" onChange={this.selectedPayType.bind(this)}  id="optionsRadios2" value="online"/>
-                        Credit Card/Debit Card/Net Banking
-                    </label>
-                </div>
+                {alternatePayments}
             </div>
             <div className="offer-main">
                 <div className="input-group">

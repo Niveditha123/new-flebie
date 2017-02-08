@@ -8,6 +8,7 @@
 {<title}Check out{/title}
 {<body}
 <div id="root" class="container-main"> </div>
+<meta id="dataDump" value={pageData} /> 
 {/body}
 
 

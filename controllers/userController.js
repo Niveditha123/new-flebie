@@ -52,8 +52,12 @@ module.exports = {
                     res.cookie('role',encrypt(response.body.role));
                     res.cookie('username',encrypt(response.body.username));
                     res.cookie('company',encrypt(response.body.company));
-                    res.cookie('labId',encrypt(response.body.userDetails.labId.toString()));
+                    var userDetails =response.body.userDetails;
+                    if(userDetails){
+res.cookie('labId',encrypt(response.body.userDetails.labId.toString()));
                     res.send({"role":response.body.role,"labId": response.body.userDetails.labId.toString()});
+                    }
+                    
                 }
             });
     },
