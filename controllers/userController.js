@@ -79,18 +79,18 @@ module.exports = {
             var labId = null;
             var company = null;
             var username = null;
-            var user = null;
-            if(req.cookies.sessionKey != null)
+            var user = {};
+            if(req.cookies.ums != null)
             {
-                role = userController.decrypt(req.cookies.role);
+                role = decrypt(req.cookies.role);
                 user.role = role;
                 if(req.cookies.labId != null )
                 {
-                    labId = userController.decrypt(req.cookies.labId);
+                    labId = decrypt(req.cookies.labId);
                     user.labId = labId;
                 }
-                company = userController.decrypt(req.cookies.company);
-                username = userController.decrypt(req.cookies.username);
+                company = decrypt(req.cookies.company);
+                username = decrypt(req.cookies.username);
                 user.company = company;
                 user.username = username;
             }
@@ -99,7 +99,7 @@ module.exports = {
             }
             
             console.log("Current user is: "+user);
-            res.send({"user": user});
+            res.send(user);
     }
     
 

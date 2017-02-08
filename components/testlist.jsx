@@ -18,7 +18,7 @@ class TestList extends React.Component {
 			filterList:[],
 			inputFilter:"",
 			user: null,
-			_notificationSystem: null,
+			_notificationSystem: null
         };
 		
     }
@@ -28,7 +28,8 @@ class TestList extends React.Component {
       level: 'success'
     });
   }
-	getCurrentUser(){
+	getUser(){
+		var _this = this;
         console.log("Entered get current user");
 		reqwest({
 			url:"/getCurrentUser"
@@ -48,11 +49,11 @@ class TestList extends React.Component {
 			}
 			, success: function (resp) {
 
-				console.log("Role in response is: "+resp.user.role);
+				console.log("Role in response is: "+JSON.stringify(resp));
 
-				this.setState({
-					user: resp.user
-				})
+				_this.setState({
+					user: resp
+				});
 			}
 		});
 		
@@ -167,7 +168,7 @@ class TestList extends React.Component {
 	})
 	}
     componentDidMount(){
-    	this.getCurrentUser.bind(this);
+    	this.getUser.bind(this)();
 		this.loadAllTests.bind(this)();
 		/*Fleb.eventDispatcher("updateCart",{
         orderItems:[],
@@ -341,13 +342,13 @@ class TestList extends React.Component {
 		
 	}
 	getRows(item,index){
-		
-				console.log("Role is: "+this.state.role);
+				console.log("Current user is: "+this.state.user.role);
+				var row = null;
 				if(this.state.user != null && this.state.user.role == "LABADMIN")
 				{
 					
 
-					var row= <div key={index} className="tb-bd-row col4">
+					row = <div key={index} className="tb-bd-row col4">
 						<div className="test-name">{item.labTestName}</div>
 						<div className="of-price"><span className="icon icon-rupee"/>{item.MRP}</div>
 						<div className="action-col">
@@ -357,7 +358,7 @@ class TestList extends React.Component {
 				}
 				else 
 				{
-					var row= <div key={index} className="tb-bd-row col4">
+					row = <div key={index} className="tb-bd-row col4">
 						<div className="test-name">{item.labTestName}</div>
 						<div className="of-price"><span className="icon icon-rupee"/>{item.offerPrice}</div>
 						<div className="mrp-price"><span className="icon icon-rupee"/>{item.MRP}</div>

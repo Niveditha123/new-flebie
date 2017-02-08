@@ -8,7 +8,7 @@ module.exports = {
             var headers={
 
                 };
-            console.log(req.query.labId, "url")
+            console.log(req.query.labId, "url");
             var query = req.query.labId;
               request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromLabId?labId='+query)
                       .headers(headers)
