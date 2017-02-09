@@ -84,9 +84,11 @@ res.cookie('labId',encrypt(response.body.userDetails.labId.toString()));
             var company = null;
             var username = null;
             var user = {};
+            console.log("user get current");
             if(req.cookies.ums != null)
             {
                 role = decrypt(req.cookies.role);
+                console.log(role,"role");
                 user.role = role;
                 if(req.cookies.labId != null )
                 {

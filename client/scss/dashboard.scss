@@ -25,3 +25,10 @@ body{
         width: 100%;
     }
 }
+.auto-grow{
+    resize: none;
+    box-sizing: content-box;
+}
+.mt12{
+    margin:12px 0;
+}

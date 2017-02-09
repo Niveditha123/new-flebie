@@ -6,6 +6,8 @@ import { SingleDatePicker } from 'react-dates';
 import React from 'react';
 import reqwest from 'reqwest';
 
+import TextareaAutosize from 'react-autosize-textarea';
+
 
 
 
@@ -19,14 +21,37 @@ class Dashboard extends React.Component {
             startDate : moment(),
             slotDate : moment(),
             endDate : moment().add(1,"days"),
-            labId: labId    
+            labId: labId,
+            timeSlotArray:[]    
         }
     }
     
     componentDidMount(){
         this.getOrders.bind(this)();
+        this.getTimeSlots.bind(this)(this.state.startDate);
         
 	}
+    getTimeSlots(date){
+        var _this = this;
+        var date = moment(date).format('YYYY-MM-DD');
+        reqwest({			
+				url:"/getAvailableSlots?slotDate="+date
+				,headers:{
+					"Access-Control-Allow-Origin":"*"
+				}
+				, method: 'get'
+				, error: function (err) {
+				}
+				, success: function (resp) {
+                    if(resp.timeSlots){
+                        _this.setState({
+                            timeSlotArray:resp.timeSlots
+                        },function(){
+                        })
+                    }
+				}
+		})
+    }
     date_sort_asc(date1, date2) {
     // This is a comparison function that will result in dates being sorted in
     // ASCENDING order. As you can see, JavaScript's native comparison operators
@@ -106,6 +131,9 @@ class Dashboard extends React.Component {
         })
         
     }
+    availabilityDateChange(date){
+        this.getTimeSlots(date);
+    }
 
     render(){
 
@@ -145,13 +173,15 @@ class Dashboard extends React.Component {
                         </div>
                         
                     </div>
-                    <div className="row">
+                    <div className="row mt12">
                         <div className="col-xs-4">
                             <label> CHECK AVAILABILITY</label>
                         </div>
                         <div className="col-xs-3">
+                        <DatePicker id="availabilityDate" className="form-control" selected={this.state.startDate} onChange={this.availabilityDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
                         </div>
                         <div className="col-xs-5">
+                            <TextareaAutosize readOnly  className="form-control" value={this.state.timeSlotArray.join("\n")} defaultValue={this.state.timeSlotArray.join("\n")} style={{ minHeight: 40, maxHeight: 200 }} />
                         </div>
                     </div>    
                     <div className="row">

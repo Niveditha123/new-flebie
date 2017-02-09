@@ -71,7 +71,8 @@ class ConfirmCtrl extends React.Component {
 						_this.setState({
 							confirmResponse:resp,
                             error:false,
-                            loading:false
+                            loading:false,
+                            convenienceFee:resp.convenienceFee
 						})     
                         Fleb.hideLoader();
 					}

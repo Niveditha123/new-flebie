@@ -1,24 +1,13 @@
 var request =  require('unirest');
+
+
 module.exports = {
   renderPage:function(req,res,next){
- var headers={
-
-    };
-
-           request.get('/getCurrentUser')
-          .headers(headers)
-          .end(function (response) {
-            
-            console.log(response.body,"curent User");
             var data ={
               userPtype:2
             }
             var data = JSON.stringify(data);
             res.render("checkout",{pageData:data});
-
-          });
-      
-    
   },
   getAvailableSlots:function(req,res,next){
 

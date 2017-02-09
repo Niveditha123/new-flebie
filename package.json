@@ -25,12 +25,13 @@
     "babel-loader": "^6.2.9",
     "compression": "^1.6.2",
     "express": "^4.14.0",
-    "mailgun-js": "0.8.1",
     "file-loader": "^0.9.0",
     "hoffman": "^0.2.2",
+    "mailgun-js": "0.8.1",
     "moment": "^2.17.1",
     "node-sass": "^4.0.0",
     "react": "^15.4.1",
+    "react-autosize-textarea": "^0.3.6",
     "react-datepicker": "^0.40.0",
     "react-dates": "^4.3.2",
     "react-dom": "^15.4.1",
@@ -38,7 +39,8 @@
     "react-notification-system": "^0.2.11",
     "redux": "^3.6.0",
     "reqwest": "^2.0.5",
-    "sass-loader": "^4.0.2"
+    "sass-loader": "^4.0.2",
+    "textarea-autogrow": "^1.0.0"
   },
   "devDependencies": {
     "aes": "^0.1.0",

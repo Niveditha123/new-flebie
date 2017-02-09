@@ -259,7 +259,6 @@ class CheckOut extends React.Component {
             "orderOriginPerson": 1,
             "orderTotal": data.totalPrice,
             "paymentType": "CARD",
-            "promotionId": 1,
             "scheduleDate": Fleb.slotResp.slotDate,
             "scheduleTime": Fleb.slotResp.slotTime,
             "status": "PENDING",
@@ -657,6 +656,13 @@ Fleb.showLoader();
                     </label>
                 </div>
         }
+        var btnText ="";
+        if(this.state.paymentType=="COD" || this.state.paymentType=="PO"){
+            btnText="Confirm Order"
+        }
+         if(this.state.paymentType=="online"){
+            btnText="Proceed to Pay"
+        }
         var paymentUI = <div id="paymentBlock" className={(this.state.activetab==="paymentBlock")?"tab-main fade-in":"fade-out"}>
             <h3>Payment</h3>
             <div className="clearfix payment-main">
@@ -668,7 +674,7 @@ Fleb.showLoader();
                 </div>
                 {alternatePayments}
             </div>
-            <div className="offer-main">
+            <div className={(this.props.data.userPtype == 3)?"hide":"offer-main"}>
                 <div className="input-group">
                     <input type="text" defaultValue={this.state.offer} className="form-control" ref="offerInput" id="exampleInputAmount" placeholder="Enter Promo Code"/>
                     <div className="input-group-addon">
@@ -686,7 +692,7 @@ Fleb.showLoader();
                         <p><span className="icon icon-thumb-down"></span> Promo Code has not been applied</p>
                     </div>
             <div  className="text-center make-payment clearfix">
-                    <button id="MakePayment" className="btn btn-success fr btn-next curved" onClick={this.makePayment.bind(this)}>{(this.state.paymentType=="COD")?"Confirm Order":"Proceed to Pay"}</button>                
+                    <button id="MakePayment" className="btn btn-success fr btn-next curved" onClick={this.makePayment.bind(this)}>{btnText}</button>                
             </div>
         </div>
 
