@@ -191,7 +191,7 @@ class CheckOut extends React.Component {
                         Fleb.hideLoader();
 				}
 				, success: function (resp) {
-					 var slotArray = _this.state.timeStringArray.slice();
+					 var slotArray = resp.timeSlots;
                      Fleb.getSlotResp = resp;
 						_this.setState({
                             timeSlotArray:slotArray,

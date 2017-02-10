@@ -45,7 +45,8 @@ class Dashboard extends React.Component {
 				, success: function (resp) {
                     if(resp.timeSlots){
                         _this.setState({
-                            timeSlotArray:resp.timeSlots
+                            timeSlotArray:resp.timeSlots,
+                            slotDate: date
                         },function(){
                         })
                     }
@@ -69,6 +70,7 @@ class Dashboard extends React.Component {
    
     }
     handleStartDateChange(date){
+        
     this.setState({
         startDate: date
     });
@@ -119,7 +121,9 @@ class Dashboard extends React.Component {
                     _this.setState({
                         orders: orders,
                         error:false,
-                        loaded:true
+                        loaded:true,
+                        startDate: fromDate,
+                        endDate: toDate
                     });
                     localStorage.removeItem('csvData');
                     localStorage.setItem('csvData', JSON.stringify(orders));
@@ -131,8 +135,9 @@ class Dashboard extends React.Component {
         })
         
     }
-    availabilityDateChange(date){
+    slotDate(date){
         this.getTimeSlots(date);
+        
     }
 
     render(){
@@ -178,7 +183,7 @@ class Dashboard extends React.Component {
                             <label> CHECK AVAILABILITY</label>
                         </div>
                         <div className="col-xs-3">
-                        <DatePicker id="availabilityDate" className="form-control" selected={this.state.startDate} onChange={this.availabilityDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
+                        <DatePicker id="slotDate" className="form-control" selected={this.state.slotDate} onChange={this.slotDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
                         </div>
                         <div className="col-xs-5">
                             <TextareaAutosize readOnly  className="form-control" value={this.state.timeSlotArray.join("\n")} defaultValue={this.state.timeSlotArray.join("\n")} style={{ minHeight: 40, maxHeight: 200 }} />
