@@ -8,12 +8,13 @@ class EditOrder extends React.Component {
             order:{
                 orderItems:[],
                 grossTotal:0,
+                orderDetails: null
             },
             role: null,
             userName: null,
             error:false,
-            loading:true,
-            convenienceFee:0
+            loading:true
+            
         }
     }
 
@@ -56,7 +57,17 @@ class EditOrder extends React.Component {
     render(){
 
         var _this=this;
+        var cashToCollect = null;
         if(!this.state.error && !this.state.loading){
+            if(_this.state.order.paymentType == "PO")
+            {
+                 cashToCollect = 0;
+            }
+            else 
+            {
+                cashToCollect = _this.state.order.grossTotal+ _this.state.order.convenienceFee;
+            }
+            
             var orderDetailsForm =
                 <form>
                     <div className="row">
@@ -110,7 +121,7 @@ class EditOrder extends React.Component {
                             <label style={{fontStyle: "italic"}}>Lab Name:</label>&nbsp;&nbsp;<span>{this.state.order.orderDetails.labName}</span>
                         </div>
                         <div className="col-sm-6">
-                            <label style={{fontStyle: "italic"}}>Cash To Collect:</label>&nbsp;&nbsp;<span>{this.state.order.grossTotal}  </span>
+                            <label style={{fontStyle: "italic"}}>Cash To Collect:</label>&nbsp;&nbsp;<span>{cashToCollect}</span>
                         </div>
                     </div>
                     <div className="row">
