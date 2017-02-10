@@ -135,7 +135,7 @@ class Dashboard extends React.Component {
         })
         
     }
-    slotDate(date){
+    handleSlotDateChange(date){
         this.getTimeSlots(date);
         
     }
@@ -183,7 +183,7 @@ class Dashboard extends React.Component {
                             <label> CHECK AVAILABILITY</label>
                         </div>
                         <div className="col-xs-3">
-                        <DatePicker id="slotDate" className="form-control" selected={this.state.slotDate} onChange={this.state.slotDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
+                        <DatePicker id="slotDate" className="form-control" selected={this.state.slotDate} onChange={this.handleSlotDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
                         </div>
                         <div className="col-xs-5">
                             <TextareaAutosize readOnly  className="form-control" value={this.state.timeSlotArray.join("\n")} defaultValue={this.state.timeSlotArray.join("\n")} style={{ minHeight: 40, maxHeight: 200 }} />
