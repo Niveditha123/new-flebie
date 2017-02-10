@@ -6,8 +6,6 @@ import { SingleDatePicker } from 'react-dates';
 import React from 'react';
 import reqwest from 'reqwest';
 
-import TextareaAutosize from 'react-autosize-textarea';
-
 
 
 
@@ -22,76 +20,63 @@ class Dashboard extends React.Component {
             slotDate : moment(),
             endDate : moment().add(1,"days"),
             labId: labId,
-            timeSlotArray:[]    
+            availableTimeSlots: ""
+            
         }
     }
     
     componentDidMount(){
         this.getOrders.bind(this)();
-        this.getTimeSlots.bind(this)(this.state.startDate);
+        this.getAvailableSlots.bind(this)();
         
 	}
-    getTimeSlots(date){
-        var _this = this;
-        var date = moment(date).format('YYYY-MM-DD');
-        reqwest({			
-				url:"/getAvailableSlots?slotDate="+date
-				,headers:{
-					"Access-Control-Allow-Origin":"*"
-				}
-				, method: 'get'
-				, error: function (err) {
-				}
-				, success: function (resp) {
-                    if(resp.timeSlots){
-                        _this.setState({
-                            timeSlotArray:resp.timeSlots,
-                            slotDate: date
-                        },function(){
-                        })
-                    }
-				}
-		})
-    }
-    date_sort_asc(date1, date2) {
-    // This is a comparison function that will result in dates being sorted in
-    // ASCENDING order. As you can see, JavaScript's native comparison operators
-    // can be used to compare dates. This was news to me.
-    if (date1 > date2) return 1;
-    if (date1 < date2) return -1;
-    return 0;
-    }
-    fetchTimeSlotsForTheDate() {
-
-    console.log('Entered here');
-    var dateObject = moment(document.getElementById("slotDate").value, 'YYYY-MM-DD').format('YYYY-MM-DD');
-    console.log('Date object is: ' + dateObject);
-    setTimeSelection(dateObject, restrictBookingAfter2PMOnCurrentDate, noTimeSlotLeftForToday);
    
-    }
     handleStartDateChange(date){
+    
+        this.setState({
+            startDate : moment(date)
+        });
+        this.getOrders(date, this.state.endDate.toDate());
         
-    this.setState({
-        startDate: date
-    });
-        this.getOrders();
+        
+        
     }
     handleEndDateChange(date){
         this.setState({
-            endDate: date
+            endDate : moment(date)
         });
-        this.getOrders();
+        this.getOrders(this.state.startDate.toDate(), date);
+        
     }
     
-	getOrders(){
+	getOrders(startDate,endDate){
         var _this = this;
         _this.setState({
             loaded : false
             });
 
         var status = document.getElementById("statusFilter").value;
-        var fromDate = document.getElementById("fromDate").value;
-        var toDate = document.getElementById("toDate").value;
+        var fromDate = null;
+        var toDate = null;
+        if(startDate != null)
+        {
+            fromDate = moment(startDate).format("YYYY-MM-DD");
+        }
+        else {
+            fromDate = document.getElementById("fromDate").value;
+        }
+        if(endDate != null)
+        {
+            toDate = moment(endDate).format("YYYY-MM-DD"); 
+        }
+        else 
+        {
+            toDate = document.getElementById("toDate").value;
+        }
+            
+        
+            
+            
         var urlToUse = '';
         if (status == 'ALL') {
             urlToUse = "/getOrdersBetweenDates?startPosition=0&maxResult=10&statuses=" + status + '&startDate=' + fromDate + '&endDate=' + toDate;
@@ -121,9 +106,7 @@ class Dashboard extends React.Component {
                     _this.setState({
                         orders: orders,
                         error:false,
-                        loaded:true,
-                        startDate: fromDate,
-                        endDate: toDate
+                        loaded:true
                     });
                     localStorage.removeItem('csvData');
                     localStorage.setItem('csvData', JSON.stringify(orders));
@@ -135,15 +118,65 @@ class Dashboard extends React.Component {
         })
         
     }
+
     handleSlotDateChange(date){
-        this.getTimeSlots(date);
         
+        this.getAvailableSlots(date);
+        
+        
+        
+    }
+    getAvailableSlots(date) {
+        var _this = this;
+        
+        var slotDate = null;
+        if(date != null)
+        {
+            slotDate = moment(date).format("YYYY-MM-DD");
+        }
+        else 
+        {
+            slotDate = document.getElementById("slotDate").value;
+        }
+            
+        var urlToUse = "/getAvailableSlots?slotDate="+slotDate;
+
+        reqwest({
+            url: urlToUse
+            ,headers:{
+                "Access-Control-Allow-Origin":"*"
+            }
+            , method: 'get'
+            , error: function (err) {
+                _this.setState({
+                    availableTimeSlots: null
+                });
+            }
+            , success: function (resp) {
+                console.log("Resp is: "+JSON.stringify(resp));
+                var timeSlots = resp.timeSlots.join("\n");
+                if(resp.timeSlots.length != 0)
+                {
+                    _this.setState({
+                        availableTimeSlots: timeSlots,
+                        slotDate : moment(slotDate,"YYYY-MM-DD")
+                    });
+                    
+                }
+                console.log("Timeslots are: "+timeSlots);
+
+
+
+            }
+        })
     }
 
     render(){
 
+        var _this = this;
         var rowsOfOrders = null;
         var newOrderLink = null;
+        var timeSlots = this.state.availableTimeSlots;
         var _this = this;
         if( this.state.loaded == true && this.state.orders != null)
         {
@@ -154,7 +187,6 @@ class Dashboard extends React.Component {
             });
 
         }
-            
         
         return (
             
@@ -178,15 +210,15 @@ class Dashboard extends React.Component {
                         </div>
                         
                     </div>
-                    <div className="row mt12">
+                    <div className="row">
                         <div className="col-xs-4">
                             <label> CHECK AVAILABILITY</label>
                         </div>
                         <div className="col-xs-3">
-                        <DatePicker id="slotDate" className="form-control" selected={this.state.slotDate} onChange={this.handleSlotDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
+                            <DatePicker id="slotDate" selected={this.state.slotDate} onChange={this.handleSlotDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
                         </div>
                         <div className="col-xs-5">
-                            <TextareaAutosize readOnly  className="form-control" value={this.state.timeSlotArray.join("\n")} defaultValue={this.state.timeSlotArray.join("\n")} style={{ minHeight: 40, maxHeight: 200 }} />
+                            <textarea id="availableTimeSlots" value={this.state.availableTimeSlots}>{this.state.availableTimeSlots}</textarea>
                         </div>
                     </div>    
                     <div className="row">

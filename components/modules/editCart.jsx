@@ -260,10 +260,21 @@ class OpenCartModalContent extends React.Component{
       }
       
             
-        var priceUI=<div className="price-row col2-row">
+        var priceUI= null;
+      if(hide_mrp == false)
+      {
+        priceUI = <div className="price-row col2-row">
           <div  className="price-tot-label">Total Price</div>
           <div className="text-right"><span className="icon icon-rupee"></span>{(this.state.testsList.totalPrice-this.state.offerResp.orderLevelDiscount)+this.state.convenienceFee}</div>
         </div>;
+      }
+      else {
+        priceUI = <div className="price-row col2-row">
+          <div  className="price-tot-label">Total Price</div>
+          <div className="text-right"><span className="icon icon-rupee"></span>{(this.state.testsList.totalListPrice-this.state.offerResp.orderLevelDiscount)+this.state.convenienceFee}</div>
+        </div>;
+      }
+            
         var convenienceFeeUI = [];
         if(this.state.convenienceFee>0){
           convenienceFeeUI = <div  className="clearfix conv-fee col2-row">
