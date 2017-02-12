@@ -16,13 +16,14 @@ class CheckOut extends React.Component {
             enablePayment:false,
             patientData:{},
             editableCart:true,
-            date: moment(),
             focused:false,
             timeSlotArray:[],
             isOffer:"",
             offer:"",
+            slotDate: moment(),
+            slotTime: null,
             paymentType:"COD",
-            timeStringArray : ["Select Time", "6:30:00 AM-7:00:00 AM","7:00:00 AM-7:30:00 AM", "7:30:00 AM-8:00:00 AM", "8:00:00 AM-8:30:00 AM","8:30:00 AM-9:00:00 AM","9:00:00 AM-9:30:00 AM", "9:30:00 AM-10:00:00 AM", "10:00:00 AM-10:30:00 AM","10:30:00 AM-11:00:00 AM","11:00:00 AM-11:30:00 AM","11:30:00 AM-12:00:00 PM","12:00:00 PM-12:30:00 PM","12:30:00 PM-1:00:00 PM","1:00:00 PM-1:30:00 PM","1:30:00 PM-2:00:00 PM","2:00:00 PM-2:30:00 PM","2:30:00 PM-3:00:00 PM","3:00:00 PM-3:30:00 PM","3:30:00 PM-4:00:00 PM","4:00:00 PM-4:30:00 PM","4:30:00 PM-5:00:00 PM"]
+            timeStringArray : null
         }
     }
     componentDidMount(){
@@ -72,6 +73,7 @@ class CheckOut extends React.Component {
                 css:"fl w50 age-block"
             }
         ];
+        this.getAvailableSlots.bind(this)(this.state.slotDate);
         var localCart = localStorage.getItem("cartInfo");
         if(!localCart){
             alert("Cart is empty")
@@ -90,6 +92,59 @@ class CheckOut extends React.Component {
         var target = e.target.getAttribute("data-target");
         this.setState({
             activetab:target
+        })
+    }
+    getAvailableSlots(date) {
+        Fleb.showLoader();
+        var _this = this;
+
+        var slotDate = null;
+        if(date != null)
+        {
+            slotDate = moment(date).format("YYYY-MM-DD");
+        }
+        else
+        {
+            slotDate = document.getElementById("slotDate").value;
+        }
+        var urlToUse = "/getAvailableSlots?slotDate="+slotDate;
+
+        reqwest({
+            url: urlToUse
+            ,headers:{
+                "Access-Control-Allow-Origin":"*"
+            }
+            , method: 'get'
+            , error: function (err) {
+                _this.setState({
+                    availableTimeSlots: null
+                });
+            }
+            , success: function (resp) {
+                Fleb.hideLoader();
+                console.log("Resp is: "+JSON.stringify(resp));
+                var timeSlots = null;
+                var timeSlotStringArray = [];
+                if(resp.timeSlots.length != 0)
+                {
+                    timeSlots = resp.timeSlots;
+
+                    for(var i in timeSlots)
+                    {
+                        timeSlotStringArray.push(timeSlots[i]+"-"+moment("1900-01-01 "+timeSlots[i], "YYYY-MM-DD hh:mm a").add(30, "minutes").format("hh:mm a").toUpperCase());
+                    }
+                    
+                    _this.setState({
+                        timeStringArray: timeSlotStringArray,
+                        slotTime: timeSlots[0].split("-")[0]
+                    });
+
+                }
+                console.log("Timeslots are: "+timeSlots);
+
+
+
+            }
         })
     }
     getPatientInfo(e){
@@ -164,45 +219,17 @@ class CheckOut extends React.Component {
 
         }
     }
-    getTimeSlots(d){
-        var _this = this;
-        var date = moment(d).format('YYYY-MM-DD');
-        var today = new Date();
-            var currentTime = today.getHours();
-            if((moment(d).format('MM/DD/YYYY') == moment().format('MM/DD/YYYY')) &&  (currentTime >=14 )){
-             _this.setState({
-                timeSlotArray:[],
-                date:d
-			})  
-             return false;
-         }
-        Fleb.showLoader();
-        reqwest({			
-				url:"/getAvailableSlots?slotDate="+date
-				,headers:{
-					"Access-Control-Allow-Origin":"*"
-				}
-				, method: 'get'
-				, error: function (err) {
-                    _this.setState({
-                            timeSlotArray:[],
-                            date:d
-						})  
-                        Fleb.hideLoader();
-				}
-				, success: function (resp) {
-					 var slotArray = resp.timeSlots;
-                     Fleb.getSlotResp = resp;
-						_this.setState({
-                            timeSlotArray:slotArray,
-                            date:d
-						})
-                        Fleb.hideLoader();
-				}
-		})
-    }
+    
     dateChanged(date){
-        this.getTimeSlots.bind(this)(date)
+        var _this = this;
+        
+        var slotDate = moment(date,"DD/MM/YYYY");
+        console.log("Value is: "+slotDate);
+
+        this.setState({
+            slotDate:slotDate
+        });
+        this.getAvailableSlots.bind(this)(slotDate)
     }
     updateOrder(type){
         var payLoad = Fleb.orderResp;
@@ -242,10 +269,6 @@ class CheckOut extends React.Component {
             alert("Invalid Order");
             location.href="";
         }
-        if(!Fleb.slotResp){
-            alert("Please choose a time!");
-            return false;
-        }
         Fleb.showLoader();
         var userDetails = this.state.patientData;
         userDetails["address"] = this.refs.addressInfo.value;
@@ -259,8 +282,8 @@ class CheckOut extends React.Component {
             "orderOriginPerson": 1,
             "orderTotal": data.totalPrice,
             "paymentType": "CARD",
-            "scheduleDate": Fleb.slotResp.slotDate,
-            "scheduleTime": Fleb.slotResp.slotTime,
+            "scheduleDate": this.state.slotDate,
+            "scheduleTime": this.state.slotTime,
             "status": "PENDING",
             "orderDetails":userDetails,
             "orderItems": orderItems
@@ -332,11 +355,16 @@ class CheckOut extends React.Component {
        
     }
     setTimeSlot(e){
+        var _this = this;
         var value = e.target.value;
+        console.log("value is: "+value);
+        _this.setState({
+          slotTime: value   
+        });
         Fleb.selectedTime = value;
         var payLoad = {        
-            "slotDate": moment(this.state.date).format(),
-            "slotTime":Fleb.selectedTime.split("-")[0]
+            "slotDate": this.state.slotDate,
+            "slotTime":this.state.slotTime.split("-")[0]
         };
         Fleb.slotResp= payLoad;
        /* Fleb.showLoader();
@@ -537,47 +565,13 @@ Fleb.showLoader();
             </div>
         </div>
         var timeSlotArrayUI = [];
-        var istomo =false;
-        var isToday = false;
-        if(moment(this.state.date).format('MM/DD/YYYY') == moment().format('MM/DD/YYYY')){
-            isToday=true;
-                var d = new Date();
-                var currentTime = d.getHours();
-                var restrict = 0;
-                if(currentTime >=14){
-                    timeSlotArrayUI= <option value="">No Booking allowed after 2:00 PM on the same day</option>
-                }
-                if(currentTime < 14){
-                    restrict = currentTime+6;
-                    timeSlotArrayUI = this.state.timeStringArray.map(function(item,index){
-                        if(index >=restrict){
-                            return <option value={item}>{item}</option>
-                        }
-                    })
-                }
+        if((this.state.timeStringArray != null) && (this.state.timeStringArray.length > 0)){
+            timeSlotArrayUI = this.state.timeStringArray.map(function(timeSlot,index){
                 
-            }
-            if(moment().add(1,'days').format('YYYY-MM-DD') == moment(this.state.date).format('YYYY-MM-DD') ){
-                istomo=true;
-            }
-            if(istomo){
-                var d = new Date();
-                var currentTime = d.getHours();
-                restrict=0
-                if(currentTime >=22 ){
-                    restrict = 7;
-                }
-                timeSlotArrayUI = this.state.timeSlotArray.map(function(item,index){
-                    if(index >=restrict){
-                        return <option value={item}>{item}</option>
-                    }
-                })
-            }
-
-            if(!istomo && !isToday){
-                timeSlotArrayUI = this.state.timeSlotArray.map(function(item,index){
-                        return <option value={item}>{item}</option>
-                })
+                    return <option value={timeSlot}>{timeSlot}</option>
+                
+            })
+                
             }
             var labAddress="";
             if(this.state.orderType=="WalkIn"){
@@ -599,8 +593,8 @@ Fleb.showLoader();
                 <h4 className="sel-head">Select Date and Timeslot</h4>
                 <div className="col2-row m20">
                     <SingleDatePicker
-                            id="date_input"
-                            date={this.state.date}
+                            id="slotDate"
+                            date={this.state.slotDate}
                             focused={this.state.focused}
                             onDateChange={this.dateChanged.bind(this)}
                             onFocusChange={({ focused }) => { this.setState({ focused }); }}
