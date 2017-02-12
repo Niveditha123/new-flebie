@@ -18,7 +18,7 @@ class Modal extends React.Component {
         }
     }
     closeThis(e){
-        if(e.target.id == this.props.id){
+        if(e.target.id == this.props.id && this.props.selfClose){
             this.refs[this.props.id].className="modal-overlay fade-out";
         }
     }

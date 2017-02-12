@@ -1,5 +1,7 @@
 import React from 'react';
 import reqwest from 'reqwest';
+import Modal from './utils/modal.jsx';
+var NotificationSystem = require('react-notification-system');
 
 class EditOrder extends React.Component {
     constructor(props){
@@ -13,19 +15,34 @@ class EditOrder extends React.Component {
             role: null,
             userName: null,
             error:false,
-            loading:true
+            loading:true,
+            editOrderPop:false,
+			_notificationSystem: null
             
         }
+    }
+    _addNotification(data) {
+    this.state._notificationSystem.addNotification({
+        message: data,
+        level: 'success',
+        title:"Update Order Status",
+        position:"tc",
+        autoDismiss:4,
+        });
     }
 
     componentDidMount(){
         Fleb.showLoader();
         this.getOrderAndOrderDetails.bind(this)();
+        this.setState({
+		_notificationSystem : this.refs.notificationSystem
+	});
 	}
     getOrderAndOrderDetails(){
         
         var _this = this;
         var id = Fleb.getQueryVariable("id");
+        
 
         reqwest({
             url:"/getOrder?id="+id
@@ -53,6 +70,55 @@ class EditOrder extends React.Component {
 
 
     }
+    openEditModal(e){
+        this.setState({
+            editOrderPop:true
+        })
+    }
+    closeEditModal(e){
+        this.setState({
+            editOrderPop:false
+        })
+    }
+    saveOrder(e){
+        var _this = this;
+        var pName = this.refs.pName.value;
+        var pAge = this.refs.pAge.value;
+        var pPhone = this.refs.pPhone.value;
+        var pEmail = this.refs.pEmail.value;
+        var pAddress = this.refs.pAddress.value;
+        var pComments = this.refs.pComments.value;
+        var orderDetails = this.state.order;
+        orderDetails.orderDetails.address = pAddress;
+        orderDetails.orderDetails.age = pAge;
+        orderDetails.orderDetails.emailId = pEmail;
+        orderDetails.orderDetails.firstName = pName;
+        orderDetails.orderDetails.phoneNumber = pPhone;
+        orderDetails.orderComments = pComments;
+        Fleb.showLoader();
+         reqwest({
+            url: '/updateOrder'
+            , type: 'json'
+            ,data:JSON.stringify(orderDetails)
+            , contentType: 'application/json'
+            , method: 'put'
+            , error: function (err) { 
+                alert("Not able to update Order, Please Try Again Later");
+                Fleb.hideLoader();
+
+            }
+            , success: function (resp) {
+                _this.setState({
+                    order:resp
+                },function(){
+                    Fleb.hideLoader();
+                    var data = "Order Updated SuccessFully!!!"
+                    _this._addNotification(data)
+                })
+            }   
+            });
+        this.closeEditModal.bind(this)();
+    }
 
     render(){
 
@@ -76,23 +142,23 @@ class EditOrder extends React.Component {
                         </div>
                         <div className="col-sm-6">
                             <label style={{fontStyle: "italic"}}>Patient Name:</label>&nbsp;&nbsp;
-                            <input id="patientName" maxLength="10" minLength="3" required="required" defaultValue={this.state.order.orderDetails.firstName}/>
+                            <input id="patientName" maxLength="10" minLength="3" ref="pName" required="required" defaultValue={this.state.order.orderDetails.firstName}/>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-6">
                             <label htmlFor="age" style={{fontStyle: "italic"}}>Age:</label>&nbsp;&nbsp;
-                            <input id="age" type="number" min="1" max="100" defaultValue={this.state.order.orderDetails.age}/>
+                            <input id="age" type="number" ref="pAge" min="1" max="100" defaultValue={this.state.order.orderDetails.age}/>
                         </div>
                         <div className="col-sm-6">
                             <label htmlFor="phone" style={{fontStyle: "italic"}}>Phone:</label>&nbsp;&nbsp;
-                            <input id="phone" type="number" required="required" defaultValue={this.state.order.orderDetails.phoneNumber}/>
+                            <input id="phone" type="number" required="required" ref="pPhone" defaultValue={this.state.order.orderDetails.phoneNumber}/>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-6">
                             <label htmlFor="emailId" style={{fontStyle: "italic"}}>Email Id:</label>&nbsp;&nbsp;
-                            <input id="emailId" type="email" required="required" style={{width: "60%"}} defaultValue={this.state.order.orderDetails.emailId}/>
+                            <input id="emailId" type="email" ref="pEmail" required="required" style={{width: "60%"}} defaultValue={this.state.order.orderDetails.emailId}/>
                         </div>
                         <div className="col-sm-6">
                             <label style={{fontStyle: "italic"}}>Date/Time:</label>&nbsp;&nbsp;<span id="dateTime">{this.state.order.scheduleDate.split("T")[0]+":"+this.state.order.scheduleTime}</span>
@@ -113,7 +179,7 @@ class EditOrder extends React.Component {
                     </div>
                     <div className="row">
                         <div className="col-sm-12">
-                            <textarea id="address" name="address" required="required" style={{width: "100%"}}>{this.state.order.orderDetails.address}</textarea>
+                            <textarea id="address" ref="pAddress" name="address" defaultValue={this.state.order.orderDetails.address} required="required" style={{width: "100%"}}></textarea>
                         </div>
                     </div>
                     <div className="row">
@@ -131,7 +197,7 @@ class EditOrder extends React.Component {
                     </div>
                     <div className="row">
                         <div className="col-sm-12">
-                            <textarea id="comments" name="comments" style={{width: "100%"}}>{this.state.order.orderComments}</textarea>
+                            <textarea id="comments" ref="pComments" defaultValue={this.state.order.orderComments} name="comments" style={{width: "100%"}}></textarea>
                         </div>
                         <input id="labId" className="hidden"/>
                     </div>
@@ -139,6 +205,9 @@ class EditOrder extends React.Component {
             var update = <button id="updateOrder" style={{backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className=" hidden btn btn-info">UPDATE</button>
             var addTests = <a id="addTestButton" href={`/test/list?labId=${this.state.order.labId}`} style={{backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className="hidden btn btn-info">ADD TESTS</a>;
             var backButton = <a id="goToDashboard" href="/dashboard" style={{backgroundColor: "red", color: "yellow", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className="btn btn-info">BACK</a>;
+            
+            var editOrderButton = <button id="editOrder" onClick={this.openEditModal.bind(this)} data-target="updateOrderModal" className="btn fr btn-info">Edit Order</button>;
+            
             var orderItems =  this.state.order.orderItems.map(function(item,index){
                 return <tr>
                     <td>{item.testName}</td>
@@ -147,10 +216,16 @@ class EditOrder extends React.Component {
                 </tr>
             });
         }
-        
+        var EditOrderUI =  <div className="clearfix"><div className="modal-body"><span style={{fontStyle: "bold"}}>Are you sure you want to update this order?</span></div>
+                                <div className="modal-footer">
+                                    <button id="updateOrderConfirmButton" onClick={this.saveOrder.bind(this)}  className="btn btn-primary pull-right contLabShop curved">Yes</button>
+                                    <button id="updateOrderCancelButton" onClick={this.closeEditModal.bind(this)}  className="btn btn-default pull-right contLabShop curved">No</button>
+                                </div>
+                                </div>;
         
         return (
             <div className="editOrder-main ">
+            <NotificationSystem ref="notificationSystem" />
                 <h1 style={{color: "grey", textAlign: "center"}}>EDIT ORDER</h1>
                     <h4 className="hidden">ROLE:
                         <input id="role"/>
@@ -178,6 +253,7 @@ class EditOrder extends React.Component {
                     <div className="container">
                         {addTests}
                         {backButton}
+                        {editOrderButton}
                     </div>
                     
                 
@@ -195,20 +271,13 @@ class EditOrder extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div id="updateOrderModal" role="dialog" className="modal right fade text-muted">
-                        <div className="modal-dialog modal-md">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h4 style={{fontStyle: "bold", color: "red"}}>Update Order</h4>
-                                </div>
-                                <div className="modal-body"><span style={{fontStyle: "bold"}}>Are you sure you want to update this order?</span></div>
-                                <div className="modal-footer">
-                                    <button id="updateOrderConfirmButton" style={{marginRight: "10px", backgroundColor: "#DBDBDB"}} className="btn btn-default pull-right contLabShop curved"><span className="glyphicon glyphicon-menu-left">Yes</span></button>
-                                    <button id="updateOrderCancelButton" style={{marginRight: "10px", backgroundColor: "#DBDBDB"}} className="btn btn-default pull-right contLabShop curved"><span className="glyphicon glyphicon-menu-left">No</span></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+
+                    <Modal open={this.state.editOrderPop} selfClose={false}  
+    id={"updateOrderModal"} 
+    css="update-order-popup"
+    headText={"Update Order"}
+  content={EditOrderUI} />
             </div>
         );
     }

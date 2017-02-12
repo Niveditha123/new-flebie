@@ -41,5 +41,33 @@ module.exports = {
             res.send({})
           }
         });
+  },
+  updateOrder:function(req,res,next){
+    
+    var headers={
+
+    };
+    var body = req.body;
+    request.put('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/updateOrder')
+        .headers(
+            {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': req.cookies.ums
+            }
+        )
+        .send(req.body)
+        .end(function (response) {
+          console.log(response.status);
+          if(response.status == 200){
+            console.log(response.body,"orders");
+            resp.body.status="success";
+            res.send(response.body);
+          }else{
+            body.status = "failed";
+            res.send(body)
+          }
+        });
+
   }
 };

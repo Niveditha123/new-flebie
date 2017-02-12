@@ -67,6 +67,7 @@ module.exports = function() {
    router.get('/getPopPackages',popularpackagesController.getPopPackages);
     router.get("/getOrderSummary",confirmController.getOrder);
     router.get('/orderSummaryEmail', mailController.sendOrderSummaryEmail);
+    router.put('/updateOrder',dashboardController.updateOrder)
   //getPopTest
 
 
