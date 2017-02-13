@@ -58,14 +58,14 @@ module.exports = {
         )
         .send(req.body)
         .end(function (response) {
-          console.log(response.status);
+          console.log(response.status,"edit order state");
           if(response.status == 201){
             console.log(response.body,"orders");
-            resp.body.status="success";
+            response.body.status="success";
             res.send(response.body);
           }else{
             body.status = "failed";
-            res.send(body)
+            response.send(body)
           }
         });
 
