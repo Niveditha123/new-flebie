@@ -59,7 +59,7 @@ module.exports = {
         .send(req.body)
         .end(function (response) {
           console.log(response.status);
-          if(response.status == 200){
+          if(response.status == 201){
             console.log(response.body,"orders");
             resp.body.status="success";
             res.send(response.body);

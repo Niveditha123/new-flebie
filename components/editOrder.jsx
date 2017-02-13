@@ -108,13 +108,20 @@ class EditOrder extends React.Component {
 
             }
             , success: function (resp) {
-                _this.setState({
+                if(resp.status =="success"){
+                     _this.setState({
                     order:resp
                 },function(){
                     Fleb.hideLoader();
                     var data = "Order Updated SuccessFully!!!"
                     _this._addNotification(data)
                 })
+
+                }else{
+                    alert("Not able to update Order, Please Try Again Later");
+                Fleb.hideLoader();
+                }
+               
             }   
             });
         this.closeEditModal.bind(this)();
@@ -206,7 +213,7 @@ class EditOrder extends React.Component {
             var addTests = <a id="addTestButton" href={`/test/list?labId=${this.state.order.labId}`} style={{backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className="hidden btn btn-info">ADD TESTS</a>;
             var backButton = <a id="goToDashboard" href="/dashboard" style={{backgroundColor: "red", color: "yellow", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}} className="btn btn-info">BACK</a>;
             
-            var editOrderButton = <button id="editOrder" onClick={this.openEditModal.bind(this)} data-target="updateOrderModal" className="btn fr btn-info">Edit Order</button>;
+            var editOrderButton = <button id="editOrder" onClick={this.openEditModal.bind(this)} data-target="updateOrderModal" className="btn fr btn-info">Update Order</button>;
             
             var orderItems =  this.state.order.orderItems.map(function(item,index){
                 return <tr>
