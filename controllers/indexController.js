@@ -10,12 +10,12 @@ module.exports = {
       var labId = null;
       if(req.cookies.ums != null)
       {
-          if(req.cookies.role == "LABADMIN")
+          if(userController.decrypt(req.cookies.role) == "LABADMIN")
           {
               labId = userController.decrypt(req.cookies.labId);
-              res.redirect("/dashboard?labId="+labId);
+              res.redirect("/dashboard");
           }
-          else if(req.cookies.role == "ADMIN")
+          else if(userController.decrypt(req.cookies.role) == "ADMIN")
           {
               labId = userController.decrypt(req.cookies.labId);
               res.render("index");
