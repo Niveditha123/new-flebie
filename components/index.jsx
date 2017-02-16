@@ -69,7 +69,7 @@ class Index extends React.Component {
 	componentDidMount(){
 		
 		this.loadTests.bind(this)();
-		//console.log("props are: "+JSON.parse(document.getElementById("dataDump").getAttribute("value")));
+		console.log("props are: "+JSON.parse(document.getElementById("dataDump").getAttribute("value")));
 	}
 	getResults(e){
 		let value = e.target.value;

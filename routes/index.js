@@ -67,12 +67,16 @@ module.exports = function() {
    router.get('/getPopPackages',popularpackagesController.getPopPackages);
     router.get("/getOrderSummary",confirmController.getOrder);
     router.get('/orderSummaryEmail', mailController.sendOrderSummaryEmail);
-    router.put('/updateOrder',dashboardController.updateOrder)
   //getPopTest
 
 
   //user apis
+    router.get("/getFlebies",userController.getFlebies);
 router.post("/signIn",userController.signIn);
     router.get("/getCurrentUser",userController.getCurrentUser);
+router.put("/assignFlebieToOrder",checkoutController.assignFlebieToOrder);
+    router.put("/changeStatusOfOrder",checkoutController.changeStatusOfOrder);
+
+    
   return router;
 };

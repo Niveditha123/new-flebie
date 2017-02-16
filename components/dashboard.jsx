@@ -20,14 +20,19 @@ class Dashboard extends React.Component {
             slotDate : moment(),
             endDate : moment().add(1,"days"),
             labId: labId,
-            availableTimeSlots: ""
+            availableTimeSlots: "",
+            user: null,
+            flebies: null,
+            orderStatusMap: {},
             
         }
     }
     
     componentDidMount(){
+        this.getCurrentUser.bind(this)();
         this.getOrders.bind(this)();
         this.getAvailableSlots.bind(this)();
+        this.getFlebies.bind(this)();
         
 	}
    
@@ -48,6 +53,79 @@ class Dashboard extends React.Component {
         this.getOrders(this.state.startDate.toDate(), date);
         
     }
+    getCurrentUser(){
+        var _this = this;
+
+        var urlToUse = '';
+            urlToUse = "/getCurrentUser";
+        
+
+        reqwest({
+            url: urlToUse
+            ,headers:{
+                "Access-Control-Allow-Origin":"*"
+            }
+            , method: 'get'
+            , error: function (err) {
+                _this.setState({
+                    error:true,
+                    loaded:false
+                })
+            }
+            , success: function (resp) {
+
+                var user = resp;
+                if(user != null)
+                {
+                    _this.setState({
+                        user : user
+                    });
+                }
+
+
+
+            }
+        })
+
+    }
+
+    getFlebies(){
+        var _this = this;
+
+        var urlToUse = '';
+        urlToUse = "/getFlebies";
+
+
+        reqwest({
+            url: urlToUse
+            ,headers:{
+                "Access-Control-Allow-Origin":"*"
+            }
+            , method: 'get'
+            , error: function (err) {
+                _this.setState({
+                    error:true,
+                    loaded:false
+                })
+            }
+            , success: function (resp) {
+
+                var flebies = resp;
+                if((flebies != null) && (flebies.length > 0))
+                {
+                    console.log("Flebies are: "+JSON.stringify(flebies));
+                    _this.setState({
+                        flebies : flebies
+                    });
+                }
+
+
+
+            }
+        })
+
+    }
+    
     
 	getOrders(startDate,endDate){
         var _this = this;
@@ -63,7 +141,7 @@ class Dashboard extends React.Component {
             fromDate = moment(startDate).format("YYYY-MM-DD");
         }
         else {
-            fromDate = document.getElementById("fromDate").value;
+            fromDate = _this.state.startDate.format("YYYY-MM-DD");
         }
         if(endDate != null)
         {
@@ -71,7 +149,7 @@ class Dashboard extends React.Component {
         }
         else 
         {
-            toDate = document.getElementById("toDate").value;
+            toDate = _this.state.endDate.format("YYYY-MM-DD");
         }
             
         
@@ -154,11 +232,18 @@ class Dashboard extends React.Component {
             }
             , success: function (resp) {
                 console.log("Resp is: "+JSON.stringify(resp));
-                var timeSlots = resp.timeSlots.join("\n");
-                if(resp.timeSlots.length != 0)
+                var timeSlots = null;
+                var timeSlotStringArray = [];
+                if(resp.timeSlots != null && resp.timeSlots.length != 0)
                 {
+                    timeSlots = resp.timeSlots;
+                    
+                    for(var i in timeSlots)
+                    {
+                       timeSlotStringArray.push(timeSlots[i]+"-"+moment("1900-01-01 "+timeSlots[i], "YYYY-MM-DD h:mm:ss a").add(30, "minutes").format("h:mm:ss a"));
+                    }
                     _this.setState({
-                        availableTimeSlots: timeSlots,
+                        availableTimeSlots: timeSlotStringArray.join("\n"),
                         slotDate : moment(slotDate,"YYYY-MM-DD")
                     });
                     
@@ -171,27 +256,258 @@ class Dashboard extends React.Component {
         })
     }
 
-    render(){
-
+    assignFlebieToOrder(orderIdAndFlebieUserId) {
         var _this = this;
+        var orderId = orderIdAndFlebieUserId.target.value.split(":")[0];
+        var flebieUserId = orderIdAndFlebieUserId.target.value.split(":")[1];
+
+        var urlToUse = "/assignFlebieToOrder?flebieUserId="+flebieUserId;
+
+        reqwest({
+            url: urlToUse
+            , type: 'json'
+            ,data:JSON.stringify({orderId: orderId})
+            , contentType: 'application/json'
+            , method: 'put'
+            , error: function (err) {
+                
+            }
+            , success: function (resp) {
+                var order = resp;
+                if(order.assignedTo == flebieUserId)
+                {
+                    var orderStatusMap = _this.state.orderStatusMap;
+                    orderStatusMap[order.orderId] = order.status;
+                    _this.setState({
+                        orderStatusMap: orderStatusMap
+                    });
+                    console.log("Successfully changed flebie");
+                }
+                
+                
+
+
+
+            }
+        })
+    }
+
+    changeStatusOfOrder(orderObject){
+        var _this = this;
+        var orderId = orderObject.target.value;
+
+        var urlToUse = "/changeStatusOfOrder";
+
+        reqwest({
+            url: urlToUse
+            , type: 'json'
+            ,data:JSON.stringify({orderId: orderId})
+            , contentType: 'application/json'
+            , method: 'put'
+            , error: function (err) {
+
+            }
+            , success: function (resp) {
+                var order = resp;
+                
+                    var orderStatusMap = _this.state.orderStatusMap;
+                    orderStatusMap[order.orderId] = order.status;
+                    _this.setState({
+                        orderStatusMap: orderStatusMap
+                    });
+                    console.log("Successfully changed status");
+
+
+
+
+
+            }
+        })
+    }
+
+    render(){
+        var dashboardHeading = null;
+        var headingRow = null;
         var rowsOfOrders = null;
         var newOrderLink = null;
         var timeSlots = this.state.availableTimeSlots;
         var _this = this;
-        if( this.state.loaded == true && this.state.orders != null)
+        var newOrderButton = null;
+        var flebies = null;
+        if(this.state.flebies != null && this.state.flebies.length > 0) {
+            flebies = this.state.flebies;
+        }    
+        
+        if( this.state.loaded == true && this.state.orders != null )
         {
 
-            rowsOfOrders = _this.state.orders.map(function(order,index){
+            if(this.state.user != null && this.state.user.role == "ADMIN")
+            {
+                
+                
+                rowsOfOrders = this.state.orders.map(function(order,index){
+                    var cashToBeCollected = 0;
+                    var changeStatusAction = null;
+                    var status = null;
+                    if((_this.state.orderStatusMap != null) && (_this.state.orderStatusMap[order.orderId] == null))
+                    {
+                        status = order.status;
+                    }
+                    else
+                    {
+                        status = _this.state.orderStatusMap[order.orderId];
+                    }
+                        
+                    if(status == 'UNASSIGNED')
+                    {
+                        changeStatusAction  = <button className='btn btn-info' onClick=''>ASSIGN</button>;
+                    }
+                    else if(status == 'ASSIGNED')
+                    {
+                        changeStatusAction  = <button className='btn btn-info' value={order.orderId} onClick={_this.changeStatusOfOrder.bind(_this)}>COLLECTED</button>;
+                    }
+                    else if (status == 'COLLECTED')
+                    {
+                        changeStatusAction  = <button className='btn btn-info' value={order.orderId} onClick={_this.changeStatusOfOrder.bind(_this)}>SUBMITTED</button>;
+                    }
+                    else if (status == 'SUBMITTED') {
+                        changeStatusAction  = <button className='btn btn-info' value={order.orderId} onClick={_this.changeStatusOfOrder.bind(_this)}>COMPLETED</button>;
+                    }
+                    else if(status == 'CANCELLED')
+                    {
+                        changeStatusAction  = <button className='btn btn-info' >----</button>;
+                    }
+                    else if (status == 'COMPLETED') {
+                        changeStatusAction = <button className='btn btn-info' >----</button>;
+                    }
+                    if(order.paymentType == "COD")
+                    {
+                        cashToBeCollected = order.grossTotal;
+                    }
 
-                return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{order.status}</td><td>{order.scheduleTime}</td><td>{order.orderDetails.emailId}</td></tr>
-            });
+                    var assignedFlebie = order.assignedTo;
+                    
 
+                    var flebieOptions = null;
+
+                    if(_this.state.flebies != null && _this.state.flebies.length > 0) {
+                        flebieOptions = flebies.map(function(flebie,index){
+                            if(order.assignedTo == flebie.userDetails.firstName)
+                            {
+                                return <option value={order.orderId+":"+flebie.userId}>{flebie.userDetails.firstName}</option>;
+                            }
+                            else {
+                                return <option value={order.orderId+":"+flebie.userId}>{flebie.userDetails.firstName}</option>;
+                            }
+
+                        });
+                        flebieOptions.unshift(<option value="">Select a flebie</option>);
+                        var selectText = <select onChange={_this.assignFlebieToOrder.bind(_this)}>{flebieOptions}</select>;
+                    }
+                        
+                    
+                     
+                    return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{selectText}</td><td>{cashToBeCollected}</td><td>{order.labName}</td><td>{changeStatusAction}</td></tr>;
+                });
+            }
+            else if(this.state.user != null && this.state.user.role == "LAB ADMIN")
+            {
+                rowsOfOrders = _this.state.orders.map(function(order,index){
+
+                    return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{order.status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td></tr>;
+                }); 
+            }
+            else if(this.state.user != null && this.state.user.role == "FLEBIE")
+            {
+                rowsOfOrders = this.state.orders.map(function(order,index){
+                    var cashToBeCollected = 0;
+                    var changeStatusAction = null;
+                    var status = null;
+                    if((_this.state.orderStatusMap != null) && (_this.state.orderStatusMap[order.orderId] == null))
+                    {
+                        status = order.status;
+                    }
+                    else
+                    {
+                        status = _this.state.orderStatusMap[order.orderId];
+                    }
+                    if(order.paymentType == "COD")
+                    {
+                        cashToBeCollected = order.grossTotal;
+                    }
+
+                    if(order.assignedTo ==  _this.state.user.userId)
+                    {
+                        return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{cashToBeCollected}</td><td>{order.labName}</td></tr>;
+                    }
+
+
+
+                    
+                });
+            }
+            
+
+        }
+        if(this.state.user != null && this.state.user.role == "LABADMIN")
+        {
+            dashboardHeading = <h1 style={{textAlign: "center"}}>LAB ADMIN DASHBOARD</h1>;
+            newOrderButton = <a className="btn btn-info"  href={`/test/list?labId=${this.state.user.labId}`} id="createANewOrder" style={{backgroundColor:"#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}}> New Order</a>;
+        }else if(this.state.user != null && this.state.user.role == "ADMIN")
+        {
+            dashboardHeading = <h1 style={{textAlign: "center"}}>ADMIN DASHBOARD</h1>;
+            newOrderButton = <a className="btn btn-info"  href={`/`} id="createANewOrder" style={{backgroundColor:"#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}}> New Order</a>;
+        }
+        else if(this.state.user != null && this.state.user.role == "FLEBIE")
+        {
+            
+            dashboardHeading = <h1 style={{textAlign: "center"}}>FLEBIE DASHBOARD</h1>;
+        }
+        
+        if(this.state.user != null && this.state.user.role =="ADMIN")
+        {
+            headingRow = <tr>
+                <th> NAME</th>
+                <th> ADDRESS</th>
+                <th> PHONE</th>
+                <th> STATUS</th>
+                <th> DATE/TIME</th>
+                <th> EMAIL</th>
+                <th>ASSIGNED</th>
+                <th>CASH</th>
+                <th>LAB NAME</th>
+                <th>CHANGE STATUS</th>
+            </tr>;
+        }
+        else if(this.state.user != null && this.state.user.role =="LABADMIN")
+        {
+            headingRow = <tr>
+                <th> NAME</th>
+                <th> ADDRESS</th>
+                <th> PHONE</th>
+                <th> STATUS</th>
+                <th> DATE/TIME</th>
+                <th> EMAIL</th>
+                </tr>;
+        }
+        else if(this.state.user != null && this.state.user.role =="FLEBIE")
+        {
+            headingRow = <tr>
+                <th> NAME</th>
+                <th> ADDRESS</th>
+                <th> PHONE</th>
+                <th> STATUS</th>
+                <th> DATE/TIME</th>
+                <th> EMAIL</th>
+                <th> CASH</th>
+                <th> LABNAME</th>
+            </tr>;
         }
         
         return (
             
             <div className="dashboard-main">
-                <h1 style={{textAlign: "center"}}>LAB ADMIN DASHBOARD</h1>
+                {dashboardHeading}
                 <div className="container-fluid" style={{backgroundColor: "rgba(255,255,255,0.60)"}} >
                     <div className="row">
                         <div className="col-xs-6">
@@ -206,7 +522,7 @@ class Dashboard extends React.Component {
                             </select>
                         </div>
                         <div className="col-xs-6 text-right">
-                            <a className="btn btn-info"  href={`/test/list?labId=${this.state.labId}`} id="createANewOrder" style={{backgroundColor:"#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}}> New Order</a>                       
+                            {newOrderButton}                    
                         </div>
                         
                     </div>
@@ -244,18 +560,11 @@ class Dashboard extends React.Component {
                             </div> 
 
 
-
+                    
                     <div id="products" className="row list-group table-responsive">
                         <table className="table" id="datatable">
                             <thead className="thead-inverse" width="100%">
-                            <tr>
-                                <th> NAME</th>
-                                <th> ADDRESS</th>
-                                <th> PHONE</th>
-                                <th> STATUS</th>
-                                <th> DATE/TIME</th>
-                                <th> EMAIL</th>
-                            </tr>
+                            {headingRow}
                             </thead>
                             <tbody id="bodyoftable">
                                 {rowsOfOrders}

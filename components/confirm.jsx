@@ -73,7 +73,7 @@ class ConfirmCtrl extends React.Component {
                             error:false,
                             loading:false,
                             convenienceFee:resp.convenienceFee
-						})     
+						});     
                         Fleb.hideLoader();
 					}
 			})

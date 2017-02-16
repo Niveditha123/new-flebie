@@ -7,10 +7,22 @@ module.exports = {
   renderPage:function(req,res,next){
       console.log("ums cookie is: "+req.cookies.ums);
       var user = null;
+      var labId = null;
       if(req.cookies.ums != null)
       {
-          var labId = userController.decrypt(req.cookies.labId);
-          res.redirect("/dashboard?labId="+labId);
+          if(req.cookies.role == "LABADMIN")
+          {
+              labId = userController.decrypt(req.cookies.labId);
+              res.redirect("/dashboard?labId="+labId);
+          }
+          else if(req.cookies.role == "ADMIN")
+          {
+              labId = userController.decrypt(req.cookies.labId);
+              res.render("index");
+          }
+          else {
+              res.render("index");
+          }
           /*console.log("Trying to get user"+req.cookies.ums);
           user = getUserUsingSessionKey(req.cookies.ums, user);
           

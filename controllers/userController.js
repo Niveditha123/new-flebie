@@ -28,11 +28,8 @@ module.exports = {
         };
         console.log(req.body);
         var payLoad={
-            "isActive": 1,
             "username": req.body.username,
-            "password":req.body.password,
-            "company": "asasI14",
-            "role": "LABADMIN"
+            "password":req.body.password
         };
         var text = payLoad.username+":"+payLoad.password;
 
@@ -46,22 +43,42 @@ module.exports = {
                 'Content-Type': 'application/json'})
             .send(payLoad)
             .end(function (response) {
-                console.log(response.body,"payment COD");
+                console.log(response.body);
                 if(response.body){
                     res.cookie('ums',response.body.sessionKey);
                     res.cookie('role',encrypt(response.body.role));
                     res.cookie('username',encrypt(response.body.username));
                     res.cookie('company',encrypt(response.body.company));
+                    res.cookie('userId',encrypt(response.body.userId.toString()));
                     var userDetails =response.body.userDetails;
-                    if(userDetails){
-res.cookie('labId',encrypt(response.body.userDetails.labId.toString()));
-                    res.send({"role":response.body.role,"labId": response.body.userDetails.labId.toString()});
+                    if((userDetails != null) &&  (response.body.userDetails.labId != null)){
+                    res.cookie('labId',encrypt(response.body.userDetails.labId.toString()));
+                    
                     }
+                    res.send({"role":response.body.role});
                     
                 }
             });
     },
+    getFlebies:function(req,res,next){
 
+        var headers={
+            'Authorization': req.cookies.ums
+            
+        };
+        
+        request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/user/getUsersUsingRoleAndCompany?role=FLEBIE&company=Flebie')
+            .headers(headers)
+            
+            .end(function (response) {
+                console.log(response.body);
+                if(response.body != null && (response.status == 200)){
+                    
+                    res.send(response.body);
+
+                }
+            });
+    },
 
     encrypt: function (text){
     var cipher = crypto.createCipher(algorithm,password);
@@ -81,6 +98,7 @@ res.cookie('labId',encrypt(response.body.userDetails.labId.toString()));
             var sessionKey = null;
             var role = null; 
             var labId = null;
+            var userId = null;
             var company = null;
             var username = null;
             var user = {};
@@ -97,8 +115,10 @@ res.cookie('labId',encrypt(response.body.userDetails.labId.toString()));
                 }
                 company = decrypt(req.cookies.company);
                 username = decrypt(req.cookies.username);
+                userId = decrypt(req.cookies.userId);
                 user.company = company;
                 user.username = username;
+                user.userId = userId;
             }
             else {
                 user.role = "USER";

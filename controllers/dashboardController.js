@@ -9,10 +9,11 @@ module.exports = {
       role = userController.decrypt(req.cookies.role);
       
     }
-    if(role == "LABADMIN")
+    if(role == "LABADMIN"|| role=="ADMIN" || role=="FLEBIE")
     {
       res.render("dashboard");
     }
+    
     
   },
   getOrdersBetweenDates:function(req,res,next){
@@ -41,33 +42,5 @@ module.exports = {
             res.send({})
           }
         });
-  },
-  updateOrder:function(req,res,next){
-    
-    var headers={
-
-    };
-    var body = req.body;
-    request.put('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/updateOrder')
-        .headers(
-            {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': req.cookies.ums
-            }
-        )
-        .send(req.body)
-        .end(function (response) {
-          console.log(response.status,"edit order state");
-          if(response.status == 201){
-            console.log(response.body,"orders");
-            response.body.status="success";
-            res.send(response.body);
-          }else{
-            body.status = "failed";
-            response.send(body)
-          }
-        });
-
   }
 };

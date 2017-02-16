@@ -12,7 +12,7 @@ module.exports = {
   getAvailableSlots:function(req,res,next){
 
       var headers={
-
+          'Authorization': req.cookies.ums
     };
       
       var query = req.query.slotDate;
@@ -30,6 +30,8 @@ console.log(query);
           });
   },
   createOrder:function(req,res,next){
+      
+      
     console.log(req.body);
       console.log("Session key is: "+req.cookies.sessionKey);
     request.post('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/createOrder')
@@ -105,6 +107,39 @@ console.log(orderId,"remove");
           res.send(response.body)
         });
       
+    },
+    assignFlebieToOrder: function(req,res,next){
+        console.log(req.body);
+        var flebieUserId = req.query.flebieUserId;
+        request.put('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/assignFlebieToOrder?flebieUserId='+flebieUserId)
+            .headers({
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': req.cookies.ums
+            })
+            .send(req.body)
+            .end(function (response) {
+                console.log("Order is: "+JSON.stringify(response.body));
+                res.send(response.body)
+            });
+
+    },
+
+    changeStatusOfOrder: function(req,res,next){
+        console.log(req.body);
+        
+        request.put('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/updateOrderStatus')
+            .headers({
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': req.cookies.ums
+            })
+            .send(req.body)
+            .end(function (response) {
+                console.log("Order is: "+JSON.stringify(response.body));
+                res.send(response.body)
+            });
+
     }
 
 
