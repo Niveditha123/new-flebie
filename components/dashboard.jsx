@@ -410,9 +410,9 @@ class Dashboard extends React.Component {
                     return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{selectText}</td><td>{cashToBeCollected}</td><td>{order.labName}</td><td>{changeStatusAction}</td></tr>;
                 });
             }
-            else if(this.state.user != null && this.state.user.role == "LAB ADMIN")
+            else if(this.state.user != null && this.state.user.role == "LABADMIN")
             {
-                rowsOfOrders = _this.state.orders.map(function(order,index){
+                rowsOfOrders = this.state.orders.map(function(order,index){
 
                     return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{order.status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td></tr>;
                 }); 
