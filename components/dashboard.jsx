@@ -24,6 +24,7 @@ class Dashboard extends React.Component {
             user: null,
             flebies: null,
             orderStatusMap: {},
+            
             statusOfOrders: "ALL"
             
         }
@@ -406,7 +407,7 @@ class Dashboard extends React.Component {
 
                     if(_this.state.flebies != null && _this.state.flebies.length > 0) {
                         flebieOptions = flebies.map(function(flebie,index){
-                            if(order.assignedTo == flebie.userDetails.firstName)
+                            if(order.assignedTo == flebie.userId)
                             {
                                 return <option value={order.orderId+":"+flebie.userId}>{flebie.userDetails.firstName}</option>;
                             }
