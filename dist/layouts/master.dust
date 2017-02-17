@@ -10,7 +10,7 @@
   </head>
   <body>
   <div class="navbar navbar-fixed-top">
-    <a href="/" class="fl logo-block">
+    <a href="/dashboard" class="fl logo-block">
     </a>
 
     <div class="fr nv-xtra">

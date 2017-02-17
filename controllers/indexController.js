@@ -17,7 +17,7 @@ module.exports = {
           }
           else if(userController.decrypt(req.cookies.role) == "ADMIN")
           {
-              labId = userController.decrypt(req.cookies.labId);
+              
               res.render("index");
           }
           else {

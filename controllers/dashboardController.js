@@ -7,13 +7,16 @@ module.exports = {
     if(req.cookies.role != null)
     {
       role = userController.decrypt(req.cookies.role);
-      
-    }
-    if(role == "LABADMIN"|| role=="ADMIN" || role=="FLEBIE")
-    {
-      res.render("dashboard");
+      if(role == "LABADMIN"|| role=="ADMIN" || role=="FLEBIE")
+      {
+        res.render("dashboard");
+      }
     }
     
+    else 
+    {
+      res.render("index");
+    }
     
   },
   getOrdersBetweenDates:function(req,res,next){

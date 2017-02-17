@@ -283,7 +283,7 @@ class CheckOut extends React.Component {
             "orderTotal": data.totalPrice,
             "paymentType": "CARD",
             "scheduleDate": this.state.slotDate,
-            "scheduleTime": this.state.slotTime,
+            "scheduleTime": this.state.slotTime.split("-")[0],
             "status": "PENDING",
             "orderDetails":userDetails,
             "orderItems": orderItems

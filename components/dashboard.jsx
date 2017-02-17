@@ -24,13 +24,14 @@ class Dashboard extends React.Component {
             user: null,
             flebies: null,
             orderStatusMap: {},
+            statusOfOrders: "ALL"
             
         }
     }
     
     componentDidMount(){
         this.getCurrentUser.bind(this)();
-        this.getOrders.bind(this)();
+        this.getOrdersForCurrentDates.bind(this)();
         this.getAvailableSlots.bind(this)();
         this.getFlebies.bind(this)();
         
@@ -41,7 +42,7 @@ class Dashboard extends React.Component {
         this.setState({
             startDate : moment(date)
         });
-        this.getOrders(date, this.state.endDate.toDate());
+        this.getOrders(date, this.state.endDate.toDate(), this.state.statusOfOrders);
         
         
         
@@ -50,7 +51,7 @@ class Dashboard extends React.Component {
         this.setState({
             endDate : moment(date)
         });
-        this.getOrders(this.state.startDate.toDate(), date);
+        this.getOrders(this.state.startDate.toDate(), date, this.state.statusOfOrders);
         
     }
     getCurrentUser(){
@@ -125,15 +126,28 @@ class Dashboard extends React.Component {
         })
 
     }
-    
-    
-	getOrders(startDate,endDate){
+
+    getOrdersForCurrentDates()
+    {
+        this.getOrders(this.state.startDate.toDate(),this.state.endDate.toDate(), this.state.statusOfOrders);
+    }
+    getOrdersOfGivenStatus(statusObject)
+    {
+        var _this = this;
+        _this.setState({
+            statusOfOrders : statusObject.target.value
+        });
+        this.getOrders(this.state.startDate.toDate(),this.state.endDate.toDate(), statusObject.target.value);
+        _this.setState({
+            statusOfOrders : statusObject.target.value
+        });
+    }
+	getOrders(startDate,endDate, status){
         var _this = this;
         _this.setState({
             loaded : false
             });
 
-        var status = document.getElementById("statusFilter").value;
         var fromDate = null;
         var toDate = null;
         if(startDate != null)
@@ -341,7 +355,7 @@ class Dashboard extends React.Component {
         if( this.state.loaded == true && this.state.orders != null )
         {
 
-            if(this.state.user != null && this.state.user.role == "ADMIN")
+            if(this.state.user != null && this.state.user.role == "ADMIN" && this.state.orders!= null && this.state.orders.length > 0)
             {
                 
                 
@@ -410,14 +424,14 @@ class Dashboard extends React.Component {
                     return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{selectText}</td><td>{cashToBeCollected}</td><td>{order.labName}</td><td>{changeStatusAction}</td></tr>;
                 });
             }
-            else if(this.state.user != null && this.state.user.role == "LABADMIN")
+            else if(this.state.user != null && this.state.user.role == "LABADMIN" && this.state.orders!= null && this.state.orders.length > 0)
             {
                 rowsOfOrders = this.state.orders.map(function(order,index){
 
                     return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{order.status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td></tr>;
                 }); 
             }
-            else if(this.state.user != null && this.state.user.role == "FLEBIE")
+            else if(this.state.user != null && this.state.user.role == "FLEBIE" && this.state.orders!= null && this.state.orders.length > 0)
             {
                 rowsOfOrders = this.state.orders.map(function(order,index){
                     var cashToBeCollected = 0;
@@ -431,6 +445,29 @@ class Dashboard extends React.Component {
                     {
                         status = _this.state.orderStatusMap[order.orderId];
                     }
+
+                    if(status == 'ASSIGNED')
+                    {
+                        changeStatusAction  = <button className='btn btn-info' value={order.orderId} onClick={_this.changeStatusOfOrder.bind(_this)}>COLLECTED</button>;
+                    }
+                    else if (status == 'COLLECTED')
+                    {
+                        changeStatusAction  = <button className='btn btn-info' value={order.orderId} onClick={_this.changeStatusOfOrder.bind(_this)}>SUBMITTED</button>;
+                    }
+                    else if (status == 'SUBMITTED') {
+                        changeStatusAction  = <button className='btn btn-info' >----</button>;
+                    }
+                    else if(status == 'CANCELLED')
+                    {
+                        changeStatusAction  = <button className='btn btn-info' >----</button>;
+                    }
+                    else if (status == 'COMPLETED') {
+                        changeStatusAction = <button className='btn btn-info' >----</button>;
+                    }
+                    
+                    
+                    
+                    
                     if(order.paymentType == "COD")
                     {
                         cashToBeCollected = order.grossTotal;
@@ -438,7 +475,7 @@ class Dashboard extends React.Component {
 
                     if(order.assignedTo ==  _this.state.user.userId)
                     {
-                        return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{cashToBeCollected}</td><td>{order.labName}</td></tr>;
+                        return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{cashToBeCollected}</td><td>{order.labName}</td><td>{changeStatusAction}</td></tr>;
                     }
 
 
@@ -501,6 +538,7 @@ class Dashboard extends React.Component {
                 <th> EMAIL</th>
                 <th> CASH</th>
                 <th> LABNAME</th>
+                <th>CHANGE STATUS</th>
             </tr>;
         }
         
@@ -511,7 +549,7 @@ class Dashboard extends React.Component {
                 <div className="container-fluid" style={{backgroundColor: "rgba(255,255,255,0.60)"}} >
                     <div className="row">
                         <div className="col-xs-6">
-                            <select id="statusFilter" style={{backgroundColor:"#00CF17", color:"black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}}>
+                            <select id="statusFilter" onChange={this.getOrdersOfGivenStatus.bind(this)} style={{backgroundColor:"#00CF17", color:"black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}}>
                                 <option value="ALL">ALL</option>
                                 <option value="UNASSIGNED">UNASSIGNED</option>
                                 <option value="ASSIGNED">ASSIGNED</option>
@@ -541,7 +579,7 @@ class Dashboard extends React.Component {
                             <div className="col-lg-10">
                             </div>
                             <div className="col-lg-2">
-                                <button id="refreshButton"  onClick={this.getOrders.bind(this)} className="btn btn-info" style={{backgroundColor: "#00CF17", color:"black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", float: "right"}}>
+                                <button id="refreshButton"  onClick={this.getOrdersForCurrentDates.bind(this)} className="btn btn-info" style={{backgroundColor: "#00CF17", color:"black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", float: "right"}}>
                                     <span className="glyphicon glyphicon-refresh">  Refresh </span>
                                 </button>
                             </div> 
