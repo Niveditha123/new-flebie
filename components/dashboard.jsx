@@ -499,6 +499,7 @@ class Dashboard extends React.Component {
         {
             
             dashboardHeading = <h1 style={{textAlign: "center"}}>FLEBIE DASHBOARD</h1>;
+            newOrderButton = <a className="btn btn-info"  href={`/`} id="createANewOrder" style={{backgroundColor:"#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}}> New Order</a>;
         }
         
         if(this.state.user != null && this.state.user.role =="ADMIN")
