@@ -44,7 +44,7 @@ module.exports = {
             .send(payLoad)
             .end(function (response) {
                 console.log(response.body);
-                if(response.body){
+                if(response.body != null && (response.status == 200)){
                     res.cookie('ums',response.body.sessionKey);
                     res.cookie('role',encrypt(response.body.role));
                     res.cookie('username',encrypt(response.body.username));
@@ -56,6 +56,9 @@ module.exports = {
                     
                     }
                     res.send({"role":response.body.role});
+                    
+                }
+                else {
                     
                 }
             });
