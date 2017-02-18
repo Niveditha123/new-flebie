@@ -409,7 +409,7 @@ class Dashboard extends React.Component {
                         flebieOptions = flebies.map(function(flebie,index){
                             if(order.assignedTo == flebie.userId)
                             {
-                                return <option value={order.orderId+":"+flebie.userId}>{flebie.userDetails.firstName}</option>;
+                                return <option selected="selected" value={order.orderId+":"+flebie.userId}>{flebie.userDetails.firstName}</option>;
                             }
                             else {
                                 return <option value={order.orderId+":"+flebie.userId}>{flebie.userDetails.firstName}</option>;
