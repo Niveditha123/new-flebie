@@ -220,6 +220,9 @@ class EditOrder extends React.Component {
                     <td>{item.testName}</td>
                     <td>{item.quantity}</td>
                     <td>{item.itemTotal}</td>
+                    <td>{item.instructions}</td>
+                    <td>{item.collectionInfo}</td>
+                    <td>{item.components}</td>
                 </tr>
             });
         }
@@ -249,6 +252,9 @@ class EditOrder extends React.Component {
                                     <th>ITEM</th>
                                     <th>QUANTITY</th>
                                     <th>MRP</th>
+                                    <th>COLLECTION INFO</th>
+                                    <th>INSTRUCTIONS</th>
+                                    <th>COMPONENTS</th>
                                 </tr>
                                 </thead>
                                 <tbody id="databody"> 
