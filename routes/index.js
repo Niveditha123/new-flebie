@@ -17,6 +17,7 @@ var userController = require("../controllers/userController.js");
 var editOrderController = require("../controllers/editOrderController.js");
 var orderSummaryController = require("../controllers/orderSummaryController.js");
 var dashboardController = require("../controllers/dashboardController.js");
+var confirmPaymentController = require("../controllers/confirmPaymentController.js");
 
 module.exports = function() {
 
@@ -47,6 +48,9 @@ module.exports = function() {
    router.get('/privacypolicy',otherPageController.privacypolicy);
    router.get('/refundsandcancellation',otherPageController.refundsandcancellation);
   //router.get('/multisearchlabs', searchController.renderPage);
+
+  router.post('/confirmPayment',confirmPaymentController.processConfirmation);
+  router.post('/processAll',confirmPaymentController.processAll);
 
 
   //apis
