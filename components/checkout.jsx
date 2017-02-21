@@ -657,6 +657,12 @@ Fleb.showLoader();
          if(this.state.paymentType=="online"){
             btnText="Proceed to Pay"
         }
+        var offerInput = [];
+        if(this.state.isOffer){    
+            offerInput = <input type="text" defaultValue={this.state.offer} disabled className="form-control" ref="offerInput" id="exampleInputAmount" placeholder="Enter Promo Code"/>
+        }else{
+            offerInput = <input type="text" defaultValue={this.state.offer} className="form-control" ref="offerInput" id="exampleInputAmount" placeholder="Enter Promo Code"/>
+        }
         var paymentUI = <div id="paymentBlock" className={(this.state.activetab==="paymentBlock")?"tab-main fade-in":"fade-out"}>
             <h3>Payment</h3>
             <div className="clearfix payment-main">
@@ -670,7 +676,7 @@ Fleb.showLoader();
             </div>
             <div className={(this.props.data.userPtype == 3)?"hide":"offer-main"}>
                 <div className="input-group">
-                    <input type="text" defaultValue={this.state.offer} className="form-control" ref="offerInput" id="exampleInputAmount" placeholder="Enter Promo Code"/>
+                    {offerInput}
                     <div className="input-group-addon">
                         <button onClick={this.applyOffer.bind(this)} className={(!this.state.isOffer)?"btn btn-default":"hide"}>Apply</button>
                         <button onClick={this.removeOffer.bind(this)} className={(this.state.isOffer)?"btn btn-default":"hide"}>remove</button>
