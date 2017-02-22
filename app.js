@@ -13,6 +13,8 @@ const httpsOptions = {
 	//key:  fs.readFileSync(path.join(__dirname, 'ssl','server.key'))
 	//cert: fs.readFileSync(config.CERT_PATH),
 	//key:  fs.readFileSync(config.KEY_PATH) 
+	cert: fs.readFileSync('/home/ubuntu/csr_keys/server.crt'),
+	key:  fs.readFileSync('/home/ubuntu/csr_keys/server.key')
 };
 var app = express();
 app.use("/public/",express.static(__dirname + '/public'));
@@ -55,19 +57,19 @@ app.use(function(req, res, next) {
 });
 setup(app);
 //HTTPS server
-/*https.createServer(httpsOptions,app)
-	.listen(config.PORT,function(){
-		console.log("App listening on port "+config.PORT);
-	});*/
-
-//HTTP server
-/*http.createServer(app)
+https.createServer(httpsOptions,app)
 	.listen(8082,function(){
 		console.log("App listening on port "+8082);
-	});	*/
+	});
+
+//HTTP server
+http.createServer(app)
+	.listen(config.PORT,function(){
+		console.log("App listening on port "+config.PORT);
+	});
 
 
-app.listen(config.PORT,function(){
+/*app.listen(config.PORT,function(){
 	console.log("App listening on port "+config.PORT);
-});
+});*/
 
