@@ -39,17 +39,18 @@ var isProduction = process.env.NODE_ENV === 'production';
 
 //redirect from http to https
 app.use(function(req, res, next) {
-	console.log("Request headers are: "+JSON.stringify(req.headers));
-	console.log("Request headers are: "+req.secure);
-	if((!req.secure)&& ((req.get('X-Forwarded-Proto') !== 'https'))) {
+	//console.log("Request headers are: "+JSON.stringify(req.headers));
+	//console.log("Request headers are: "+req.secure);
+	/*if((!req.secure)&& ((req.get('X-Forwarded-Proto') !== 'https'))) {
 		res.redirect('https://' + req.get('host') + req.url);
 	}
 	else {
-		next();
-	}
+		
+	}*/
 	/*if(!req.secure) {
 		return res.redirect(['https://', 'localhost:'+config.PORT, req.url].join(''));
 	}*/
+	next();
 	
 });
 setup(app);
