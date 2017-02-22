@@ -63,7 +63,7 @@ setup(app);
 	});	*/
 
 
-/*app.listen(config.PORT,function(){
+app.listen(config.PORT,function(){
 	console.log("App listening on port "+config.PORT);
 });
-*/
+
