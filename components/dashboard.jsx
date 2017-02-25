@@ -127,11 +127,153 @@ class Dashboard extends React.Component {
         })
 
     }
+    JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
 
+//If JSONData is not an object then JSON.parse will parse the JSON string in an Object
+
+    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+
+    var CSV = '';
+
+//Set Report title in first row or line
+
+//This condition will generate the Label/Header
+
+    if (ShowLabel) {
+
+        var row = '';
+
+//This loop will extract the label from 1st index of on array
+
+        for (var index in arrData[0]) {
+
+            if(index!= 'UserName1')
+
+//Now convert each value to string and comma-seprated
+
+                row += index + ',';
+
+        }
+
+        row = row.slice(0, -1);
+
+//append Label row with line break
+
+        CSV += row + '\r\n';
+
+    }
+
+//1st loop is to extract each row
+
+    for (var i = 0; i < arrData.length; i++) {
+
+        var row = '';
+
+//2nd loop will extract each column and convert it in string comma-seprated
+
+        for (var index in arrData[i]) {
+
+
+            var data = null;
+            data = arrData[i][index].toString().replace(/\r?\n|\r/g, " ").replace(/,/g,"");
+
+            row += '' +data+ ',';
+
+        }
+        row = row.replace(/,\s*$/, "");
+        var len = row.length - 1;
+        row.slice(0, len);
+
+//add a line break after each row
+
+        CSV += row + '\r\n';
+
+    }
+
+    if (CSV == '') {
+
+        alert('Invalid data');
+
+        return;
+
+    }
+
+//Generate a file name
+
+    var fileName = '';
+
+//this will remove the blank-spaces from the title and replace it with an underscore
+
+    fileName += ReportTitle.replace(/ /g, '');
+
+//Initialize file format you want csv or xls
+
+    var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+
+    var blob = new Blob([CSV], { type: 'text/csv' }); //new way as anchor tag download not supported in latest chrome so use Blob
+
+    var csvUrl = URL.createObjectURL(blob);  //Now file with proper filename is downloaded with proper extension
+
+//this trick will generate a temp <a /> tag
+
+    var link = document.createElement('a');
+
+    link.href = csvUrl;
+
+//set the visibility hidden so it will not effect on your web-layout
+
+    link.style = 'visibility:hidden';
+
+    link.download = fileName + '.csv';
+
+//this part will append the anchor tag and remove it after automatic click
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+}
+    
+    
+    
     getOrdersForCurrentDates()
     {
         this.getOrders(this.state.startDate.toDate(),this.state.endDate.toDate(), this.state.statusOfOrders);
     }
+    getOrdersAsCSVForADMIN(){
+    var jsonData = localStorage.getItem('csvData');
+    console.log("Json data is: "+jsonData);
+    var requiredJsonData = [];
+
+        for (var i in jsonData) {
+            var requiredJson = {"orderId": jsonData[i].orderId, "name": jsonData[i].lab, "address": jsonData[i].orderDetails.address, "phone": jsonData[i].orderDetails.phone, "status": jsonData[i].status, "Date/Time": jsonData[i].scheduleDate.split("T")[0]+" "+jsonData[i].scheduleTime, "email": jsonData[i].orderDetails.emailId, "assigned": jsonData[i].assignedTo, "cash": jsonData[i].labName, "grossMRP": jsonData[i].grossMRP, "grossTotal": jsonData[i].grossTotal};
+            requiredJsonData.push(requiredJson);
+        }    
+    this.JSONToCSVConvertor(JSON.parse(requiredJsonData), 'OrdersReport', 'Orders');
+    }
+    getOrdersAsCSVForLABADMIN(){
+        var jsonData = localStorage.getItem('csvData');
+        var requiredJsonData = [];
+        for (var i in jsonData) {
+            var requiredJson = {"orderId": jsonData[i].orderId};
+            requiredJsonData.push(requiredJson);
+        }
+        //this.JSONToCSVConvertor(JSON.parse(jsonData), 'OrdersReport', 'Orders');
+    }
+    getOrdersAsCSVForFLEBIE(){
+        var jsonData = localStorage.getItem('csvData');
+        var requiredJsonData = [];
+        for (var i in jsonData) {
+            var requiredJson = {"orderId": jsonData[i].orderId};
+            requiredJsonData.push(requiredJson);
+        }
+        //this.JSONToCSVConvertor(JSON.parse(jsonData), 'OrdersReport', 'Orders');
+    }
+    
+    
+    
     getOrdersOfGivenStatus(statusObject)
     {
         var _this = this;
@@ -349,6 +491,7 @@ class Dashboard extends React.Component {
         var _this = this;
         var newOrderButton = null;
         var flebies = null;
+        var exportButton = null;
         if(this.state.flebies != null && this.state.flebies.length > 0) {
             flebies = this.state.flebies;
         }    
@@ -419,17 +562,24 @@ class Dashboard extends React.Component {
                         flebieOptions.unshift(<option value="">Select a flebie</option>);
                         var selectText = <select onChange={_this.assignFlebieToOrder.bind(_this)}>{flebieOptions}</select>;
                     }
-                        
-                    
+
+                    if(status != 'PENDING')
+                    {
+                        return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{selectText}</td><td>{cashToBeCollected}</td><td>{order.labName}</td><td>{changeStatusAction}</td></tr>;
+                    }
                      
-                    return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{selectText}</td><td>{cashToBeCollected}</td><td>{order.labName}</td><td>{changeStatusAction}</td></tr>;
+                    
                 });
             }
             else if(this.state.user != null && this.state.user.role == "LABADMIN" && this.state.orders!= null && this.state.orders.length > 0)
             {
                 rowsOfOrders = this.state.orders.map(function(order,index){
-
-                    return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{order.status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td></tr>;
+                    if(order.status != 'PENDING')
+                    {
+                        return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{order.status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td></tr>;
+                    }
+                    
+                    
                 }); 
             }
             else if(this.state.user != null && this.state.user.role == "FLEBIE" && this.state.orders!= null && this.state.orders.length > 0)
@@ -476,7 +626,12 @@ class Dashboard extends React.Component {
 
                     if(order.assignedTo ==  _this.state.user.userId)
                     {
-                        return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{cashToBeCollected}</td><td>{order.labName}</td><td>{changeStatusAction}</td></tr>;
+                        if(status != 'PENDING')
+                        {
+                            return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{cashToBeCollected}</td><td>{order.labName}</td><td>{changeStatusAction}</td></tr>;
+                        }
+                        
+                        
                     }
 
 
@@ -517,6 +672,10 @@ class Dashboard extends React.Component {
                 <th>LAB NAME</th>
                 <th>CHANGE STATUS</th>
             </tr>;
+            exportButton = <button  className="btn btn-info" id="getCSVData" onClick={this.getOrdersAsCSVForADMIN.bind(this)} style={{ backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", textAlign: "right"}}>
+                <span className="glyphicon glyphicon-download-alt">Export</span>
+            </button>;
+            
         }
         else if(this.state.user != null && this.state.user.role =="LABADMIN")
         {
@@ -528,6 +687,9 @@ class Dashboard extends React.Component {
                 <th> DATE/TIME</th>
                 <th> EMAIL</th>
                 </tr>;
+            exportButton = <button  className="btn btn-info" id="getCSVData" onClick={this.getOrdersAsCSVForLABADMIN.bind(this)} style={{ backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", textAlign: "right"}}>
+                <span className="glyphicon glyphicon-download-alt">Export</span>
+            </button>;
         }
         else if(this.state.user != null && this.state.user.role =="FLEBIE")
         {
@@ -542,6 +704,9 @@ class Dashboard extends React.Component {
                 <th> LABNAME</th>
                 <th>CHANGE STATUS</th>
             </tr>;
+            exportButton = <button  className="btn btn-info" id="getCSVData" onClick={this.getOrdersAsCSVForFLEBIE.bind(this)} style={{ backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", textAlign: "right"}}>
+                <span className="glyphicon glyphicon-download-alt">Export</span>
+            </button>;
         }
         
         return (
@@ -616,9 +781,7 @@ class Dashboard extends React.Component {
                     <br/>
                     </div>
                     <div className="row">
-                        <button  className="btn btn-info" id="getCSVData" style={{ backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", textAlign: "right"}}>
-                            <span className="glyphicon glyphicon-download-alt">Export</span>
-                        </button>
+                        {exportButton}
                     </div>    
                 </div>
 
