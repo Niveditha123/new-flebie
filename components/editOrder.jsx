@@ -191,7 +191,7 @@ class EditOrder extends React.Component {
                     </div>
                     <div className="row">
                         <div className="col-sm-6">
-                            <label style={{fontStyle: "italic"}}>Lab Name:</label>&nbsp;&nbsp;<span>{this.state.order.orderDetails.labName}</span>
+                            <label style={{fontStyle: "italic"}}>Lab Name:</label>&nbsp;&nbsp;<span>{this.state.order.labName}</span>
                         </div>
                         <div className="col-sm-6">
                             <label style={{fontStyle: "italic"}}>Cash To Collect:</label>&nbsp;&nbsp;<span>{cashToCollect}</span>
