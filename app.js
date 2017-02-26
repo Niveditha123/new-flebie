@@ -46,7 +46,7 @@ app.use(function(req, res, next) {
 	//console.log("Request headers are: "+JSON.stringify(req.headers));
 	//console.log("Request headers are: "+req.secure);
 	if(!req.secure) {
-		res.redirect('https://' + req.get('host') + req.url);
+		//res.redirect('https://' + req.get('host') + req.url);
 	}
 	else {
 		next();
