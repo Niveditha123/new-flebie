@@ -48,12 +48,12 @@ app.use(function(req, res, next) {
 		res.redirect('https://' + req.get('host') + req.url);
 	}
 	else {
-		
+		next();
 	}
 	/*if(!req.secure) {
 		return res.redirect(['https://', 'localhost:'+config.PORT, req.url].join(''));
 	}*/
-	next();
+	
 	
 });
 setup(app);
