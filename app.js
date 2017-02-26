@@ -14,9 +14,9 @@ const httpsOptions = {
 	//cert: fs.readFileSync(config.CERT_PATH),
 	//key:  fs.readFileSync(config.KEY_PATH) 
 	//cert: fs.readFileSync('/home/ubuntu/csr_keys/server.crt'),
-	//key:  fs.readFileSync('/home/ubuntu/custom.key'),
-	//csr:  fs.readFileSync('/home/ubuntu/csr.pem'),
-	//ca:   fs.readFileSync('/home/ubuntu/gd_bundle-g2-g1.crt')
+	key:  fs.readFileSync('/home/ubuntu/custom.key'),
+	csr:  fs.readFileSync('/home/ubuntu/csr.pem'),
+	ca:   fs.readFileSync('/home/ubuntu/gd_bundle-g2-g1.crt')
 };
 var app = express();
 app.use("/public/",express.static(__dirname + '/public'));
@@ -47,6 +47,7 @@ app.use(function(req, res, next) {
 	//console.log("Request headers are: "+req.secure);
 	if(!req.secure) {
 		//res.redirect('https://' + req.get('host') + req.url);
+		next();
 	}
 	else {
 		next();
