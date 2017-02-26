@@ -15,8 +15,8 @@ const httpsOptions = {
 	//key:  fs.readFileSync(config.KEY_PATH) 
 	//cert: fs.readFileSync('/home/ubuntu/csr_keys/server.crt'),
 	key:  fs.readFileSync('/home/ubuntu/custom.key'),
-	csr:  fs.readFileSync('/home/ubuntu/csr.pem'),
-	cert:   fs.readFileSync('/home/ubuntu/gd_bundle-g2-g1.crt')
+	csr:  fs.readFileSync('/home/ubuntu/csr.pem')
+	//cert:   fs.readFileSync('/home/ubuntu/gd_bundle-g2-g1.crt')
 };
 var app = express();
 app.use("/public/",express.static(__dirname + '/public'));
