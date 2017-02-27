@@ -14,9 +14,8 @@ const httpsOptions = {
 	//cert: fs.readFileSync(config.CERT_PATH),
 	//key:  fs.readFileSync(config.KEY_PATH) 
 	//cert: fs.readFileSync('/home/ubuntu/csr_keys/server.crt'),
-	key:  fs.readFileSync(path.join(__dirname, 'ssl','custom.key')),
-	cert: fs.readFileSync(path.join(__dirname, 'ssl','b39dc3a8428cdd1d.crt')),
-	ca:  fs.readFileSync(path.join(__dirname, 'ssl','gd_bundle-g2-g1.crt'))
+	key: fs.readFileSync('/home/ubuntu/newkeys/flebie.com.key'),
+	cert: fs.readFileSync('/home/ubuntu/newkeys/flebie.com.cert'),
 };
 var app = express();
 app.use("/public/",express.static(__dirname + '/public'));
