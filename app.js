@@ -39,7 +39,7 @@ var isProduction = process.env.NODE_ENV === 'production';
 //redirect from http to https
 app.use(function(req, res, next) {
 	console.log("Port is: "+req.socket.localPort );
-	if(req.socket.localPort != 443)
+	if(req.socket.localPort != config.PORT)
 	{
 		res.redirect("https://www.flebie.com");
 	}
