@@ -45,9 +45,9 @@ app.use(function(req, res, next) {
 	}
 	else
 	{
-		next();
+		
 	}
-	
+	next();
 	
 });
 setup(app);
