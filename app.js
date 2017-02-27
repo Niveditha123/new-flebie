@@ -8,15 +8,11 @@ var setup 	= require("./setup/index.js");
 var bodyParser = require("body-parser");
 var cookieParser = require('cookie-parser');
 var path = require('path');
-const httpsOptions = {
-	//cert: fs.readFileSync(path.join(__dirname, 'ssl','server.crt')),
-	//key:  fs.readFileSync(path.join(__dirname, 'ssl','server.key'))
-	//cert: fs.readFileSync(config.CERT_PATH),
-	//key:  fs.readFileSync(config.KEY_PATH) 
-	//cert: fs.readFileSync('/home/ubuntu/csr_keys/server.crt'),
-	key: fs.readFileSync('/home/ubuntu/newkeys/flebie.com.key'),
-	cert: fs.readFileSync('/home/ubuntu/newkeys/flebie.com.cert'),
-};
+/*const httpsOptions = {
+	key: fs.readFileSync(path.join(__dirname, 'ssl','server-key.pem')), 
+    cert: fs.readFileSync(path.join(__dirname, 'ssl','server-crt.pem')), 
+    ca: [ fs.readFileSync(path.join(__dirname, 'ssl', 'gd_bundle-g2-g1.crt'))]
+};*/
 var app = express();
 app.use("/public/",express.static(__dirname + '/public'));
 app.use(compression({filter: shouldCompress}));
@@ -42,34 +38,34 @@ var isProduction = process.env.NODE_ENV === 'production';
 
 //redirect from http to https
 app.use(function(req, res, next) {
-	//console.log("Request headers are: "+JSON.stringify(req.headers));
-	//console.log("Request headers are: "+req.secure);
-	if(!req.secure) {
-		//res.redirect('https://' + req.get('host') + req.url);
+	console.log("Port is: "+req.get('host').split(":"));
+	if(req.get('host').split(":")!= null && req.get('host').split(":")[1]!= config.PORT)
+	{
+		res.redirect("https://www.flebie.com");
+	}
+	else
+	{
 		next();
 	}
-	else {
-		next();
-	}
-	/*if(!req.secure) {
-		return res.redirect(['https://', 'localhost:'+config.PORT, req.url].join(''));
-	}*/
 	
 	
 });
 setup(app);
 //HTTPS server
-https.createServer(httpsOptions,app)
+/*https.createServer(httpsOptions,app)
 	.listen(8082,function(){
 		console.log("App listening on port "+8082);
-	});
+	});*/
 
 //HTTP server
 http.createServer(app)
 	.listen(config.PORT,function(){
 		console.log("App listening on port "+config.PORT);
 	});
-
+http.createServer(app)
+	.listen(8082,function(){
+		console.log("App listening on port "+8082);
+	});
 
 /*app.listen(config.PORT,function(){
 	console.log("App listening on port "+config.PORT);

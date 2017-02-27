@@ -15,7 +15,7 @@ module.exports = {
     
     else 
     {
-      res.render("index");
+      res.redirect("/");
     }
     
   },
