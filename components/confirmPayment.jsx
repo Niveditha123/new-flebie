@@ -16,7 +16,7 @@ class ConfirmPayment extends React.Component {
 		//debugger;
 		var payLoad = this.props.data;
 		reqwest({			
-				url:"/processAll"
+				url:"/processAll?id="+Fleb.getQueryVariable("id")
 				, type: 'json'
 				,data:JSON.stringify(payLoad)
 				, contentType: 'application/json'
@@ -26,6 +26,7 @@ class ConfirmPayment extends React.Component {
 				}
 				, success: function (resp) {
 					debugger;
+					location.href="paymentresponse?id="+resp.orderid;
 					//document.write = resp.html;
 					//_this.refs.emailTemplate.innerHTML = resp.html;
 				}

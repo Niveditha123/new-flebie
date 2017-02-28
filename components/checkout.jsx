@@ -234,7 +234,7 @@ class CheckOut extends React.Component {
     updateOrder(type){
         var payLoad = Fleb.orderResp;
         payLoad.paymentMode =type;
-
+        var _this=this;
         reqwest({
             url: '/updateTransaction'
             , type: 'json'
@@ -246,7 +246,9 @@ class CheckOut extends React.Component {
                 Fleb.hideLoader();
             }
             , success: function (resp) {
-                location.href="paymentresponse?id="+Fleb.orderResp.orderId
+                debugger;
+                _this.createFormSubmit.bind(_this)(resp,"toConfirm","/confirmPayment?id="+Fleb.orderResp.orderId);
+                //location.href="paymentresponse?id="+Fleb.orderResp.orderId
             }   
             });
 
@@ -485,17 +487,21 @@ Fleb.showLoader();
             orderAmount:Fleb.orderResp.amount-Fleb.applyOfferResp.orderLevelDiscount,
             currency:"INR",
             secSignature:Fleb.orderResp.signature,
-            returnUrl:"https://www.flebie.com/paymentresponse?id="+Fleb.orderResp.orderId
+            //returnUrl:"https://www.flebie.com/paymentresponse?id="+Fleb.orderResp.orderId
+            returnUrl:"/confirmPayment?id="+Fleb.orderResp.orderId
         }
+        this.createFormSubmit.bind(this)(paymentResp,"toGateway","https://www.citruspay.com/flebie");
+    }
+    createFormSubmit(formObj,formId,action){
         var form = document.createElement("form");
         form.setAttribute("method","post");
-        form.setAttribute("id","paymentForm");
+        form.setAttribute("id",formId);
         form.setAttribute("enctype","application/x-www-form-urlencoded");
-        form.setAttribute("action","https://www.citruspay.com/flebie");
+        form.setAttribute("action",action);
         var frg = document.createDocumentFragment();
-        for (var key in paymentResp) {
+        for (var key in formObj) {
             var input = document.createElement("input");
-            input.setAttribute("value",paymentResp[key]);
+            input.setAttribute("value",formObj[key]);
             input.setAttribute("name",key);
             input.setAttribute("type","hidden");
             frg.appendChild(input);
@@ -503,8 +509,8 @@ Fleb.showLoader();
         form.appendChild(frg);
         // html: '<div ...>\n<h1 ...>Constructing HTML Elements<h1>\n</div>'
         this.refs.fakeForm.appendChild(form);
-        var paymentForm = document.getElementById("paymentForm");
-        paymentForm.submit();
+        var formDom = document.getElementById(formId);
+        formDom.submit();
     }
     changeWalkIn(e){
         var checked= e.target.value;
