@@ -21,55 +21,9 @@ import { Email, Item, Span, A, renderEmail,Box } from 'react-html-email';
   console.log(config,"conmf");
 var mailgun = require('mailgun.js');
 var mg = mailgun.client({username: "api", key:config.MAILGUN_APIKEY});
-module.exports = {
 
-    processConfirmation: function(req,res,next) {
-
-        //We pass the api_key and domain to the wrapper, or it won't be able to identify + send emails
-        var data= {
- "TxStatus": "SUCCESS",
- "TxId": "1465302375",
- "TxRefNo": "CTX1606071226402805501",
- "pgTxnNo": "2000005952",
- "pgRespCode": "0",
- "TxMsg": "Transaction Successful",
- "amount": "1.00",
- "authIdCode": "626081",
- "issuerRefNo": "615922626081",
- "signature": "970ed7a0166c371af222c633104e49cf0024d958",
- "paymentMode": "CREDIT_CARD",
- "TxGateway": "AXIS PG (Citrus Plus)",
- "currency": "INR",
- "maskedCardNumber": "512345XXXXXX2346",
- "cardType": "MCRD",
- "cardHolderName": "Amey Joshi",
- "txn3DSecure": "A",
- "eci": "01",
- "txnType": "SALE",
- "requestedCurrency": "",
- "requestedAmount": "",
- "mcpCurrency": "",
- "mcpAmount": "",
- "offerExchangeRate": "",
- "firstName": "Amey",
- "lastName": "Joshi",
- "email": "amey.joshi@citruspay.com",
- "mobileNo": "9819450401",
- "addressStreet1": "",
- "addressStreet2": "",
- "addressCity": "Panjim",
- "addressState": "Goa",
- "addressCountry": "India",
- "addressZip": "411038",
- "txnDateTime": "2016-06-07 17:55:49"
-};
-        var pD = JSON.stringify(data);
-        res.render("confirmPayment",{data:pD});    
-
-    },
-    processAll:function (req,res,next){
-        var data = req.body;
-        //var renderedHTML = ReactDom.renderToString(CustomerEmailObj({data:data}));
+function sendNotifications (orderObj, cb){
+        var data = orderObj;
         const textStyles = {
             fontFamily:'Verdana',
             fontSize: '20px',
@@ -106,6 +60,14 @@ module.exports = {
         const secondItem={
             padding:"12px"
         }
+        var tests = "";
+        for(var i =0;i<data.orderItems.length;i++){
+            var test = data.orderItems[i].testName;
+            if(i>0){
+                test=" ,"+test
+            }
+            tests += test;
+        }
         const emailHTML = renderEmail(
             <Email title="Flebie Support" style={{fontFamily:"'Open Sans', sans-serif"}}>
                 <Item style={{paddingBottom:"12px",borderBottom:"solid 1px #686868"}} >
@@ -121,7 +83,7 @@ module.exports = {
                                 <Item style={{padding:"12px 12px 0px 0",fontWeight:"bold",color: '#686868'}}> OrderId</Item>
                             </Box>
                             <Box {...horizBox}>
-                                <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > {data.TxId}</Item>
+                                <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > {data.orderId}</Item>
                             </Box>
                         </Item>
                         <Item {...secondItem}>
@@ -129,7 +91,7 @@ module.exports = {
                                 <Item style={{padding:"12px 12px 0px 0",fontWeight:"bold",color: '#686868'}}>Lab Name</Item>
                             </Box>
                             <Box {...horizBox}>
-                                <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > {data.firstName +" "+ data.lastName}</Item>
+                                <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > {data.labName}</Item>
                             </Box>
                         </Item>
                     </Box>
@@ -139,7 +101,7 @@ module.exports = {
                         <Item style={{padding:"12px 12px 0px 0",fontWeight:"bold",color: '#686868'}}>Client Name</Item>
                     </Box>
                     <Box {...horizBox}>
-                        <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > {data.firstName +" "+ data.lastName}</Item>
+                        <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > {data.orderDetails.firstName}</Item>
                     </Box>
                 </Item>
                 <Item {...secondItem}>
@@ -147,7 +109,7 @@ module.exports = {
                         <Item style={{padding:"12px 12px 0px 0",fontWeight:"bold",color: '#686868'}}>Client Address</Item>
                     </Box>
                     <Box {...horizBox}>
-                        <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > {data.addressStreet1+" "+data.addressStreet2 +" "+ data.addressCity+" "+data.addressState+" "+data.addressCountry+" "+data.addressZip}</Item>
+                        <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > {data.orderDetails.address}</Item>
                     </Box>
                 </Item>
                 <Item {...secondItem}>
@@ -155,22 +117,93 @@ module.exports = {
                         <Item style={{padding:"12px 12px 0px 0",fontWeight:"bold",color: '#686868'}}>Phone Number</Item>
                     </Box>
                     <Box {...horizBox}>
-                        <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > {data.mobileNo}</Item>
+                        <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > {data.orderDetails.phoneNumber}</Item>
+                    </Box>
+                </Item>
+                <Item {...secondItem}>
+                    <Box {...horizBox}>
+                        <Item style={{padding:"12px 12px 0px 0",fontWeight:"bold",color: '#686868'}}>Age</Item>
+                    </Box>
+                    <Box {...horizBox}>
+                        <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > {data.orderDetails.age}</Item>
+                    </Box>
+                </Item>
+                <Item {...secondItem}>
+                    <Box {...horizBox}>
+                        <Item style={{padding:"12px 12px 0px 0",fontWeight:"bold",color: '#686868'}}>Gender</Item>
+                    </Box>
+                    <Box {...horizBox}>
+                        <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} ></Item>
+                    </Box>
+                </Item>
+                <Item {...secondItem}>
+                    <Box {...horizBox}>
+                        <Item style={{padding:"12px 12px 0px 0",fontWeight:"bold",color: '#686868'}}>Test Ordered</Item>
+                    </Box>
+                    <Box {...horizBox}>
+                        <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > {tests}</Item>
+                    </Box>
+                </Item>
+                <Item {...secondItem}>
+                    <Box {...horizBox}>
+                        <Item style={{padding:"12px 12px 0px 0",fontWeight:"bold",color: '#686868'}}>Scheduled Date/Time</Item>
+                    </Box>
+                    <Box {...horizBox}>
+                        <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > </Item>
+                    </Box>
+                </Item>
+                <Item {...secondItem}>
+                    <Box {...horizBox}>
+                        <Item style={{padding:"12px 12px 0px 0",fontWeight:"bold",color: '#686868'}}>Amount to collect</Item>
+                    </Box>
+                    <Box {...horizBox}>
+                        <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} >{data.grossTotal} </Item>
                     </Box>
                 </Item>
             </Email>
             )
-            console.log(data,emailHTML)
-            
+            console.log(data,emailHTML,"rendered email")
+            var clientEmail = data.orderDetails.emailId;
             mg.messages.create(config.MAILGUN_DOMAIN, {
                 from:config.SENDER,
-                to: ["manusunny999@gmail.com"],
+                to: [clientEmail],
                 subject: "Your Order with Flebie",
                 html:emailHTML
             })
             .then(msg => console.log(msg)) // logs response data
             .catch(err => console.log(err)); // logs any error
-            res.send({html:emailHTML})
+            cb();
+    }
+module.exports = {
+
+    processConfirmation: function(req,res,next) {
+
+        //We pass the api_key and domain to the wrapper, or it won't be able to identify + send emails
+        var data= req.body;
+        var pD = JSON.stringify(data);
+        res.render("confirmPayment",{data:pD});    
+
+    },
+    processAll:function (req,res,next){
+        var data = req.body;
+        //var renderedHTML = ReactDom.renderToString(CustomerEmailObj({data:data}));
+        var headers={};
+        var orderid = req.query.id;
+        console.log(orderid,"orderid");
+         request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/getOrder?id='+orderid)
+          .headers(headers)
+          .end(function (response) {
+            console.log(response.status);
+            if(response.status == 200){
+              sendNotifications(response.body,function(){
+                  console.log("adsadsad succss")
+                  res.send({orderid:orderid})
+              });
+            }else{
+              res.send({orderid:orderid})
+            }
+          });
+
 
     }
     
