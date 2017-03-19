@@ -70,6 +70,11 @@ function sendNotifications (orderObj, cb){
         }
         const emailHTML = renderEmail(
             <Email title="Flebie Support" style={{fontFamily:"'Open Sans', sans-serif"}}>
+                <Item>
+                    <Span>
+                        <img style={{display:"block",margin:0}} src="https://s3.ap-south-1.amazonaws.com/elasticbeanstalk-ap-south-1-254076455009/static_resources/order_summary_email.png"/>
+                    </Span>
+                </Item>
                 <Item style={{paddingBottom:"12px",borderBottom:"solid 1px #686868"}} >
                     <Span {...textStyles}>
                         Hi,
@@ -150,6 +155,14 @@ function sendNotifications (orderObj, cb){
                     </Box>
                     <Box {...horizBox}>
                         <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} > </Item>
+                    </Box>
+                </Item>
+                <Item {...secondItem}>
+                    <Box {...horizBox}>
+                        <Item style={{padding:"12px 12px 0px 0",fontWeight:"bold",color: '#686868'}}>Convenience Fee</Item>
+                    </Box>
+                    <Box {...horizBox}>
+                        <Item align="right" style={{align:"right",padding:"12px 0px 0px 0",color: '#686868'}} >{data.convenienceFee} </Item>
                     </Box>
                 </Item>
                 <Item {...secondItem}>
