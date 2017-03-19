@@ -1,11 +1,46 @@
 import React from 'react';
 import reqwest from 'reqwest';
+import ReactDOM from 'react-dom';
+
+class Description extends React.Component{
+    constructor(props){
+        super(props);
+    }
+    render(){
+        var compList = this.props.packageIn.test.components;
+        if(compList){
+            compList = compList.split(",");
+        }else{
+            compList = [];
+        }
+        var list = compList.map(function(item,index){
+            return <li>{item}</li>
+        })
+        var desription = (this.props.packageIn.test.description)?this.props.packageIn.test.description:"No Description available!";
+    return(<div className="clearfix description-main">
+            <button className='fl btn btn-link icon icon-delete' data-index={this.props.index} onClick={this.props.removeDetails} ></button>
+            <div className="comp-list-main">
+                <ul className={(list.length >0)?"comp-list":"hide"} >
+                    {list}
+                </ul>
+                <h3 className={(list.length >0)?"hide":""}>
+                    No Component Details available.
+                </h3>
+            </div>
+            <div className={"desc-main"}>
+                {this.props.packageIn.test.description}
+            </div>
+        </div>
+        )
+    }
+}
 
 class PopularPackages extends React.Component {
     constructor(props){
 		super(props);
         this.state={
-            popPackages:[]
+            popPackages:[],
+            showDetails:false
         }
     }
     loadPopPackages(){
@@ -59,7 +94,6 @@ class PopularPackages extends React.Component {
     createNewCart(data){
         var cart={
             labAddress:data.lab.address,
-            labId:data.lab.labTestId,
             labName:data.lab.labName,
             totalItems:1,
             totalListPrice:data.MRP,
@@ -123,6 +157,31 @@ class PopularPackages extends React.Component {
         Fleb.eventDispatcher("toggleCartModal",{flag:true});
         document.getElementById("openCart").click();
     }
+    removeThis(e){
+        var _this = this;
+        var dataId = e.target.getAttribute("data-index");
+        this.refs["details"+dataId].className = "details-drop fade-out";
+        setTimeout(function(){
+            _this.refs["details"+dataId].innerHTML="";
+        },100)
+    }
+    showDetails(e){
+        var dataId = e.currentTarget.getAttribute("data-index");
+        var elem;
+        var _this = this;
+        if(dataId != null || dataId != ""){
+            var currentPackage = this.state.popPackages[dataId];
+            elem = this.refs["details"+dataId];
+            if(elem.innerHTML == ""){
+                ReactDOM.render(<Description index={dataId} packageIn={currentPackage} removeDetails={this.removeThis.bind(this)}  />,elem);
+            setTimeout(function(){
+                _this.refs["details"+dataId].className="details-drop fade-in"
+            },10)
+            }
+            
+        }
+         
+    }
     render(){
             var popPackagesUI=[];
             var _this=this;
@@ -130,15 +189,18 @@ class PopularPackages extends React.Component {
 
             popPackagesUI= this.state.popPackages.map(function(item,index){
                 var test = item.testId;
-                return <div key={index} className="list-item">
-					<div><div className="item-head">
+                return <div key={index} className="list-item cursor" data-index={index} onClick={_this.showDetails.bind(_this)}>
+                    
+					<div>
+                        <div className="details-drop fade-out" ref={"details"+index}></div>
+                    <div className="item-head">
 						<div className="fr price-block">
 							<div className="striked-price"><span className="icon icon-rupee"/>{item.MRP}</div>
 							<div className="actual-price"><span className="icon icon-rupee"/>{item.offerPrice}</div>
 						</div>
 					</div>
 					<div className="lab-img img-block">
-                        <img src={"/public/images/"+item.labTestName+"_pkg.jpg"}/>
+                        <img src={"/public/images/"+item.lab.labName+"_multi.jpg"}/>
 					</div>
 					<div className="lab-footer">
 						<h3>{item.labTestName}</h3>
