@@ -39,16 +39,15 @@ var isProduction = process.env.NODE_ENV === 'production';
 //redirect from http to https
 app.use(function(req, res, next) {
 	console.log("Port is: "+req.socket.localPort );
-	if(req.socket.localPort != config.PORT)
+	/*if(req.socket.localPort != config.PORT)
 	{
-		console.log("Redirecting to https");
 		res.redirect("https://www.flebie.com");
 	}
 	else
 	{
-        next();
-	}
 
+	}*/
+    next();
 	
 });
 setup(app);
