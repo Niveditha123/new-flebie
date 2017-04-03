@@ -42,7 +42,7 @@ app.use(function(req, res, next) {
 	if(req.socket.localPort != config.PORT)
 	{
 		console.log("Redirecting to https port");
-		res.redirect("https://www.flebie.com");
+		return res.redirect("https://www.flebie.com");
 	}
 	else
 	{
