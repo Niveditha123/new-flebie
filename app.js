@@ -41,12 +41,13 @@ app.use(function(req, res, next) {
 	console.log("Port is: "+req.socket.localPort );
 	if(req.socket.localPort != config.PORT)
 	{
-		console.log("Redirecting to https port");
-		res.redirect("https://www.flebie.com");
+        next();
 	}
 	else
 	{
-        next();
+        console.log("Redirecting to https port");
+        res.redirect("https://www.flebie.com");
+
 	}
 
 	
