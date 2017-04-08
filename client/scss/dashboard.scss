@@ -32,3 +32,72 @@ body{
 .mt12{
     margin:12px 0;
 }
+.table-wrap{
+    overflow-x: auto;
+    
+}
+@media (max-width: 1023px){
+    table, .btn.btn-info{
+        font-size: 10px;
+    }
+    .dashboard-main h1 {
+        font-size: 20px;
+    }
+    .dashboard-content {
+        font-size: 11px;
+        width: 100%;
+        padding: 0;
+    }
+    .address-col{
+        min-width: 110px;
+    }
+    .status-filter{
+        padding: 5px;
+        border-radius: 3px;
+    }
+    .clearfix.critical-content {
+        width: 100%;
+    }
+    .dashboard-main {
+            width: 100% !important;
+        padding: 15px !important;
+        margin: 0 !important;
+        background: #FFFFFF;
+    }
+    .react-datepicker__input-container > input{
+        width: 100%;
+    }
+    .table-wrap {
+        overflow: auto;
+        width: 100%;
+        margin: 20px auto 0px auto;
+        max-height: 300px;
+    }
+    .check-availability{
+        padding-top: 15px;
+    }
+    textarea#availableTimeSlots {
+        /* width: 100%; */
+        float: right;
+    }
+    .btn-container{
+        padding-top: 20px;
+    }
+    .to-block{
+        label{
+            width:100%;
+            display: block
+        }
+    }
+    .react-datepicker__input-container {
+        position: relative;
+        display: block;
+        width: 100%;
+    }
+    .container-main {
+        padding-bottom: 10px;
+        padding: 100px 0px 0px 0px;
+            position: relative;
+    z-index: 1040;
+    }
+}

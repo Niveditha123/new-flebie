@@ -565,7 +565,7 @@ class Dashboard extends React.Component {
 
                     if(status != 'PENDING')
                     {
-                        return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{selectText}</td><td>{cashToBeCollected}</td><td>{order.labName}</td><td>{changeStatusAction}</td></tr>;
+                        return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{changeStatusAction}</td><td className="address-col">{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{selectText}</td><td>{cashToBeCollected}</td><td>{order.labName}</td></tr>;
                     }
                      
                     
@@ -576,7 +576,7 @@ class Dashboard extends React.Component {
                 rowsOfOrders = this.state.orders.map(function(order,index){
                     if(order.status != 'PENDING')
                     {
-                        return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{order.status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td></tr>;
+                        return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td  className="address-col">{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{order.status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td></tr>;
                     }
                     
                     
@@ -584,6 +584,7 @@ class Dashboard extends React.Component {
             }
             else if(this.state.user != null && this.state.user.role == "FLEBIE" && this.state.orders!= null && this.state.orders.length > 0)
             {
+                //var _this = this;
                 rowsOfOrders = this.state.orders.map(function(order,index){
                     var cashToBeCollected = 0;
                     var changeStatusAction = null;
@@ -628,7 +629,21 @@ class Dashboard extends React.Component {
                     {
                         if(status != 'PENDING')
                         {
-                            return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{cashToBeCollected}</td><td>{order.labName}</td><td>{changeStatusAction}</td></tr>;
+                            if(_this.state.user != null && _this.state.user.role =="FLEBIE"){
+                                    return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td>
+                                    <td>{changeStatusAction}</td>
+                                    <td>{status}</td>
+                                    <td>{order.labName}</td>
+                                    <td className="address-col">{order.orderDetails.address}</td>
+                                    <td>{order.orderDetails.phoneNumber}</td>
+                                    <td>{order.scheduleDate+" "+order.scheduleTime}</td>
+                                    <td>{order.orderDetails.emailId}</td>
+                                    <td>{cashToBeCollected}</td>x</tr>;
+
+                            }else{
+                                return  <tr><td><a className="btn btn-info" href={"/editOrder?id="+order.orderId}>{order.orderDetails.firstName}</a></td><td>{changeStatusAction}</td><td>{order.orderDetails.address}</td><td>{order.orderDetails.phoneNumber}</td><td>{status}</td><td>{order.scheduleDate+" "+order.scheduleTime}</td><td>{order.orderDetails.emailId}</td><td>{cashToBeCollected}</td><td>{order.labName}</td></tr>;
+
+                            }
                         }
                         
                         
@@ -662,7 +677,8 @@ class Dashboard extends React.Component {
         {
             headingRow = <tr>
                 <th> NAME</th>
-                <th> ADDRESS</th>
+                <th>CHANGE STATUS</th>  
+                <th> ADDRESS</th>              
                 <th> PHONE</th>
                 <th> STATUS</th>
                 <th> DATE/TIME</th>
@@ -670,7 +686,7 @@ class Dashboard extends React.Component {
                 <th>ASSIGNED</th>
                 <th>CASH</th>
                 <th>LAB NAME</th>
-                <th>CHANGE STATUS</th>
+                
             </tr>;
             exportButton = <button  className="btn btn-info" id="getCSVData" onClick={this.getOrdersAsCSVForADMIN.bind(this)} style={{ backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", textAlign: "right"}}>
                 <span className="glyphicon glyphicon-download-alt">Export</span>
@@ -695,14 +711,19 @@ class Dashboard extends React.Component {
         {
             headingRow = <tr>
                 <th> NAME</th>
-                <th> ADDRESS</th>
-                <th> PHONE</th>
+                <th>CHANGE STATUS</th>
+                
                 <th> STATUS</th>
+                <th> LABNAME</th>
+                <th> ADDRESS</th>
+                
+                <th> PHONE</th>
+                
                 <th> DATE/TIME</th>
                 <th> EMAIL</th>
                 <th> CASH</th>
-                <th> LABNAME</th>
-                <th>CHANGE STATUS</th>
+                
+                
             </tr>;
             exportButton = <button  className="btn btn-info" id="getCSVData" onClick={this.getOrdersAsCSVForFLEBIE.bind(this)} style={{ backgroundColor: "#00CF17", color: "black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%", textAlign: "right"}}>
                 <span className="glyphicon glyphicon-download-alt">Export</span>
@@ -713,10 +734,11 @@ class Dashboard extends React.Component {
             
             <div className="dashboard-main">
                 {dashboardHeading}
-                <div className="container-fluid" style={{backgroundColor: "rgba(255,255,255,0.60)"}} >
-                    <div className="row">
+                <div className="container-fluid dashboard-content" style={{backgroundColor: "rgba(255,255,255,0.60)"}} >
+                    <div className="clearfix critical-content">
+                        <div className="row">
                         <div className="col-xs-6">
-                            <select id="statusFilter" onChange={this.getOrdersOfGivenStatus.bind(this)} style={{backgroundColor:"#00CF17", color:"black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}}>
+                            <select id="statusFilter" className="status-filter" onChange={this.getOrdersOfGivenStatus.bind(this)} style={{backgroundColor:"#00CF17", color:"black", marginTop: "1%", marginBottom: "1%", marginLeft: "1%", marginRight: "1%"}}>
                                 <option value="ALL">ALL</option>
                                 <option value="UNASSIGNED">UNASSIGNED</option>
                                 <option value="ASSIGNED">ASSIGNED</option>
@@ -731,18 +753,18 @@ class Dashboard extends React.Component {
                         </div>
                         
                     </div>
-                    <div className="row">
-                        <div className="col-xs-4">
+                    <div className="row check-availability">
+                        <div className="col-xs-12 col-md-4 ">
                             <label> CHECK AVAILABILITY</label>
                         </div>
-                        <div className="col-xs-3">
+                        <div className="col-xs-4 col-md-3">
                             <DatePicker id="slotDate" selected={this.state.slotDate} onChange={this.handleSlotDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
                         </div>
-                        <div className="col-xs-5">
+                        <div className="col-xs-8 col-md-5">
                             <textarea id="availableTimeSlots" value={this.state.availableTimeSlots}>{this.state.availableTimeSlots}</textarea>
                         </div>
                     </div>    
-                    <div className="row">
+                    <div className="row btn-container">
                             <div className="col-lg-10">
                             </div>
                             <div className="col-lg-2">
@@ -751,23 +773,25 @@ class Dashboard extends React.Component {
                                 </button>
                             </div> 
                     </div>
-                            <div className="row">
-                                <div className="col-xs-6 form-inline">
-                                    <label htmlFor="exampleInputName2">From</label>
-                                    <DatePicker id="fromDate" selected={this.state.startDate} onChange={this.handleStartDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
+                    <div className="row">
+                        <div className="col-xs-6 form-inline">
+                            <label htmlFor="exampleInputName2">From</label>
+                            <DatePicker id="fromDate" selected={this.state.startDate} onChange={this.handleStartDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
 
-                                </div>
-                                
-                                <div className="col-xs-6 form-inline">
-                                <label htmlFor="exampleInputName21">To</label>
-                                    <DatePicker id="toDate" selected={this.state.endDate} onChange={this.handleEndDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
-                                </div>   
-                            </div> 
+                        </div>
+                        
+                        <div className="col-xs-6 form-inline to-block">
+                            <label htmlFor="exampleInputName21">To</label>
+                            <DatePicker id="toDate" selected={this.state.endDate} onChange={this.handleEndDateChange.bind(this)}  dateFormat="YYYY-MM-DD"/>
+                        </div>   
+                    </div> 
 
 
+                    </div>
                     
-                    <div id="products" className="row list-group table-responsive">
-                        <table className="table" id="datatable">
+                    
+                    <div id="products" className="row list-group table-wrap">
+                        <table className="table  table-responsive" id="datatable">
                             <thead className="thead-inverse" width="100%">
                             {headingRow}
                             </thead>
