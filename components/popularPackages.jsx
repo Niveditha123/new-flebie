@@ -136,7 +136,7 @@ class PopularPackages extends React.Component {
                         //"isHomeCollectible":item.data.test.isHomeCollectible,
                         "labTestId":item.data.labTestId
                     }
-                    cartInfo.orderitems.push(newItem);
+                    cartInfo.orderItems.push(newItem);
                     cartInfo.totalItems+=1;
                     cartInfo.totalListPrice+=item.data.offerPrice;
                     cartInfo.totalPrice+=item.data.MRP;
