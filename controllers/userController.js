@@ -1,5 +1,5 @@
 var request =  require('unirest');
-
+var config 	= require("../config/index.js");
 var crypto = require('crypto'),
     algorithm = 'aes-256-ctr',
     password = 'TheBestSecretKey';
@@ -37,7 +37,7 @@ module.exports = {
         console.log("Encrypted string is: "+ebc);
         var dbc = decrypt(ebc);
         payLoad.accessKey=ebc;
-        request.put('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/user/loginWithCredentials')
+        request.put(config.API_DOMAIN+'user/loginWithCredentials')
             .headers({
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'})
@@ -70,7 +70,7 @@ module.exports = {
             
         };
         
-        request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/user/getUsersUsingRoleAndCompany?role=FLEBIE&company=Flebie')
+        request.get(config.API_DOMAIN+'user/getUsersUsingRoleAndCompany?role=FLEBIE&company=Flebie')
             .headers(headers)
             
             .end(function (response) {

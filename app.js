@@ -18,6 +18,23 @@ var path = require('path');
     cert: fs.readFileSync(path.join(__dirname, 'ssl','server-crt.pem')), 
     ca: [ fs.readFileSync(path.join(__dirname, 'ssl', 'gd_bundle-g2-g1.crt'))]
 };*/
+
+//Setting up all environment variables
+
+if(process.env.API_DOMAIN != null)
+{
+    config.API_DOMAIN = process.env.API_DOMAIN;
+    config.MAILGUN_APIKEY = process.env.MAILGUN_APIKEY;
+    config.MAILGUN_DOMAIN = process.env.MAILGUN_DOMAIN;
+    config.HTTP_PORT = process.env.HTTP_PORT;
+    config.HTTPS_PORT = process.env.HTTPS_PORT;
+    config.BCC_EMAIL = process.env.BCC_EMAIL;
+    config.SENDER = process.env.SENDER;
+
+}
+
+
+
 var app = express();
 app.use("/public/",express.static(__dirname + '/public'));
 app.use(compression({filter: shouldCompress}));
@@ -43,38 +60,43 @@ var isProduction = process.env.NODE_ENV === 'production';
 
 //redirect from http to https
 app.use(function(req, res, next) {
-	//console.log("Port is: "+req.socket.localPort );
-	if(req.socket.localPort != config.PORT)
-	{
-        console.log("In http section ");
-        console.log("Port is: "+req.socket.localPort );
-        next();
-	}
-	else
-	{
-        console.log("In https section ");
-        console.log("Port is: "+req.socket.localPort );
-        next();
-	}
 
-	
+    if(req.socket.localPort == config.PORT)
+    {
+        if(process.env.API_DOMAIN != null)
+        {
+            console.log("In http section ");
+            console.log("Port is: "+req.socket.localPort );
+            res.redirect("https://www.flebie.com");
+        }
+        else {
+            next();
+        }
+
+    }
+    else
+    {
+        next();
+    }
+
+
 });
 setup(app);
 //HTTPS server
 /*https.createServer(httpsOptions,app)
-	.listen(8082,function(){
-		console.log("App listening on port "+8082);
-	});*/
+ .listen(8082,function(){
+ console.log("App listening on port "+8082);
+ });*/
 
 //HTTP server
 http.createServer(app)
-	.listen(config.PORT,function(){
-		console.log("App listening on port "+config.PORT);
-	});
+    .listen(config.HTTP_PORT,function(){
+        console.log("App listening on port "+config.HTTP_PORT);
+    });
 http.createServer(app)
-	.listen(8082,function(){
-		console.log("App listening on port "+8082);
-	});
+    .listen(config.HTTPS_PORT,function(){
+        console.log("App listening on port "+config.HTTPS_PORT);
+    });
 
 /*app.listen(config.PORT,function(){
 	console.log("App listening on port "+config.PORT);

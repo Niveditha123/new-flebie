@@ -1,4 +1,5 @@
 var request =  require('unirest');
+var config 	= require("../config/index.js");
 module.exports = {
   renderPage:function(req,res,next){
     var order = null;
@@ -19,7 +20,7 @@ module.exports = {
     };
     var query = req.query.id;
 
-    request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/getOrder?id='+query)
+    request.get(config.API_DOMAIN+'order/getOrder?id='+query)
         .headers(headers)
         .end(function (response) {
           console.log(response.status);
@@ -36,7 +37,7 @@ module.exports = {
     var headers={
 
     };
-    request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/getUserUsingSessionKey?='+sessionKey)
+    request.get(config.API_DOMAIN+'order/getUserUsingSessionKey?='+sessionKey)
         .headers(headers)
         .end(function (response) {
           console.log(response.status);

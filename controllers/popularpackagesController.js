@@ -1,4 +1,5 @@
 var request =  require('unirest');
+var config 	= require("../config/index.js");
 module.exports = {
   renderPage:function(req,res,next){
     res.render("popularpackages");
@@ -7,7 +8,7 @@ module.exports = {
     var headers={
 
     };
-      request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/package/getAllPackages')
+      request.get(config.API_DOMAIN+'package/getAllPackages')
           .headers(headers)
           .end(function (response) {
             console.log(response.body,"popular packages");

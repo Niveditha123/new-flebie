@@ -1,5 +1,5 @@
 var request =  require('unirest');
-
+var config 	= require("../config/index.js");
 
 module.exports = {
   renderPage:function(req,res,next){
@@ -17,7 +17,7 @@ module.exports = {
       
       var query = req.query.slotDate;
 console.log(query);
-  request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/timeSlot/getAvailableSlots?slotDate='+query)
+  request.get(config.API_DOMAIN+'timeSlot/getAvailableSlots?slotDate='+query)
           .headers(headers)
           .end(function (response) {
             
@@ -34,7 +34,7 @@ console.log(query);
       
     console.log(req.body);
       console.log("Session key is: "+req.cookies.sessionKey);
-    request.post('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/createOrder')
+    request.post(config.API_DOMAIN+'order/createOrder')
       .headers({
         'Accept': 'application/json', 
         'Content-Type': 'application/json', 
@@ -48,7 +48,7 @@ console.log(query);
   },
   setTimeSlot:function(req,res,next){
     console.log(req.body);
-    request.post('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/timeSlot/setTimeSlot')
+    request.post(config.API_DOMAIN+'timeSlot/setTimeSlot')
       .headers({
         'Accept': 'application/json', 
         'Content-Type': 'application/json'})
@@ -66,7 +66,7 @@ console.log(query);
 var code = req.query.promoCode;
 var orderId = req.query.orderId;
 console.log(code,orderId," applyoffer");
-  request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/promotion/applyPromotionCode?promoCode='+code+'&orderId='+orderId)
+  request.get(config.API_DOMAIN+'promotion/applyPromotionCode?promoCode='+code+'&orderId='+orderId)
           .headers(headers)
           .end(function (response) {
             console.log(response.body,"promo");
@@ -84,7 +84,7 @@ console.log(code,orderId," applyoffer");
     };
 var orderId = req.query.orderId;
 console.log(orderId,"remove");
-  request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/promotion/ignorePromotionCode?orderId='+orderId)
+  request.get(config.API_DOMAIN+'promotion/ignorePromotionCode?orderId='+orderId)
           .headers(headers)
           .end(function (response) {
             console.log(response.body,"promo removed");
@@ -97,7 +97,7 @@ console.log(orderId,"remove");
   },
     updateTransaction:function(req,res,next){
       console.log(req.body);
-      request.put('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/transaction/updateTransaction')
+      request.put(config.API_DOMAIN+'transaction/updateTransaction')
         .headers({
           'Accept': 'application/json', 
           'Content-Type': 'application/json'})
@@ -111,7 +111,7 @@ console.log(orderId,"remove");
     assignFlebieToOrder: function(req,res,next){
         console.log(req.body);
         var flebieUserId = req.query.flebieUserId;
-        request.put('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/assignFlebieToOrder?flebieUserId='+flebieUserId)
+        request.put(config.API_DOMAIN+'order/assignFlebieToOrder?flebieUserId='+flebieUserId)
             .headers({
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ console.log(orderId,"remove");
     changeStatusOfOrder: function(req,res,next){
         console.log(req.body);
         
-        request.put('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/updateOrderStatus')
+        request.put(config.API_DOMAIN+'order/updateOrderStatus')
             .headers({
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',

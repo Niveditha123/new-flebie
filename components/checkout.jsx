@@ -480,7 +480,7 @@ Fleb.showLoader();
             this.updateOrder.bind(this)(payMethod);
             return false;
         }
-
+        var citrusPostUrl = Fleb.orderResp.citrusPostUrl;
         var paymentResp = {
             email:this.state.patientData.email,
             merchantTxnId:Fleb.orderResp.txId,
@@ -489,8 +489,8 @@ Fleb.showLoader();
             secSignature:Fleb.orderResp.signature,
             //returnUrl:"https://www.flebie.com/paymentresponse?id="+Fleb.orderResp.orderId
             returnUrl:"/confirmPayment?id="+Fleb.orderResp.orderId
-        }
-        this.createFormSubmit.bind(this)(paymentResp,"toGateway","https://www.citruspay.com/flebie");
+        };
+        this.createFormSubmit.bind(this)(paymentResp,"toGateway",citrusPostUrl);
     }
     createFormSubmit(formObj,formId,action){
         var form = document.createElement("form");

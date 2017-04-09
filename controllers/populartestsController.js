@@ -1,4 +1,5 @@
 var request =  require('unirest');
+var config 	= require("../config/index.js");
 module.exports = {
   renderPage:function(req,res,next){
     res.render("populartests");
@@ -8,7 +9,7 @@ module.exports = {
 
     };
 
-    request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests')
+    request.get(config.API_DOMAIN+'test/getAllTests')
         .headers(headers)
         .end(function (response) {
           console.log(response.status);

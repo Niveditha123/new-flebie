@@ -1,5 +1,6 @@
 var request =  require('unirest');
 var userController = require('../controllers/userController.js');
+var config 	= require("../config/index.js");
 module.exports = {
      
     
@@ -61,7 +62,7 @@ module.exports = {
 
     };
 
- request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/test/getAllTests')
+ request.get(config.API_DOMAIN+'test/getAllTests')
         .headers(headers)
         .end(function (response) {
           console.log(response.status);
@@ -81,7 +82,7 @@ var getUserUsingSessionKey = function(sessionKey, user){
 
     };
     
-    request.put('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/user/getUserUsingSessionKey')
+    request.put(config.API_DOMAIN+'user/getUserUsingSessionKey')
         .headers(headers)
         .send({"sessionKey": sessionKey})
         .end(function (response) {

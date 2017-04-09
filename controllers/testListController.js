@@ -1,5 +1,6 @@
 var request =  require('unirest');
 var userController = require('../controllers/userController.js');
+var config 	= require("../config/index.js");
 module.exports = {
   renderPage:function(req,res,next){
     res.render("testlist");
@@ -10,7 +11,7 @@ module.exports = {
                 };
             console.log(req.query.labId, "url");
             var query = req.query.labId;
-              request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/labTest/getLabTestsFromLabId?labId='+query)
+              request.get(config.API_DOMAIN+'labTest/getLabTestsFromLabId?labId='+query)
                       .headers(headers)
                       .end(function (response) {
                          
@@ -28,7 +29,7 @@ module.exports = {
           };
       console.log(req.query.id, "url")
       var query = req.query.id;
-        request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/lab/getLab?id='+query)
+        request.get(config.API_DOMAIN+'lab/getLab?id='+query)
                 .headers(headers)
                 .end(function (response) {
                   console.log(response.status);

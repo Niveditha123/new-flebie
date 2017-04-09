@@ -1,5 +1,6 @@
 var request =  require('unirest');
 var userController = require('../controllers/userController.js');
+var config 	= require("../config/index.js");
 module.exports = {
   renderPage:function(req,res,next){
     console.log(req.cookies.ums);
@@ -28,7 +29,7 @@ module.exports = {
     var endDate = req.query.endDate;
     
     console.log(statuses+"-"+startDate+"-"+endDate);
-    request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/getOrdersBetweenDates?startPosition=0&maxResult=10&statuses='+statuses+'&startDate='+startDate+'&endDate='+endDate+'&orderOriginPerson=2')
+    request.get(config.API_DOMAIN+'order/getOrdersBetweenDates?startPosition=0&maxResult=10&statuses='+statuses+'&startDate='+startDate+'&endDate='+endDate+'&orderOriginPerson=2')
         .headers(
             {
               'Accept': 'application/json',

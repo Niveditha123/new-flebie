@@ -334,7 +334,7 @@ module.exports = {
         var headers={};
         var orderid = req.query.id;
         console.log(orderid,"orderid");
-         request.get('http://flebie.ap-south-1.elasticbeanstalk.com/api/v0.1/order/getOrder?id='+orderid)
+         request.get(config.API_DOMAIN+'order/getOrder?id='+orderid)
           .headers(headers)
           .end(function (response) {
             console.log(response.status);
