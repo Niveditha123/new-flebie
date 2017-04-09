@@ -176,7 +176,8 @@ function sendToCient(orderObj,cb){
             var clientEmail = data.orderDetails.emailId;
             mg.messages.create(config.MAILGUN_DOMAIN, {
                 from:config.SENDER,
-                to: [clientEmail],
+                //to: [clientEmail],
+                to: ['support@flebie.com'],
                 subject: "Your Order with Flebie",
                 html:emailHTML
             })
