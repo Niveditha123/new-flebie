@@ -352,6 +352,7 @@ module.exports = {
 
                 var sendToClientPromise = new Promise(function(resolve,reject){
                     sendToCient(response.body,function(err,resp){
+                         console.log("client succss")
                         if (err) {
                             reject(err);
                         }else{
@@ -362,6 +363,7 @@ module.exports = {
 
                 Promise.all([Promise.resolve(sendNotPromise), Promise.resolve(sendToClientPromise)])
                 .then(function (response) {
+                    console.log("all succss")
                     res.send({orderid:orderid});
                 })
             }else{
