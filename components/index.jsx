@@ -42,7 +42,7 @@ class Index extends React.Component {
 							getLists:resp,
 							loadedList:true,
 							listLoadError:false
-						})     
+						})  
 				}
 		});
 		
@@ -244,6 +244,12 @@ class Index extends React.Component {
 			</a>
 		</div>
 		<Modal open={this.state.openContact} content={callContent}/>
+		<form action="/confirmPayment" className="hide" method="POST" ref="fakeForm"  enctype="application/x-www-form-urlencoded">
+			<input type="hidden" name='TxId' value='1465302375'/>
+			<input type="hidden" name='TxStatus' value='SUCCESS' />
+			<input type="hidden" name='Tx0Msg' value='Transaction Successful' />
+			<input type="hidden" name='pgTxnN' value='2000005952' />
+			</form>
 		 </div> );
 	}
 }

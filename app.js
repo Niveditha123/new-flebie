@@ -1,3 +1,8 @@
+
+
+require('babel-register')({
+  presets: ['es2015', 'react']
+});
 var compression = require("compression");
 var fs = require("fs");
 var express = require("express");
