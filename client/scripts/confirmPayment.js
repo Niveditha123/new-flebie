@@ -1,0 +1,39 @@
+
+import ConfirmPayment from '../../components/ConfirmPayment.jsx';
+//import PopularLabs from '../../components/PopularLabs.jsx';
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+//import createBrowserHistory from 'history/lib/createBrowserHistory';
+
+//import ReactRouter from 'react-router';
+
+import Styles from '../scss/ConfirmPayment.scss';
+
+////import { Router, Route, Link,IndexRoute  } from 'react-router';
+//var browserHistory = ReactRouter.browserHistory;
+
+
+
+//const App = React.createClass(PopularTests)
+
+
+ document.addEventListener("DOMContentLoaded", function(event) {
+    var data = JSON.parse(document.getElementById("dataDump").getAttribute("value"))
+    ReactDOM.render(
+      <ConfirmPayment data={data} />,
+      document.getElementById('root')
+    );
+  });
+/*ReactDOM.render(
+  <Router history={createBrowserHistory()} >
+   <Route path="/" component={Index} />
+   <Route path="/popularTests" component={PopularTests} />
+   <Route path="/popularlabs" component={PopularLabs} />
+   <Route path="/multisearchlabs/:multisearchparam" component={Search} />
+  </Router>
+, document.getElementById('root'));*/
+
+
+
+

@@ -29,7 +29,8 @@ module.exports = {
             dashboard:['./client/scripts/dashboard.js'],
             other:['./client/scripts/other.js'],
             orderSummaryPage:['./client/scripts/orderSummaryPage.js'],
-            editOrder:['./client/scripts/editOrder.js']
+            editOrder:['./client/scripts/editOrder.js'],
+            confirmPayment:['./client/scripts/confirmPayment.js']
         },
         output: {
             path: path.join(__dirname, 'public'),
@@ -49,7 +50,7 @@ module.exports = {
             loaders: [
                 {
                     test: /.jsx?$/,
-                    loader: 'babel-loader',
+                    loader: 'babel',
                     exclude: /node_modules/,
                     query: {
                         presets: ['es2015', 'react']

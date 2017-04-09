@@ -1,0 +1,16 @@
+{>"layouts/master" /}
+
+{<pageStyles}
+<link rel="stylesheet"  type="text/css" href="/public/styles/confirmPayment.css"></link>
+{/pageStyles}
+
+
+{<title}Login{/title}
+{<body}
+<div id="root" class="container-main"> </div>
+{/body}
+<meta id="dataDump" value="{data}">
+
+{<pageScripts}
+<script src="/public/scripts/confirmPaymentbundle.js"></script>
+{/pageScripts}
