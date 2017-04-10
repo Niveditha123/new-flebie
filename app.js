@@ -61,7 +61,7 @@ var isProduction = process.env.NODE_ENV === 'production';
 //redirect from http to https
 app.use(function(req, res, next) {
 
-    if(req.socket.localPort == config.PORT)
+    if(req.socket.localPort == config.HTTP_PORT)
     {
         if(process.env.API_DOMAIN != null)
         {
