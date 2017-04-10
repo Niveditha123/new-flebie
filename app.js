@@ -67,9 +67,9 @@ app.use(function(req, res, next) {
         {
             console.log("In http section ");
             console.log("Port is: "+req.socket.localPort );
-            //res.redirect("https://www.flebie.com");
-            res.writeHead(301,{Location: 'https://www.flebie.com'});
-            res.end();
+            //res.writeHead(301,{Location: 'https://www.flebie.com'});
+            //res.end();
+            next();
         }
         else {
             next();
