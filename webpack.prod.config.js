@@ -29,8 +29,7 @@ module.exports = {
             dashboard:['./client/scripts/dashboard.js'],
             other:['./client/scripts/other.js'],
             orderSummaryPage:['./client/scripts/orderSummaryPage.js'],
-            editOrder:['./client/scripts/editOrder.js'],
-            confirmPayment:['./client/scripts/confirmPayment.js']
+            editOrder:['./client/scripts/editOrder.js']
         },
         output: {
             path: path.join(__dirname, 'public'),
