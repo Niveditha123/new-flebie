@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "mailgun-js": "^0.9.1",
+    "swagger-ui-express": "^1.0.7",
     "babel-loader": "^6.2.9",
     "compression": "^1.6.2",
     "dustjs-helper-stringify": "0.0.2",

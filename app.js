@@ -6,6 +6,7 @@ require('babel-register')({
 var compression = require("compression");
 var fs = require("fs");
 var express = require("express");
+const swaggerUi = require('swagger-ui-express');
 var https = require("https");
 var http = require("http");
 var config 	= require("./config/index.js");
@@ -13,6 +14,11 @@ var setup 	= require("./setup/index.js");
 var bodyParser = require("body-parser");
 var cookieParser = require('cookie-parser');
 var path = require('path');
+const swaggerDocument = require('./swagger.json');
+
+var showExplorer = true;
+
+
 /*const httpsOptions = {
 	key: fs.readFileSync(path.join(__dirname, 'ssl','server-key.pem')), 
     cert: fs.readFileSync(path.join(__dirname, 'ssl','server-crt.pem')), 
@@ -37,6 +43,12 @@ if(process.env.API_DOMAIN != null)
 
 var app = express();
 app.use("/public/",express.static(__dirname + '/public'));
+
+app.use('/apidocs',swaggerUi.serve, swaggerUi.setup(swaggerDocument, showExplorer));
+
+
+
+
 app.use(compression({filter: shouldCompress}));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({

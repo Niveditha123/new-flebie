@@ -1,0 +1,2176 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This serves as a detailed documentation of FLEBIE REST API ( Work in progress )",
+    "version": "0.1",
+    "title": "API Documentation for FLEBIE API",
+    "contact": {
+      "name": "Adarsha"
+    }
+  },
+  "host": "flebie.ap-south-1.elasticbeanstalk.com",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/v0.1/appConfiguration/setPropertyInConfig": {
+      "post": {
+        "summary": "Set property in config",
+        "description": "Set a property in config",
+        "operationId": "setAppConfigProperty",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "appConfigStringKeyPair",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AppConfig"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/appConfiguration/getAppConfig": {
+      "get": {
+        "summary": "Get app config",
+        "description": "Get config of the app",
+        "operationId": "getAppConfig",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AppConfig"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/lab/getLabs": {
+      "get": {
+        "summary": "Get labs",
+        "description": "Get all labs",
+        "operationId": "getLabs",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Lab"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/lab/getNearestLabs": {
+      "get": {
+        "summary": "Get nearest labs",
+        "description": "Get all labs nearest to a location (Distance to be considered nearest is preconfigured in the system)",
+        "operationId": "getNearestLabs",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "currentLocation",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Lab"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/lab/getLab": {
+      "get": {
+        "summary": "Get lab",
+        "description": "Get lab",
+        "operationId": "getLab",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Lab"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/labTest/getLabTestsFromTestNames": {
+      "get": {
+        "summary": "Get labtests from test names",
+        "description": "Get all lab tests with given test names",
+        "operationId": "getLabTestsFromTestNames",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "tests",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/LabTestAggregated"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/labTest/getLabTestsFromLabId": {
+      "get": {
+        "summary": "Get labtests from lab id",
+        "description": "Get lab tests with given lab id",
+        "operationId": "getLabTestsFromLabId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "labId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "startPosition",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maxResult",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/LabTest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/log/getApplicationLog": {
+      "get": {
+        "summary": "Get application log",
+        "description": "Get logs of the application",
+        "operationId": "getApplicationLog",
+        "parameters": [
+          {
+            "name": "lines",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/order/getOrder": {
+      "get": {
+        "summary": "Get an order",
+        "description": "API endpoint to fetch an order",
+        "operationId": "getOrder",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/order/createOrder": {
+      "post": {
+        "summary": "Create a new order",
+        "description": "API endpoint for creating a new order",
+        "operationId": "createOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/order/getOrdersBetweenDates": {
+      "get": {
+        "summary": "Get orders between dates",
+        "description": "Get orders scheduled between two dates",
+        "operationId": "getOrders",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "startPosition",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maxResult",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "statuses",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "orderOriginPerson",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Order"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/order/updateOrder": {
+      "put": {
+        "summary": "Update an order",
+        "description": "Update an existing order",
+        "operationId": "updateOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/order/updateOrderStatus": {
+      "put": {
+        "summary": "Update status of an order",
+        "description": "Update status of an existing order",
+        "operationId": "updateOrderStatus",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/order/updateOrderDetails": {
+      "put": {
+        "summary": "Update details of an order",
+        "description": "Update details of an existing order",
+        "operationId": "updateOrderDetails",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/OrderDetails"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrderDetails"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/order/getOrderUsingTransactionId": {
+      "get": {
+        "summary": "Get order using transaction id",
+        "description": "Get an existing order using transaction id",
+        "operationId": "getOrderUsingTransactionId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/order/assignFlebieToOrder": {
+      "put": {
+        "summary": "Assign flebie to an order",
+        "description": "Assign phlebotomist to an existing order",
+        "operationId": "assignFlebieToOrder",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          },
+          {
+            "name": "flebieUserId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/package/getAllPackages": {
+      "get": {
+        "summary": "Get all packages",
+        "description": "Get all packages",
+        "operationId": "getAllPackages",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/LabTest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/package/getPackageDetails": {
+      "get": {
+        "summary": "Get package details",
+        "description": "Get details of a package",
+        "operationId": "getPackageDetails",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/PackageDetails"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/promotion/createPromotionCode": {
+      "post": {
+        "summary": "Create promotion code",
+        "description": "Create a new promotion code",
+        "operationId": "createPromotionCode",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Promotion"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Promotion"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/promotion/modifyPromotionCode": {
+      "put": {
+        "summary": "Modify promotion code",
+        "description": "Modify a promotion code",
+        "operationId": "modifyPromotionCode",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Promotion"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Promotion"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/promotion/removePromotionCode": {
+      "post": {
+        "summary": "Remove promotion code",
+        "description": "Remove a promotion code",
+        "operationId": "removePromotionCode",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Promotion"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Promotion"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/promotion/applyPromotionCode": {
+      "get": {
+        "summary": "Apply promotion code",
+        "description": "Apply promotion code on an order",
+        "operationId": "applyPromotionCode",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "promoCode",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "orderId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/promotion/ignorePromotionCode": {
+      "get": {
+        "summary": "Ignore promotion code",
+        "description": "Ignore promotion code in an existing order",
+        "operationId": "ignorePromotionCode",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "promoCode",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "orderId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/events": {
+      "get": {
+        "operationId": "getServerSentEvents",
+        "produces": [
+          "text/event-stream"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/EventOutput"
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/v0.1/test/getAllTests": {
+      "get": {
+        "summary": "Get all tests",
+        "description": "Get all existing tests",
+        "operationId": "getAllTests",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Test"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/timeSlot/getAvailableSlots": {
+      "get": {
+        "summary": "Get available time slots",
+        "description": "Get all timeslots available for a given day",
+        "operationId": "getAvailableTimeSlots",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "slotDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/TimeSlotsArray"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/timeSlot/setTimeSlot": {
+      "post": {
+        "operationId": "setTimeSlot",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/TimeSlot"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/TimeSlot"
+            },
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/v0.1/transaction/paymentResponse": {
+      "post": {
+        "summary": "Post transaction response",
+        "description": "API endpoint for receiving response of a transaction",
+        "operationId": "postTransactionResponse",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/transaction/getTransactionUsingTransactionId": {
+      "get": {
+        "summary": "Get transaction using transaction id",
+        "description": "Get transaction using transaction id",
+        "operationId": "getTransactionUsingTransactionId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/transaction/updateTransaction": {
+      "put": {
+        "summary": "Update transaction",
+        "description": "Update a transaction",
+        "operationId": "updateTransaction",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/user/createUser": {
+      "post": {
+        "summary": "Create user",
+        "description": "Create a new user",
+        "operationId": "addUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/user/deleteUser": {
+      "delete": {
+        "summary": "Delete user",
+        "description": "Delete an existing user",
+        "operationId": "deleteUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/user/loginWithCredentials": {
+      "put": {
+        "summary": "Login with credentials",
+        "description": "Login as an existing user with username and password",
+        "operationId": "loginWithCredentials",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/user/lockUser": {
+      "put": {
+        "summary": "Lock user",
+        "description": "Lock an existing user",
+        "operationId": "lockUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/user/getUserUsingSessionKey": {
+      "put": {
+        "summary": "Get user using session key",
+        "description": "Get session key of an existing user",
+        "operationId": "getUserUsingSessionKey",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/user/getUsersUsingRoleAndCompany": {
+      "get": {
+        "summary": "Get users using role and company",
+        "description": "Get users with a given role and belonging to a company",
+        "operationId": "getUsersUsingRoleAndCompany",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "company",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/user/loginAsUser": {
+      "put": {
+        "summary": "Login as user",
+        "description": "Login as an existing user with access key",
+        "operationId": "login",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AppConfig": {
+      "type": "object",
+      "properties": {
+        "appConfig": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
+        },
+        "lastModified": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "Lab": {
+      "type": "object",
+      "properties": {
+        "labId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "labName": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "emailId": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "inHouseConsultationAvailable": {
+          "type": "boolean"
+        },
+        "isAvailableForHC": {
+          "type": "boolean"
+        },
+        "isNABLAccredited": {
+          "type": "boolean"
+        },
+        "averageWaitingTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "isCap": {
+          "type": "boolean"
+        },
+        "operatingHours": {
+          "type": "string"
+        },
+        "isPopular": {
+          "type": "boolean"
+        },
+        "isISOCertified": {
+          "type": "boolean"
+        },
+        "isAvailableForOB": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "isDisplayable": {
+          "type": "boolean"
+        },
+        "coordinates": {
+          "type": "string"
+        }
+      },
+      "description": "Lab model"
+    },
+    "LabTest": {
+      "type": "object",
+      "properties": {
+        "labTestId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "labTestName": {
+          "type": "string"
+        },
+        "labId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "offerPrice": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "isDrive": {
+          "type": "boolean"
+        },
+        "testId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "cost": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "isPopularPkg": {
+          "type": "boolean"
+        },
+        "test": {
+          "$ref": "#/definitions/Test"
+        },
+        "lab": {
+          "$ref": "#/definitions/Lab"
+        },
+        "mrp": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "description": "LabTest model"
+    },
+    "LabTestAggregated": {
+      "type": "object",
+      "properties": {
+        "labTests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LabTest"
+          }
+        },
+        "packages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Package"
+          }
+        },
+        "lab": {
+          "$ref": "#/definitions/Lab"
+        },
+        "totalMRP": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalOfferPrice": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "description": "Aggregated set of LabTests from a given lab"
+    },
+    "Package": {
+      "type": "object",
+      "properties": {
+        "packageId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "packageName": {
+          "type": "string"
+        },
+        "labId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "offerPrice": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "mrp": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "description": "Package model"
+    },
+    "Test": {
+      "type": "object",
+      "properties": {
+        "testId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "testName": {
+          "type": "string"
+        },
+        "sample": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "isPopular": {
+          "type": "boolean"
+        },
+        "isHomeCollectible": {
+          "type": "boolean"
+        },
+        "isFastingRequired": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string"
+        },
+        "comments": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "isDisplayable": {
+          "type": "boolean"
+        },
+        "collectionInfo": {
+          "type": "string"
+        },
+        "instructions": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "components": {
+          "type": "string"
+        },
+        "transportTemp": {
+          "type": "string"
+        }
+      },
+      "description": "Test model"
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "orderUUID": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "PENDING",
+            "SUCCESS",
+            "ASSIGNED",
+            "COLLECTED",
+            "SUBMITTED",
+            "COMPLETED",
+            "UPDATED",
+            "CANCELLED"
+          ]
+        },
+        "paymentType": {
+          "type": "string",
+          "enum": [
+            "CARD",
+            "COD",
+            "PO"
+          ]
+        },
+        "orderTotal": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "grossTotal": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "grossMRP": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "orderLevelDiscount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "convenienceFee": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "scheduleDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "scheduleTime": {
+          "type": "string"
+        },
+        "orderComments": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "consumerId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "promotionId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "assignedTo": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "orderOriginPerson": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "orderDetails": {
+          "$ref": "#/definitions/OrderDetails"
+        },
+        "orderItems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrderItem"
+          }
+        },
+        "labName": {
+          "type": "string"
+        },
+        "labId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "promotionCode": {
+          "type": "string"
+        },
+        "flebies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Order model"
+    },
+    "OrderDetails": {
+      "type": "object",
+      "properties": {
+        "orderDetailsId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "orderId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "emailId": {
+          "type": "string"
+        }
+      },
+      "description": "Contains additional details related to order"
+    },
+    "OrderItem": {
+      "type": "object",
+      "properties": {
+        "orderItemId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "itemTotal": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "itemMRP": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "itemLevelDiscount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "labTestId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "packageId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "orderId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "testName": {
+          "type": "string"
+        },
+        "collectionInfo": {
+          "type": "string"
+        },
+        "instructions": {
+          "type": "string"
+        },
+        "components": {
+          "type": "string"
+        }
+      },
+      "description": "Order item belonging to an order"
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "transactionId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "addressZip": {
+          "type": "string"
+        },
+        "authIdCode": {
+          "type": "string"
+        },
+        "paymentMode": {
+          "type": "string"
+        },
+        "pgRespCode": {
+          "type": "string"
+        },
+        "pgTxnNo": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float"
+        },
+        "issuerRefNo": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "orderId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "txRefNo": {
+          "type": "string"
+        },
+        "txStatus": {
+          "type": "string"
+        },
+        "txMsg": {
+          "type": "string"
+        },
+        "txId": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "emailId": {
+          "type": "string"
+        },
+        "convenienceFee": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "citrusPostUrl": {
+          "type": "string"
+        },
+        "citrusCurrency": {
+          "type": "string"
+        }
+      },
+      "description": "Transaction model"
+    },
+    "PackageDetails": {
+      "type": "object",
+      "properties": {
+        "packageDetailsId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "packageId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "testId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "containedTests": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "description": "Additional details related to a package"
+    },
+    "Promotion": {
+      "type": "object",
+      "properties": {
+        "promotionId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "promotionCode": {
+          "type": "string"
+        },
+        "promotionType": {
+          "type": "string"
+        },
+        "priceDiscount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "percentageDiscount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "promotionStatus": {
+          "type": "boolean"
+        },
+        "minOrderAmount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxDiscount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "comments": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "promotionDetails": {
+          "$ref": "#/definitions/PromotionDetails"
+        }
+      },
+      "description": "Promotion model"
+    },
+    "PromotionDetails": {
+      "type": "object",
+      "properties": {
+        "promotionDetailsId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "promotionId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "labTestId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "testId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "labId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "freeGiftId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "description": "Additional details related to promotion"
+    },
+    "EventOutput": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/Type"
+        },
+        "closed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Type": {
+      "type": "object",
+      "properties": {
+        "typeName": {
+          "type": "string"
+        }
+      }
+    },
+    "TimeSlotsArray": {
+      "type": "object",
+      "properties": {
+        "timeSlots": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "TimeSlot": {
+      "type": "object",
+      "properties": {
+        "timeSlotId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "slotDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "slotTime": {
+          "type": "string"
+        },
+        "maxFlebieAvailability": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "description": "Maintains scheduled timeslot"
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "accessKey": {
+          "type": "string"
+        },
+        "sessionKey": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "ADMIN",
+            "FLEBIE",
+            "USER",
+            "LABADMIN"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "userDetails": {
+          "$ref": "#/definitions/UserDetails"
+        }
+      },
+      "description": "User model"
+    },
+    "UserDetails": {
+      "type": "object",
+      "properties": {
+        "userDetailsId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "phoneNumber": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "address": {
+          "type": "string"
+        },
+        "emailId": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "labId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "description": "Additional details related to a user"
+    }
+  }
+}
