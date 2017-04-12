@@ -481,14 +481,46 @@ class Dashboard extends React.Component {
             }
         })
     }
+    changeAccessKeyTruthValue(){
+        var _this = this;
+        if(_this.state.accessKeyTruthValue != null)
+        {
+            if(_this.state.accessKeyTruthValue != true)
+            {
+                _this.setState({
+                    accessKeyTruthValue: true
+                });
+            }
+            else
+            {
+                _this.setState({
+                    accessKeyTruthValue: false
+                });
+            }
+
+        }
+        else
+        {
+            _this.setState({
+                accessKeyTruthValue: true
+            });
+            _this.setState({
+                accessKey: document.cookie.split('ums=')[1].split(';')[0]
+            });
+        }
+
+    }
 
     render(){
+        var _this = this;
+        var accessKeyDisplay = null;
+        var accessKeyRadioButton = null;
         var dashboardHeading = null;
         var headingRow = null;
         var rowsOfOrders = null;
         var newOrderLink = null;
         var timeSlots = this.state.availableTimeSlots;
-        var _this = this;
+
         var newOrderButton = null;
         var flebies = null;
         var exportButton = null;
@@ -675,6 +707,9 @@ class Dashboard extends React.Component {
         
         if(this.state.user != null && this.state.user.role =="ADMIN")
         {
+            accessKeyDisplay = <input disabled={_this.state.accessKeyTruthValue} id="accessKeyDisplay" value={_this.state.accessKey}/>;
+            accessKeyRadioButton = <input type="radio"  onClick={_this.changeAccessKeyTruthValue.bind(_this)} id="accessKeyRadioButton" />;
+
             headingRow = <tr>
                 <th> NAME</th>
                 <th>CHANGE STATUS</th>  
@@ -734,6 +769,8 @@ class Dashboard extends React.Component {
             
             <div className="dashboard-main">
                 {dashboardHeading}
+                {accessKeyRadioButton}
+                {accessKeyDisplay}
                 <div className="container-fluid dashboard-content" style={{backgroundColor: "rgba(255,255,255,0.60)"}} >
                     <div className="clearfix critical-content">
                         <div className="row">

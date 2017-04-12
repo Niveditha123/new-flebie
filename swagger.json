@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This serves as a detailed documentation of FLEBIE REST API ( Work in progress )",
+    "description": "This serves as a detailed documentation of FLEBIE REST API ( Work in progress ). For authorization header login with your credentials and click on the radio button on the dashboard",
     "version": "0.1",
     "title": "API Documentation for FLEBIE API",
     "contact": {
@@ -287,39 +287,6 @@
         }
       }
     },
-    "/v0.1/order/getOrder": {
-      "get": {
-        "summary": "Get an order",
-        "description": "API endpoint to fetch an order",
-        "operationId": "getOrder",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Header to find the role of user using the endpoint",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/Order"
-            }
-          }
-        }
-      }
-    },
     "/v0.1/order/createOrder": {
       "post": {
         "summary": "Create a new order",
@@ -590,6 +557,39 @@
           },
           {
             "name": "flebieUserId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/order/getOrder": {
+      "get": {
+        "summary": "Get an order",
+        "description": "API endpoint to fetch an order",
+        "operationId": "getOrder",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
             "in": "query",
             "required": false,
             "type": "string"
@@ -1087,6 +1087,44 @@
         }
       }
     },
+    "/v0.1/user/loginAsUser": {
+      "put": {
+        "summary": "Login as user",
+        "description": "Login as an existing user with access key",
+        "operationId": "login",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
     "/v0.1/user/createUser": {
       "post": {
         "summary": "Create user",
@@ -1106,6 +1144,39 @@
             "schema": {
               "$ref": "#/definitions/User"
             }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/user/lockUser": {
+      "put": {
+        "summary": "Lock user",
+        "description": "Lock an existing user",
+        "operationId": "lockUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": false,
+            "type": "string"
           },
           {
             "name": "Authorization",
@@ -1182,39 +1253,6 @@
             "schema": {
               "$ref": "#/definitions/User"
             }
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Header to find the role of user using the endpoint",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          }
-        }
-      }
-    },
-    "/v0.1/user/lockUser": {
-      "put": {
-        "summary": "Lock user",
-        "description": "Lock an existing user",
-        "operationId": "lockUser",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "query",
-            "required": false,
-            "type": "string"
           },
           {
             "name": "Authorization",
@@ -1313,44 +1351,6 @@
           }
         }
       }
-    },
-    "/v0.1/user/loginAsUser": {
-      "put": {
-        "summary": "Login as user",
-        "description": "Login as an existing user with access key",
-        "operationId": "login",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Header to find the role of user using the endpoint",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          }
-        }
-      }
     }
   },
   "definitions": {
@@ -1434,8 +1434,7 @@
         "coordinates": {
           "type": "string"
         }
-      },
-      "description": "Lab model"
+      }
     },
     "LabTest": {
       "type": "object",
@@ -1487,8 +1486,7 @@
           "type": "integer",
           "format": "int32"
         }
-      },
-      "description": "LabTest model"
+      }
     },
     "LabTestAggregated": {
       "type": "object",
@@ -1516,8 +1514,7 @@
           "type": "integer",
           "format": "int32"
         }
-      },
-      "description": "Aggregated set of LabTests from a given lab"
+      }
     },
     "Package": {
       "type": "object",
@@ -1549,8 +1546,7 @@
           "type": "integer",
           "format": "int32"
         }
-      },
-      "description": "Package model"
+      }
     },
     "Test": {
       "type": "object",
@@ -1609,8 +1605,85 @@
         "transportTemp": {
           "type": "string"
         }
-      },
-      "description": "Test model"
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "transactionId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "addressZip": {
+          "type": "string"
+        },
+        "authIdCode": {
+          "type": "string"
+        },
+        "paymentMode": {
+          "type": "string"
+        },
+        "pgRespCode": {
+          "type": "string"
+        },
+        "pgTxnNo": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float"
+        },
+        "issuerRefNo": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "orderId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "txRefNo": {
+          "type": "string"
+        },
+        "txStatus": {
+          "type": "string"
+        },
+        "txMsg": {
+          "type": "string"
+        },
+        "txId": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "emailId": {
+          "type": "string"
+        },
+        "convenienceFee": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "citrusPostUrl": {
+          "type": "string"
+        },
+        "citrusCurrency": {
+          "type": "string"
+        }
+      }
     },
     "Order": {
       "type": "object",
@@ -1718,8 +1791,7 @@
             "type": "string"
           }
         }
-      },
-      "description": "Order model"
+      }
     },
     "OrderDetails": {
       "type": "object",
@@ -1759,8 +1831,7 @@
         "emailId": {
           "type": "string"
         }
-      },
-      "description": "Contains additional details related to order"
+      }
     },
     "OrderItem": {
       "type": "object",
@@ -1817,87 +1888,7 @@
         "components": {
           "type": "string"
         }
-      },
-      "description": "Order item belonging to an order"
-    },
-    "Transaction": {
-      "type": "object",
-      "properties": {
-        "transactionId": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "firstName": {
-          "type": "string"
-        },
-        "lastName": {
-          "type": "string"
-        },
-        "addressZip": {
-          "type": "string"
-        },
-        "authIdCode": {
-          "type": "string"
-        },
-        "paymentMode": {
-          "type": "string"
-        },
-        "pgRespCode": {
-          "type": "string"
-        },
-        "pgTxnNo": {
-          "type": "string"
-        },
-        "amount": {
-          "type": "number",
-          "format": "float"
-        },
-        "issuerRefNo": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "orderId": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "txRefNo": {
-          "type": "string"
-        },
-        "txStatus": {
-          "type": "string"
-        },
-        "txMsg": {
-          "type": "string"
-        },
-        "txId": {
-          "type": "string"
-        },
-        "signature": {
-          "type": "string"
-        },
-        "emailId": {
-          "type": "string"
-        },
-        "convenienceFee": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "citrusPostUrl": {
-          "type": "string"
-        },
-        "citrusCurrency": {
-          "type": "string"
-        }
-      },
-      "description": "Transaction model"
+      }
     },
     "PackageDetails": {
       "type": "object",
@@ -1925,8 +1916,7 @@
           "type": "string",
           "format": "date-time"
         }
-      },
-      "description": "Additional details related to a package"
+      }
     },
     "Promotion": {
       "type": "object",
@@ -1974,8 +1964,7 @@
         "promotionDetails": {
           "$ref": "#/definitions/PromotionDetails"
         }
-      },
-      "description": "Promotion model"
+      }
     },
     "PromotionDetails": {
       "type": "object",
@@ -2016,8 +2005,7 @@
           "type": "string",
           "format": "date-time"
         }
-      },
-      "description": "Additional details related to promotion"
+      }
     },
     "EventOutput": {
       "type": "object",
@@ -2075,8 +2063,7 @@
           "type": "string",
           "format": "date-time"
         }
-      },
-      "description": "Maintains scheduled timeslot"
+      }
     },
     "User": {
       "type": "object",
@@ -2123,8 +2110,7 @@
         "userDetails": {
           "$ref": "#/definitions/UserDetails"
         }
-      },
-      "description": "User model"
+      }
     },
     "UserDetails": {
       "type": "object",
@@ -2169,8 +2155,7 @@
           "type": "integer",
           "format": "int32"
         }
-      },
-      "description": "Additional details related to a user"
+      }
     }
   }
 }
