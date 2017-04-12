@@ -505,7 +505,7 @@ class Dashboard extends React.Component {
                 accessKeyTruthValue: true
             });
             _this.setState({
-                accessKey: document.cookie.split('ums=')[1].split(';')[0]
+                accessKey: decodeURIComponent(document.cookie.split('ums=')[1].split(';')[0])
             });
         }
 
