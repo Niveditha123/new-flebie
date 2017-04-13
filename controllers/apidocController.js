@@ -12,8 +12,9 @@ module.exports = {
             role = userController.decrypt(req.cookies.role);
             if(role=="ADMIN")
             {
-                console.log("Path is: "+path.join(__dirname+'/../apidoc/index.html'));
-                res.sendFile(path.join(__dirname+'/../apidoc/index.html'));
+                //console.log("Path is: "+path.join(__dirname+'/../apidocumentation_files/index.html'));
+                res.redirect('/apidocumentation_files/index.html');
+                //res.sendFile(path.join(__dirname+'/../apidocumentation_files/index.html'));
             }
             else {
                 res.redirect("/");

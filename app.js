@@ -38,7 +38,7 @@ if(process.env.API_DOMAIN != null)
 
 var app = express();
 app.use("/public/",express.static(__dirname + '/public'));
-app.use("/apidoc/",express.static(__dirname + '/apidoc'));
+app.use("/apidocumentation_files/",express.static(__dirname + '/apidocumentation_files'));
 
 
 
