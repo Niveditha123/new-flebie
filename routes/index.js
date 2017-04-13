@@ -18,7 +18,7 @@ var editOrderController = require("../controllers/editOrderController.js");
 var orderSummaryController = require("../controllers/orderSummaryController.js");
 var dashboardController = require("../controllers/dashboardController.js");
 var confirmPaymentController = require("../controllers/confirmPaymentController.js");
-
+var apidocController = require("../controllers/apidocController.js");
 module.exports = function() {
 
   var router = express.Router();
@@ -51,7 +51,7 @@ module.exports = function() {
 
   router.post('/confirmPayment',confirmPaymentController.processConfirmation);
   router.post('/processAll',confirmPaymentController.processAll);
-
+    router.get('/apidocs',apidocController.getapidoc);
 
   //apis
   router.get('/getList',indexController.getList);

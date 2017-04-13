@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This serves as a detailed documentation of FLEBIE REST API ( Work in progress ). For authorization header login with your credentials and click on the radio button on the dashboard",
+    "description": "This serves as a detailed documentation of FLEBIE REST API ( Work in progress ). For authorization header login with your credentials and run this javascript in web console: | document.cookie.split('ums=')[1].split(';')[0] |",
     "version": "0.1",
     "title": "API Documentation for FLEBIE API",
     "contact": {
@@ -13,6 +13,15 @@
   "schemes": [
     "http"
   ],
+  securityDefinitions:
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+    description: Requests should pass an api_key header.
+
+security: 
+ - api_key: []
   "paths": {
     "/v0.1/appConfiguration/setPropertyInConfig": {
       "post": {
@@ -282,6 +291,39 @@
             "description": "successful operation",
             "schema": {
               "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/order/getOrder": {
+      "get": {
+        "summary": "Get an order",
+        "description": "API endpoint to fetch an order",
+        "operationId": "getOrder",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Order"
             }
           }
         }
@@ -557,39 +599,6 @@
           },
           {
             "name": "flebieUserId",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Header to find the role of user using the endpoint",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/Order"
-            }
-          }
-        }
-      }
-    },
-    "/v0.1/order/getOrder": {
-      "get": {
-        "summary": "Get an order",
-        "description": "API endpoint to fetch an order",
-        "operationId": "getOrder",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
             "in": "query",
             "required": false,
             "type": "string"
@@ -1087,25 +1096,20 @@
         }
       }
     },
-    "/v0.1/user/loginAsUser": {
+    "/v0.1/user/lockUser": {
       "put": {
-        "summary": "Login as user",
-        "description": "Login as an existing user with access key",
-        "operationId": "login",
-        "consumes": [
-          "application/json"
-        ],
+        "summary": "Lock user",
+        "description": "Lock an existing user",
+        "operationId": "lockUser",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
+            "name": "username",
+            "in": "query",
             "required": false,
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
+            "type": "string"
           },
           {
             "name": "Authorization",
@@ -1144,39 +1148,6 @@
             "schema": {
               "$ref": "#/definitions/User"
             }
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Header to find the role of user using the endpoint",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          }
-        }
-      }
-    },
-    "/v0.1/user/lockUser": {
-      "put": {
-        "summary": "Lock user",
-        "description": "Lock an existing user",
-        "operationId": "lockUser",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "query",
-            "required": false,
-            "type": "string"
           },
           {
             "name": "Authorization",
@@ -1347,6 +1318,44 @@
               "items": {
                 "$ref": "#/definitions/User"
               }
+            }
+          }
+        }
+      }
+    },
+    "/v0.1/user/loginAsUser": {
+      "put": {
+        "summary": "Login as user",
+        "description": "Login as an existing user with access key",
+        "operationId": "login",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Header to find the role of user using the endpoint",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
             }
           }
         }
@@ -1607,84 +1616,6 @@
         }
       }
     },
-    "Transaction": {
-      "type": "object",
-      "properties": {
-        "transactionId": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "firstName": {
-          "type": "string"
-        },
-        "lastName": {
-          "type": "string"
-        },
-        "addressZip": {
-          "type": "string"
-        },
-        "authIdCode": {
-          "type": "string"
-        },
-        "paymentMode": {
-          "type": "string"
-        },
-        "pgRespCode": {
-          "type": "string"
-        },
-        "pgTxnNo": {
-          "type": "string"
-        },
-        "amount": {
-          "type": "number",
-          "format": "float"
-        },
-        "issuerRefNo": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "orderId": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "txRefNo": {
-          "type": "string"
-        },
-        "txStatus": {
-          "type": "string"
-        },
-        "txMsg": {
-          "type": "string"
-        },
-        "txId": {
-          "type": "string"
-        },
-        "signature": {
-          "type": "string"
-        },
-        "emailId": {
-          "type": "string"
-        },
-        "convenienceFee": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "citrusPostUrl": {
-          "type": "string"
-        },
-        "citrusCurrency": {
-          "type": "string"
-        }
-      }
-    },
     "Order": {
       "type": "object",
       "properties": {
@@ -1886,6 +1817,84 @@
           "type": "string"
         },
         "components": {
+          "type": "string"
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "transactionId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "addressZip": {
+          "type": "string"
+        },
+        "authIdCode": {
+          "type": "string"
+        },
+        "paymentMode": {
+          "type": "string"
+        },
+        "pgRespCode": {
+          "type": "string"
+        },
+        "pgTxnNo": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float"
+        },
+        "issuerRefNo": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "orderId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "txRefNo": {
+          "type": "string"
+        },
+        "txStatus": {
+          "type": "string"
+        },
+        "txMsg": {
+          "type": "string"
+        },
+        "txId": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "emailId": {
+          "type": "string"
+        },
+        "convenienceFee": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "citrusPostUrl": {
+          "type": "string"
+        },
+        "citrusCurrency": {
           "type": "string"
         }
       }
